@@ -539,7 +539,18 @@ function renderHistoryTab(history) {
         <div class="hw-date">${h.date||''}</div>
       </div>
       <div class="hw-meals">
-        ${DAY_ABBR.map((d,i)=>{const m=meals[i]||{}; return `<div class="hw-meal"><div class="hw-meal-day">${d}</div><span class="hw-meal-emoji">${m.emoji||'🍽️'}</span><div class="hw-meal-name">${m.name||'—'}</div></div>`;}).join('')}
+        ${DAY_ABBR.map((d,i)=>{
+          const m=meals[i]||{};
+          const bname = m.breakfast?m.breakfast.name:'';
+          const lname = m.lunch?m.lunch.name:'';
+          const dname = m.dinner?m.dinner.name:(m.name||'—');
+          return `<div class="hw-meal">
+            <div class="hw-meal-day">${d}</div>
+            ${bname?`<div style="font-size:0.55rem;color:var(--taupe);margin-bottom:1px;">B: ${bname}</div>`:''}
+            ${lname?`<div style="font-size:0.55rem;color:var(--taupe);margin-bottom:1px;">L: ${lname}</div>`:''}
+            <div class="hw-meal-name" style="color:var(--brown-mid);">D: ${dname}</div>
+          </div>`;
+        }).join('')}
       </div>
     </div>`;
   }).join('');
@@ -550,30 +561,38 @@ function renderPlannerTab(f, history) {
   mealLinks = {};
   const rows = document.getElementById('planner-meal-rows');
   rows.innerHTML = DAYS.map((d,i) => `
-    <div class="pmr" id="pmr-${d}">
-      <div class="pmr-day">${DAY_LABELS[i]}</div>
-      <input type="text" id="pmeal-${d}" placeholder="Meal name" oninput="onMealType('${d}')">
-      <input type="text" id="pemoji-${d}" placeholder="🍽️" style="max-width:70px;text-align:center;">
-      <select id="ptype-${d}"><option>Dinner</option><option>Lunch</option><option>Breakfast</option>${d==='sun'?'<option>Batch Cook</option>':''}</select>
-      <button class="pick-btn" id="ppick-${d}" onclick="openPicker('${d}')">📖 Pick</button>
+    <div style="background:var(--cream);border:1.5px solid var(--sand);border-radius:6px;padding:12px 14px;margin-bottom:6px;">
+      <div style="font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);font-weight:500;margin-bottom:10px;">${DAY_LABELS[i]}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 90px;gap:8px;align-items:center;">
+        <div>
+          <div style="font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);margin-bottom:4px;">Breakfast</div>
+          <input type="text" id="pmeal-${d}-b" placeholder="e.g. Overnight oats" style="width:100%;padding:7px 10px;background:var(--warm-white);border:1px solid var(--sand);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--brown-deep);outline:none;">
+        </div>
+        <div>
+          <div style="font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);margin-bottom:4px;">Lunch</div>
+          <input type="text" id="pmeal-${d}-l" placeholder="e.g. Turkey wrap" style="width:100%;padding:7px 10px;background:var(--warm-white);border:1px solid var(--sand);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--brown-deep);outline:none;">
+        </div>
+        <div>
+          <div style="font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);margin-bottom:4px;">Dinner</div>
+          <input type="text" id="pmeal-${d}-d" placeholder="e.g. Chicken tacos" class="${'pmeal-d-'+d}" style="width:100%;padding:7px 10px;background:var(--warm-white);border:1px solid var(--sand);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--brown-deep);outline:none;" oninput="onMealType('${d}-d')">
+        </div>
+        <button class="pick-btn" id="ppick-${d}" onclick="openPicker('${d}-d')" style="margin-top:18px;">📖 Pick</button>
+      </div>
     </div>`).join('');
 
-  // Auto-set week number to next logical week
   const nextWeek = history.length > 0 ? Math.min(history[history.length-1].week + 1, 8) : 1;
   document.getElementById('planner-week').value = nextWeek;
 
-  // Show last week's meals as reference
   const notice = document.getElementById('planner-last-week-notice');
   if (history.length > 0) {
     const last = history[history.length-1];
-    const mealNames = (last.meals||[]).map(m=>m.name||'—').filter(n=>n!=='—');
+    const dinnerNames = (last.meals||[]).map(m=>m.dinner?m.dinner.name:m.name).filter(n=>n&&n!=='—');
     notice.style.display = 'block';
-    notice.innerHTML = `<strong>Last week (Week ${last.week}):</strong> ${mealNames.join(', ')} — don't repeat these!`;
+    notice.innerHTML = `<strong>Last week's dinners (Week ${last.week}):</strong> ${dinnerNames.join(', ')||'—'} — avoid repeating these!`;
   } else {
     notice.style.display = 'none';
   }
 
-  // Reset note and visits
   document.getElementById('planner-note').value = '';
   document.getElementById('planner-visits').value = '';
   document.getElementById('planner-note-date').value = '';
@@ -581,12 +600,12 @@ function renderPlannerTab(f, history) {
 }
 
 // ── MEAL TYPE HANDLER ──
-function onMealType(d) {
-  if (mealLinks[d]) {
-    delete mealLinks[d];
-    document.getElementById('pmr-'+d).classList.remove('linked');
-    document.getElementById('ppick-'+d).textContent = '📖 Pick';
-    document.getElementById('ppick-'+d).classList.remove('active');
+function onMealType(key) {
+  if (mealLinks[key]) {
+    delete mealLinks[key];
+    const day = key.replace('-d','');
+    const btn = document.getElementById('ppick-'+day);
+    if (btn) { btn.textContent = '📖 Pick'; btn.classList.remove('active'); }
   }
 }
 
@@ -648,13 +667,13 @@ function renderPickerList() {
   }).join('');
 }
 function selectRecipe(r) {
-  const d = pickerTargetDay;
-  mealLinks[d] = r;
-  document.getElementById('pmeal-'+d).value = r.name;
-  document.getElementById('pemoji-'+d).value = r.emoji||'🍽️';
-  document.getElementById('pmr-'+d).classList.add('linked');
-  document.getElementById('ppick-'+d).textContent = '✓ Linked';
-  document.getElementById('ppick-'+d).classList.add('active');
+  const key = pickerTargetDay; // e.g. 'mon-d'
+  mealLinks[key] = r;
+  const day = key.replace('-d','');
+  const input = document.getElementById('pmeal-'+key);
+  if (input) input.value = r.name;
+  const btn = document.getElementById('ppick-'+day);
+  if (btn) { btn.textContent = '✓ Linked'; btn.classList.add('active'); }
   closePicker();
 }
 
@@ -670,10 +689,10 @@ function savePlan() {
   const visits = visitsRaw.split('\n').filter(l=>l.trim());
 
   const meals = DAYS.map(d=>({
-    name:   document.getElementById('pmeal-'+d).value||'—',
-    emoji:  document.getElementById('pemoji-'+d).value||'🍽️',
-    type:   document.getElementById('ptype-'+d).value||'Dinner',
-    recipe: mealLinks[d]||null
+    day: d,
+    breakfast: { name: document.getElementById('pmeal-'+d+'-b').value||'', type:'Breakfast' },
+    lunch:     { name: document.getElementById('pmeal-'+d+'-l').value||'', type:'Lunch' },
+    dinner:    { name: document.getElementById('pmeal-'+d+'-d').value||'—', type:'Dinner', recipe: mealLinks[d+'-d']||null }
   }));
 
   // Save to history (replace if same week exists)
