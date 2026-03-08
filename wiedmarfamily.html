@@ -28,15 +28,12 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 .banner-tags{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
 .banner-tag{border:1px solid rgba(255,255,255,0.2);color:rgba(247,243,236,0.7);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;padding:5px 12px;border-radius:100px;}
 .banner-tag.active{border-color:var(--gold);color:var(--gold);background:rgba(201,162,84,0.1);}
-/* TABS */
-.portal-tabs{background:var(--brown-deep);display:flex;gap:0;border-top:1px solid rgba(255,255,255,0.1);}
+.portal-tabs{background:var(--brown-deep);display:flex;border-top:1px solid rgba(255,255,255,0.1);}
 .ptab{padding:14px 24px;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(247,243,236,0.5);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;}
 .ptab:hover{color:var(--cream);}
 .ptab.active{color:var(--gold);border-bottom-color:var(--gold);}
-/* TAB PANELS */
 .tab-content{display:none;}
 .tab-content.active{display:block;}
-/* MAIN */
 .main-grid{display:grid;grid-template-columns:1fr 360px;}
 .left-panel{padding:36px 44px;border-right:1px solid var(--sand);}
 .right-panel{padding:36px 28px;background:var(--warm-white);display:flex;flex-direction:column;gap:28px;}
@@ -44,16 +41,20 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 .slabel::before{content:'';width:22px;height:1px;background:var(--terra);}
 /* MEAL GRID */
 .meal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:36px;}
-.meal-cell{background:var(--warm-white);border:1.5px solid var(--sand);border-radius:6px;padding:14px 8px 12px;text-align:center;cursor:pointer;transition:all 0.2s;}
-.meal-cell:hover{border-color:var(--brown-light);transform:translateY(-3px);box-shadow:0 6px 20px rgba(44,31,20,0.1);}
+.meal-cell{background:var(--warm-white);border:1.5px solid var(--sand);border-radius:6px;padding:14px 8px 12px;text-align:center;transition:all 0.2s;}
+.meal-cell.linked{border-color:var(--sage);cursor:pointer;}
+.meal-cell.linked:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(44,31,20,0.12);}
 .meal-cell.today{border-color:var(--terra);background:var(--terra-soft);}
 .meal-day-abbr{font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--taupe);margin-bottom:6px;}
 .meal-emoji{font-size:1.5rem;margin-bottom:5px;display:block;}
 .meal-name{font-size:0.7rem;color:var(--brown-mid);line-height:1.35;}
 .meal-type{font-size:0.58rem;color:var(--taupe);margin-top:4px;text-transform:uppercase;letter-spacing:0.08em;}
+.meal-link-badge{font-size:0.58rem;color:var(--sage);margin-top:5px;letter-spacing:0.04em;}
 /* FEEDBACK */
 .fb-card{background:var(--warm-white);border:1.5px solid var(--sand);border-radius:6px;padding:18px 20px;margin-bottom:12px;}
 .fb-meal-name{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--brown-deep);margin-bottom:10px;}
+.fb-recipe-btn{display:inline-block;margin-bottom:12px;padding:7px 14px;background:var(--sage-soft);border:1px solid var(--sage);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.72rem;color:var(--sage);cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.fb-recipe-btn:hover{background:var(--sage);color:white;}
 .fb-stars{display:flex;gap:4px;margin-bottom:10px;}
 .fb-star{font-size:1.3rem;cursor:pointer;color:var(--sand);transition:color 0.15s;}
 .fb-star.lit{color:var(--gold);}
@@ -61,16 +62,15 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 .fb-submit{margin-top:8px;background:none;border:1.5px solid var(--sand);padding:8px 18px;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--brown-mid);cursor:pointer;border-radius:2px;transition:all 0.2s;}
 .fb-submit:hover{border-color:var(--terra);color:var(--terra);}
 .fb-sent{font-size:0.76rem;color:var(--sage);display:none;margin-top:8px;}
-/* SCHEDULE FORM */
+/* SCHEDULE */
 .schedule-form{background:var(--warm-white);border:1.5px solid var(--sand);border-radius:8px;padding:24px;margin-bottom:20px;}
 .schedule-form h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--brown-deep);margin-bottom:6px;}
 .schedule-form p{font-size:0.8rem;color:var(--taupe);margin-bottom:20px;line-height:1.6;}
-.schedule-day-row{margin-bottom:16px;background:var(--cream);border:1px solid var(--sand);border-radius:6px;padding:14px;}
+.schedule-day-row{margin-bottom:14px;background:var(--cream);border:1px solid var(--sand);border-radius:6px;padding:14px;}
 .schedule-day-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--terra);font-weight:500;margin-bottom:10px;}
 .schedule-slots{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
 .schedule-slot label{display:block;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);margin-bottom:5px;}
 .schedule-slot input,.schedule-slot select{width:100%;padding:8px 10px;background:var(--warm-white);border:1px solid var(--sand);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--brown-deep);outline:none;}
-.schedule-slot input::placeholder{color:var(--taupe);}
 .schedule-submit{width:100%;padding:13px;background:var(--brown-deep);color:var(--cream);border:none;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;margin-top:16px;}
 .schedule-submit:hover{background:var(--terra);}
 .schedule-success{display:none;margin-top:14px;background:var(--sage-soft);border:1px solid var(--sage);border-radius:4px;padding:14px 18px;font-size:0.82rem;color:var(--brown-deep);}
@@ -88,12 +88,12 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 .mpc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;}
 .mpc-tag{font-size:0.62rem;padding:3px 9px;border-radius:100px;border:1px solid var(--sand);color:var(--taupe);}
 .mpc-tag.terra{border-color:var(--terra);color:var(--terra);}
-/* PROFILE SUMMARY */
+/* TAGS */
 .ptag{font-size:0.65rem;padding:3px 10px;border-radius:100px;border:1px solid var(--sand);color:var(--taupe);display:inline-block;margin:2px 2px 2px 0;}
 .ptag.green{border-color:var(--sage);color:var(--sage);}
 .ptag.gold{border-color:var(--gold);color:var(--gold);}
 .ptag.red{border-color:var(--terra);color:var(--terra);}
-/* SIDEBAR CARDS */
+/* SIDEBAR */
 .erins-note{background:var(--brown-deep);border-radius:6px;padding:26px;color:var(--cream);position:relative;overflow:hidden;}
 .erins-note::before{content:'"';font-family:'Playfair Display',serif;font-size:7rem;position:absolute;top:-10px;right:14px;color:rgba(201,162,84,0.12);font-style:italic;line-height:1;}
 .note-from{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
@@ -103,33 +103,46 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 .grocery-panel{background:var(--cream);border:1px solid var(--sand);border-radius:6px;padding:22px;}
 .grocery-panel h3{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--brown-deep);margin-bottom:5px;}
 .grocery-sub{font-size:0.76rem;color:var(--taupe);margin-bottom:14px;line-height:1.5;}
-.grocery-btn{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--warm-white);border:1.5px solid var(--sand);border-radius:4px;cursor:pointer;transition:all 0.2s;text-decoration:none;margin-bottom:7px;}
-.grocery-btn:hover{border-color:var(--terra);}
-.grocery-btn.preferred{border-color:var(--sage);background:var(--sage-soft);}
-.grocery-btn-left{display:flex;align-items:center;gap:10px;}
-.grocery-btn-name{font-size:0.82rem;color:var(--brown-deep);}
-.grocery-btn-pref{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--sage);}
 .next-card{background:var(--terra);border-radius:6px;padding:22px;color:white;}
 .next-card h3{font-family:'Playfair Display',serif;font-size:0.95rem;margin-bottom:12px;}
 .next-list{display:flex;flex-direction:column;gap:10px;}
 .next-item{display:flex;align-items:flex-start;gap:10px;font-size:0.78rem;color:rgba(255,255,255,0.88);}
 .next-dot{width:6px;height:6px;background:rgba(255,255,255,0.4);border-radius:50%;flex-shrink:0;margin-top:5px;}
 .next-item strong{color:white;display:block;font-weight:500;}
-/* FAMILY OVERVIEW */
-.overview-section{margin-bottom:28px;}
+/* OVERVIEW */
 .overview-row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--sand);font-size:0.82rem;}
 .overview-row:last-child{border-bottom:none;}
 .overview-key{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);}
 .overview-val{color:var(--brown-mid);text-align:right;max-width:60%;}
+/* RECIPE MODAL */
+.recipe-modal-bg{display:none;position:fixed;inset:0;background:rgba(26,18,8,0.75);z-index:9000;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(3px);}
+.recipe-modal-bg.show{display:flex;}
+.recipe-modal-box{background:var(--cream);border-radius:8px;width:100%;max-width:680px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,0.35);margin:auto;}
+.rmodal-header{background:var(--brown-deep);padding:28px 32px;position:relative;}
+.rmodal-emoji{font-size:2.2rem;margin-bottom:10px;display:block;}
+.rmodal-name{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--cream);margin-bottom:6px;}
+.rmodal-meta{font-size:0.78rem;color:var(--taupe);display:flex;gap:16px;flex-wrap:wrap;}
+.rmodal-close{position:absolute;top:18px;right:20px;background:none;border:none;cursor:pointer;font-size:1.5rem;color:var(--taupe);}
+.rmodal-body{padding:28px 32px;}
+.rmodal-section{margin-bottom:24px;}
+.rmodal-section-label{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--terra);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.rmodal-section-label::before{content:'';width:18px;height:1px;background:var(--terra);}
+.rmodal-ingredient{padding:6px 0;border-bottom:1px solid var(--sand);font-size:0.85rem;color:var(--brown-mid);}
+.rmodal-ingredient:last-child{border-bottom:none;}
+.rmodal-step{display:flex;gap:14px;margin-bottom:14px;align-items:flex-start;}
+.rmodal-step-num{width:26px;height:26px;border-radius:50%;background:var(--terra);color:white;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:500;flex-shrink:0;}
+.rmodal-step-text{font-size:0.85rem;color:var(--brown-mid);line-height:1.6;padding-top:3px;}
+.rmodal-note{background:var(--gold-soft);border:1px solid var(--gold);border-radius:4px;padding:14px 18px;font-size:0.82rem;color:var(--brown-mid);line-height:1.6;}
 /* FOOTER */
 .portal-footer{background:var(--brown-deep);padding:22px 48px;display:flex;align-items:center;justify-content:space-between;}
 .footer-left{font-family:'Playfair Display',serif;font-size:0.9rem;color:var(--cream);}
 .footer-left span{color:var(--gold);font-style:italic;}
 .footer-right{font-size:0.7rem;color:var(--taupe);text-align:right;line-height:1.7;}
-@media(max-width:900px){.main-grid{grid-template-columns:1fr;}.left-panel{padding:24px 20px;}.right-panel{padding:24px 20px;}.meal-week{gap:3px;}.meal-cell{padding:10px 3px;}.meal-emoji{font-size:1.1rem;}.portal-footer{flex-direction:column;gap:12px;text-align:center;}.topbar{padding:0 20px;}.hero-banner{padding:40px 20px;}.schedule-slots{grid-template-columns:1fr;}.mpc-grid{grid-template-columns:1fr;}}
+@media(max-width:900px){.main-grid{grid-template-columns:1fr;}.left-panel{padding:24px 20px;}.right-panel{padding:24px 20px;}.meal-week{gap:3px;}.meal-cell{padding:10px 3px;}.meal-emoji{font-size:1.1rem;}.portal-footer{flex-direction:column;gap:12px;text-align:center;}.topbar{padding:0 20px;}.hero-banner{padding:40px 20px;}.schedule-slots{grid-template-columns:1fr;}.mpc-grid{grid-template-columns:1fr;}.rmodal-body{padding:20px;}.rmodal-header{padding:20px;}}
 </style>
 </head>
 <body>
+
 <div class="topbar">
   <a href="index.html" class="topbar-brand">Food <span>COO</span></a>
   <div class="topbar-right">
@@ -142,11 +155,10 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
   <div class="hero-banner-text">
     <div class="banner-greeting">Your personalized portal</div>
     <h1 class="banner-h1">Welcome, <em>Wiedmars</em> 👋</h1>
-    <p class="banner-sub">Your week is planned, your groceries are ready to order, and Erin has a note waiting for you.</p>
+    <p class="banner-sub">Your week is planned, Erin has your groceries covered, and there's a note waiting for you below.</p>
     <div class="banner-tags">
-      <span class="banner-tag active">Reduce Processed Foods</span>
-      <span class="banner-tag">5 people</span>
-      <span class="banner-tag">Kroger</span>
+      <span class="banner-tag active">Balanced Nutrition</span>
+      <span class="banner-tag">2 people</span>
       
     </div>
   </div>
@@ -164,159 +176,79 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
   <div class="main-grid">
     <div class="left-panel">
       <div class="slabel">This Week's Meal Plan</div>
-      <div class="meal-week">
-      <div class="meal-cell today">
-        <div class="meal-day-abbr">Mon</div>
-        <span class="meal-emoji">🍽️</span>
-        <div class="meal-name">Shrimp and risotto</div>
-        <div class="meal-type">Dinner</div>
-      </div>
-      <div class="meal-cell">
-        <div class="meal-day-abbr">Tue</div>
-        <span class="meal-emoji">🍽️</span>
-        <div class="meal-name">Chicken Fajitas</div>
-        <div class="meal-type">Dinner</div>
-      </div>
-      <div class="meal-cell">
-        <div class="meal-day-abbr">Wed</div>
-        <span class="meal-emoji">🍽️</span>
-        <div class="meal-name">Turkey fried rice</div>
-        <div class="meal-type">Dinner</div>
-      </div>
-      <div class="meal-cell">
-        <div class="meal-day-abbr">Thu</div>
-        <span class="meal-emoji">🍽️</span>
-        <div class="meal-name">Grilled cheese and soup</div>
-        <div class="meal-type">Dinner</div>
-      </div>
-      <div class="meal-cell">
-        <div class="meal-day-abbr">Fri</div>
-        <span class="meal-emoji">🍽️</span>
-        <div class="meal-name">Fish fry</div>
-        <div class="meal-type">Dinner</div>
-      </div>
-      <div class="meal-cell">
-        <div class="meal-day-abbr">Sat</div>
-        <span class="meal-emoji">🍽️</span>
-        <div class="meal-name">Deli Sandwiches and Soup</div>
-        <div class="meal-type">Dinner</div>
-      </div>
-      <div class="meal-cell">
-        <div class="meal-day-abbr">Sun</div>
-        <span class="meal-emoji">🍽️</span>
-        <div class="meal-name">Honey Mustard Chicken, baked potatoes, and broccoli</div>
-        <div class="meal-type">Dinner</div>
-      </div></div>
+      <div class="meal-week"><div class="meal-cell today linked" onclick="window.open('https://www.tasteofhome.com/recipes/southwest-chicken-chili/','_blank')"><div class="meal-day-abbr">Mon</div><span class="meal-emoji">🔗</span><div class="meal-name">Southwest Chicken Chili</div><div class="meal-type">Dinner</div><div class="meal-link-badge">Open Recipe ↗</div></div><div class="meal-cell" ><div class="meal-day-abbr">Tue</div><span class="meal-emoji">🍽️</span><div class="meal-name">Grilled Cheese </div><div class="meal-type">Dinner</div></div><div class="meal-cell" ><div class="meal-day-abbr">Wed</div><span class="meal-emoji">🍽️</span><div class="meal-name">Grilled Cheese </div><div class="meal-type">Dinner</div></div><div class="meal-cell" ><div class="meal-day-abbr">Thu</div><span class="meal-emoji">🍽️</span><div class="meal-name">Grilled Cheese </div><div class="meal-type">Dinner</div></div><div class="meal-cell" ><div class="meal-day-abbr">Fri</div><span class="meal-emoji">🍽️</span><div class="meal-name">Grilled Cheese </div><div class="meal-type">Dinner</div></div><div class="meal-cell" ><div class="meal-day-abbr">Sat</div><span class="meal-emoji">🍽️</span><div class="meal-name">Grilled Cheese </div><div class="meal-type">Dinner</div></div><div class="meal-cell" ><div class="meal-day-abbr">Sun</div><span class="meal-emoji">🍽️</span><div class="meal-name">Grilled Cheese </div><div class="meal-type">Dinner</div></div></div>
       <div class="slabel">Rate This Week's Meals</div>
+      <div class="fb-card">
+      <div class="fb-meal-name">Mon — Southwest Chicken Chili</div>
+      <a href="https://www.tasteofhome.com/recipes/southwest-chicken-chili/" target="_blank" class="fb-recipe-btn">📖 View Full Recipe ↗</a>
+      <div class="fb-stars"><span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span></div>
+      <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
+      <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
+      <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
+    </div><div class="fb-card">
+      <div class="fb-meal-name">Tue — Grilled Cheese </div>
       
-      <div class="fb-card">
-        <div class="fb-meal-name">Mon — Shrimp and risotto</div>
-        <div class="fb-stars">
-          <span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span>
-        </div>
-        <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
-        <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
-        <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
-      </div>
-      <div class="fb-card">
-        <div class="fb-meal-name">Tue — Chicken Fajitas</div>
-        <div class="fb-stars">
-          <span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span>
-        </div>
-        <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
-        <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
-        <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
-      </div>
-      <div class="fb-card">
-        <div class="fb-meal-name">Wed — Turkey fried rice</div>
-        <div class="fb-stars">
-          <span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span>
-        </div>
-        <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
-        <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
-        <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
-      </div>
-      <div class="fb-card">
-        <div class="fb-meal-name">Thu — Grilled cheese and soup</div>
-        <div class="fb-stars">
-          <span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span>
-        </div>
-        <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
-        <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
-        <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
-      </div>
-      <div class="fb-card">
-        <div class="fb-meal-name">Fri — Fish fry</div>
-        <div class="fb-stars">
-          <span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span>
-        </div>
-        <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
-        <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
-        <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
-      </div>
-      <div class="fb-card">
-        <div class="fb-meal-name">Sat — Deli Sandwiches and Soup</div>
-        <div class="fb-stars">
-          <span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span>
-        </div>
-        <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
-        <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
-        <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
-      </div>
-      <div class="fb-card">
-        <div class="fb-meal-name">Sun — Honey Mustard Chicken, baked potatoes, and broccoli</div>
-        <div class="fb-stars">
-          <span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span>
-        </div>
-        <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
-        <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
-        <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
-      </div>
+      <div class="fb-stars"><span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span></div>
+      <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
+      <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
+      <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
+    </div><div class="fb-card">
+      <div class="fb-meal-name">Wed — Grilled Cheese </div>
+      
+      <div class="fb-stars"><span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span></div>
+      <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
+      <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
+      <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
+    </div><div class="fb-card">
+      <div class="fb-meal-name">Thu — Grilled Cheese </div>
+      
+      <div class="fb-stars"><span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span></div>
+      <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
+      <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
+      <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
+    </div><div class="fb-card">
+      <div class="fb-meal-name">Fri — Grilled Cheese </div>
+      
+      <div class="fb-stars"><span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span></div>
+      <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
+      <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
+      <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
+    </div><div class="fb-card">
+      <div class="fb-meal-name">Sat — Grilled Cheese </div>
+      
+      <div class="fb-stars"><span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span></div>
+      <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
+      <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
+      <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
+    </div><div class="fb-card">
+      <div class="fb-meal-name">Sun — Grilled Cheese </div>
+      
+      <div class="fb-stars"><span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span></div>
+      <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
+      <button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button>
+      <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
+    </div>
     </div>
     <div class="right-panel">
       <div class="erins-note">
         <div class="note-from">A note from Erin</div>
-        <div class="note-text">I am so excited!</div>
+        <div class="note-text">yahoo!</div>
         <div class="note-date">— Erin W. · March 2026</div>
       </div>
       <div class="grocery-panel">
-        <h3>Grocery Delivery</h3>
-        <div class="grocery-sub">One tap to send this week's list to your preferred service.</div>
-        
-        <a href="#" class="grocery-btn">
-          <div class="grocery-btn-left"><span>🛒</span><div><div class="grocery-btn-name">Instacart</div></div></div>
-          <span>→</span>
-        </a>
-        <a href="#" class="grocery-btn">
-          <div class="grocery-btn-left"><span>🔵</span><div><div class="grocery-btn-name">Walmart+</div></div></div>
-          <span>→</span>
-        </a>
-        <a href="#" class="grocery-btn">
-          <div class="grocery-btn-left"><span>📦</span><div><div class="grocery-btn-name">Amazon Fresh</div></div></div>
-          <span>→</span>
-        </a>
-        <a href="#" class="grocery-btn preferred">
-          <div class="grocery-btn-left"><span>🏪</span><div><div class="grocery-btn-name">Kroger</div><div class="grocery-btn-pref">Preferred</div></div></div>
-          <span>→</span>
-        </a>
-        <a href="#" class="grocery-btn">
-          <div class="grocery-btn-left"><span>🌿</span><div><div class="grocery-btn-name">Whole Foods</div></div></div>
-          <span>→</span>
-        </a>
-        <a href="#" class="grocery-btn">
-          <div class="grocery-btn-left"><span>🚗</span><div><div class="grocery-btn-name">Local Pickup</div></div></div>
-          <span>→</span>
-        </a>
+        <h3>🛒 Groceries, Handled</h3>
+        <div class="grocery-sub">Erin takes grocery shopping completely off your plate. Whether she orders delivery or shops in person, it's handled for you.</div>
+        <div style="background:var(--sage-soft);border:1px solid var(--sage);border-radius:4px;padding:12px 16px;font-size:0.8rem;color:var(--brown-mid);line-height:1.6;">✓ This is part of your engagement — no action needed from you.</div>
       </div>
       <div class="next-card">
         <h3>Upcoming With Erin</h3>
-        <div class="next-list"><div class="next-item"><div class="next-dot"></div><div>Tuesday, March 11 - 2 hour meal prep</div></div></div>
+        <div class="next-list"><div class="next-item"><div class="next-dot"></div><div><strong>March 10</strong></div></div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- TAB: WEEKLY SCHEDULE -->
+<!-- TAB: SCHEDULE -->
 <div class="tab-content" id="tab-schedule">
   <div style="padding:36px 44px;max-width:800px;">
     <div class="slabel">Submit Your Week</div>
@@ -327,100 +259,76 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
       <div class="schedule-day-row">
         <div class="schedule-day-label">Monday</div>
         <div class="schedule-slots">
-          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am, Work 8am"></div>
+          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am"></div>
           <div class="schedule-slot"><label>Afternoon</label><input type="text" placeholder="e.g. Soccer 4–6pm"></div>
           <div class="schedule-slot"><label>Evening / Dinner</label><select><option value="">Select dinner situation</option><option>Everyone home — full dinner</option><option>Quick dinner needed (30 min or less)</option><option>Staggered — people eating at diff times</option><option>Some people gone</option><option>Eating out or leftovers</option></select></div>
-      </div>
+        </div>
       </div>
       <div class="schedule-day-row">
         <div class="schedule-day-label">Tuesday</div>
         <div class="schedule-slots">
-          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am, Work 8am"></div>
+          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am"></div>
           <div class="schedule-slot"><label>Afternoon</label><input type="text" placeholder="e.g. Soccer 4–6pm"></div>
           <div class="schedule-slot"><label>Evening / Dinner</label><select><option value="">Select dinner situation</option><option>Everyone home — full dinner</option><option>Quick dinner needed (30 min or less)</option><option>Staggered — people eating at diff times</option><option>Some people gone</option><option>Eating out or leftovers</option></select></div>
-      </div>
+        </div>
       </div>
       <div class="schedule-day-row">
         <div class="schedule-day-label">Wednesday</div>
         <div class="schedule-slots">
-          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am, Work 8am"></div>
+          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am"></div>
           <div class="schedule-slot"><label>Afternoon</label><input type="text" placeholder="e.g. Soccer 4–6pm"></div>
           <div class="schedule-slot"><label>Evening / Dinner</label><select><option value="">Select dinner situation</option><option>Everyone home — full dinner</option><option>Quick dinner needed (30 min or less)</option><option>Staggered — people eating at diff times</option><option>Some people gone</option><option>Eating out or leftovers</option></select></div>
-      </div>
+        </div>
       </div>
       <div class="schedule-day-row">
         <div class="schedule-day-label">Thursday</div>
         <div class="schedule-slots">
-          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am, Work 8am"></div>
+          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am"></div>
           <div class="schedule-slot"><label>Afternoon</label><input type="text" placeholder="e.g. Soccer 4–6pm"></div>
           <div class="schedule-slot"><label>Evening / Dinner</label><select><option value="">Select dinner situation</option><option>Everyone home — full dinner</option><option>Quick dinner needed (30 min or less)</option><option>Staggered — people eating at diff times</option><option>Some people gone</option><option>Eating out or leftovers</option></select></div>
-      </div>
+        </div>
       </div>
       <div class="schedule-day-row">
         <div class="schedule-day-label">Friday</div>
         <div class="schedule-slots">
-          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am, Work 8am"></div>
+          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am"></div>
           <div class="schedule-slot"><label>Afternoon</label><input type="text" placeholder="e.g. Soccer 4–6pm"></div>
           <div class="schedule-slot"><label>Evening / Dinner</label><select><option value="">Select dinner situation</option><option>Everyone home — full dinner</option><option>Quick dinner needed (30 min or less)</option><option>Staggered — people eating at diff times</option><option>Some people gone</option><option>Eating out or leftovers</option></select></div>
-      </div>
+        </div>
       </div>
       <div class="schedule-day-row">
         <div class="schedule-day-label">Saturday</div>
         <div class="schedule-slots">
-          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am, Work 8am"></div>
+          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am"></div>
           <div class="schedule-slot"><label>Afternoon</label><input type="text" placeholder="e.g. Soccer 4–6pm"></div>
           <div class="schedule-slot"><label>Evening / Dinner</label><select><option value="">Select dinner situation</option><option>Everyone home — full dinner</option><option>Quick dinner needed (30 min or less)</option><option>Staggered — people eating at diff times</option><option>Some people gone</option><option>Eating out or leftovers</option></select></div>
-      </div>
+        </div>
       </div>
       <div class="schedule-day-row">
         <div class="schedule-day-label">Sunday</div>
         <div class="schedule-slots">
-          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am, Work 8am"></div>
+          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am"></div>
           <div class="schedule-slot"><label>Afternoon</label><input type="text" placeholder="e.g. Soccer 4–6pm"></div>
           <div class="schedule-slot"><label>Evening / Dinner</label><select><option value="">Select dinner situation</option><option>Everyone home — full dinner</option><option>Quick dinner needed (30 min or less)</option><option>Staggered — people eating at diff times</option><option>Some people gone</option><option>Eating out or leftovers</option></select></div>
+        </div>
       </div>
-      </div>
-      <div style="margin-top:16px;"><label style="display:block;font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--brown-mid);margin-bottom:7px;">Any notes for Erin this week?</label><textarea style="width:100%;padding:11px 14px;background:var(--warm-white);border:1.5px solid var(--sand);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--brown-deep);outline:none;resize:vertical;min-height:80px;" placeholder="Big week, someone's sick, celebrating a birthday, out of usual groceries..."></textarea></div>
+      <div style="margin-top:16px;"><label style="display:block;font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--brown-mid);margin-bottom:7px;">Any notes for Erin this week?</label><textarea style="width:100%;padding:11px 14px;background:var(--warm-white);border:1.5px solid var(--sand);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--brown-deep);outline:none;resize:vertical;min-height:80px;" placeholder="Big week, someone's sick, celebrating a birthday..."></textarea></div>
       <button class="schedule-submit" onclick="submitSchedule(this)">Send Schedule to Erin →</button>
-      <div class="schedule-success" id="schedule-success">✅ Schedule sent! Erin will have your meal plan ready before Monday.</div>
+      <div class="schedule-success">✅ Schedule sent! Erin will have your meal plan ready before Monday.</div>
     </div>
   </div>
 </div>
 
-<!-- TAB: FAMILY PROFILES -->
+<!-- TAB: PROFILES -->
 <div class="tab-content" id="tab-profiles">
   <div style="padding:36px 44px;max-width:900px;">
     <div class="slabel">Individual Food Profiles</div>
     <p style="font-size:0.85rem;color:var(--taupe);margin-bottom:24px;line-height:1.6;">Each family member's personal food profile — what they love, what they're still learning, and what makes meals work for them.</p>
     
     <div class="member-profile-card">
-      <div class="mpc-header" onclick="toggleProfile(this)">
-        <div class="mpc-avatar">C</div>
-        <div>
-          <div class="mpc-name">Chris</div>
-          <div class="mpc-meta">Age 40 · Works till 4 · ⚠️ none</div>
-        </div>
-      </div>
-      <div class="mpc-body">
-        <div class="mpc-grid">
-          
-          
-          
-          
-          
-          
-        </div>
-        
-        
-      </div>
-    </div>
-    <div class="member-profile-card">
-      <div class="mpc-header" onclick="toggleProfile(this)">
+      <div class="mpc-header" onclick="this.nextElementSibling.classList.toggle('open')">
         <div class="mpc-avatar">E</div>
-        <div>
-          <div class="mpc-name">Erin</div>
-          <div class="mpc-meta">Age 40 · Works till 3 · ⚠️ none</div>
-        </div>
+        <div><div class="mpc-name">Erin  </div><div class="mpc-meta">Age 40 · Works till 3pm · ⚠️ none</div></div>
       </div>
       <div class="mpc-body">
         <div class="mpc-grid">
@@ -436,54 +344,9 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
       </div>
     </div>
     <div class="member-profile-card">
-      <div class="mpc-header" onclick="toggleProfile(this)">
-        <div class="mpc-avatar">W</div>
-        <div>
-          <div class="mpc-name">Walker</div>
-          <div class="mpc-meta">Age 11 · school, some sports · ⚠️ picky eater</div>
-        </div>
-      </div>
-      <div class="mpc-body">
-        <div class="mpc-grid">
-          
-          
-          
-          
-          
-          
-        </div>
-        
-        
-      </div>
-    </div>
-    <div class="member-profile-card">
-      <div class="mpc-header" onclick="toggleProfile(this)">
-        <div class="mpc-avatar">R</div>
-        <div>
-          <div class="mpc-name">Riley  </div>
-          <div class="mpc-meta">Age 9 · School, some sports · ⚠️ none</div>
-        </div>
-      </div>
-      <div class="mpc-body">
-        <div class="mpc-grid">
-          
-          
-          
-          
-          
-          
-        </div>
-        
-        
-      </div>
-    </div>
-    <div class="member-profile-card">
-      <div class="mpc-header" onclick="toggleProfile(this)">
-        <div class="mpc-avatar">L</div>
-        <div>
-          <div class="mpc-name">Logan</div>
-          <div class="mpc-meta"> · School, some sports · ⚠️ none</div>
-        </div>
+      <div class="mpc-header" onclick="this.nextElementSibling.classList.toggle('open')">
+        <div class="mpc-avatar">C</div>
+        <div><div class="mpc-name">Chris</div><div class="mpc-meta">Age 40 · Works till 4pm · ⚠️ eggs</div></div>
       </div>
       <div class="mpc-body">
         <div class="mpc-grid">
@@ -507,8 +370,8 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
     <div class="slabel">Our Shared Plan</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
       <div style="background:var(--warm-white);border:1px solid var(--sand);border-radius:6px;padding:22px;">
-        <div style="font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--terra);margin-bottom:14px;">Goals & Vision</div>
-        <div class="overview-row"><span class="overview-key">Primary Goal</span><span class="overview-val">Reduce Processed Foods</span></div>
+        <div style="font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--terra);margin-bottom:14px;">Goals &amp; Vision</div>
+        <div class="overview-row"><span class="overview-key">Primary Goal</span><span class="overview-val">Balanced Nutrition</span></div>
         
         
         
@@ -522,16 +385,20 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
       <div style="background:var(--warm-white);border:1px solid var(--sand);border-radius:6px;padding:22px;">
         <div style="font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--terra);margin-bottom:14px;">Household Logistics</div>
         <div class="overview-row"><span class="overview-key">Weekly Budget</span><span class="overview-val">$200</span></div>
-        <div class="overview-row"><span class="overview-key">Grocery Service</span><span class="overview-val">Kroger</span></div>
         <div class="overview-row"><span class="overview-key">Leftovers</span><span class="overview-val">Yes — love leftovers</span></div>
-        <div style="margin-top:12px;"><div style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--taupe);margin-bottom:8px;">Kitchen Appliances</div><div><span class="ptag">Slow Cooker</span><span class="ptag">Air Fryer</span><span class="ptag">Grill</span><span class="ptag">Blender</span><span class="ptag">Food Processor</span></div></div>
+        
       </div>
       <div style="background:var(--warm-white);border:1px solid var(--sand);border-radius:6px;padding:22px;">
         <div style="font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--terra);margin-bottom:14px;">Weekly Schedule Routine</div>
-        <div style="font-size:0.85rem;color:var(--brown-mid);line-height:1.7;">Submit your family's weekly schedule every <strong style="color:var(--brown-deep);">Sunday</strong> using the <em>Weekly Schedule</em> tab above. This helps Erin plan the right meal for every night — matching your busy days with quick dinners and your free nights with something more special.</div>
+        <div style="font-size:0.85rem;color:var(--brown-mid);line-height:1.7;">Submit your family's weekly schedule every <strong style="color:var(--brown-deep);">Sunday</strong> using the <em>Weekly Schedule</em> tab above. This helps Erin plan the right meal for every night.</div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- RECIPE DETAIL MODAL -->
+<div class="recipe-modal-bg" id="recipe-modal" onclick="closeRecipeModal(event)">
+  <div class="recipe-modal-box" id="recipe-modal-box"></div>
 </div>
 
 <div class="portal-footer">
@@ -540,27 +407,57 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 </div>
 
 <script>
-function rate(star,n){const row=star.closest('.fb-stars');row.querySelectorAll('.fb-star').forEach((s,i)=>s.classList.toggle('lit',i<n));}
-function sendFb(btn){const c=btn.closest('.fb-card');c.querySelector('.fb-sent').style.display='block';btn.style.display='none';}
+const RECIPES = [{"id":"l_1773003395977","type":"external","name":"Southwest Chicken Chili","emoji":"🔗","url":"https://www.tasteofhome.com/recipes/southwest-chicken-chili/","source":"Taste of Home","time":"6 hours","color":"linear-gradient(135deg,#D4E8D8,#90B898)","tags":[],"desc":"","note":""}];
+
 function switchTab(name,el){
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   el.classList.add('active');
 }
-function toggleProfile(header){header.nextElementSibling.classList.toggle('open');}
+function rate(star,n){const row=star.closest('.fb-stars');row.querySelectorAll('.fb-star').forEach((s,i)=>s.classList.toggle('lit',i<n));}
+function sendFb(btn){const c=btn.closest('.fb-card');c.querySelector('.fb-sent').style.display='block';btn.style.display='none';}
 function submitSchedule(btn){
   const form=btn.closest('.schedule-form');
   form.querySelector('.schedule-success').style.display='block';
   btn.style.display='none';
-  // Email via mailto as fallback
-  const mailto='mailto:erin.louienu@gmail.com?subject=Weekly%20Schedule%20-%20The%20Wiedmar%20Family&body=Schedule%20submitted%20from%20portal.';
-  setTimeout(()=>window.location.href=mailto,800);
+  setTimeout(()=>{ window.location.href='mailto:erin.louienu@gmail.com?subject=Weekly%20Schedule%20-%20The%20Wiedmar%20Family&body=Schedule%20submitted%20from%20portal.'; },800);
 }
-// Animate on load
+function openRecipeModal(id){
+  const r = RECIPES.find(x=>x.id===id);
+  if(!r) return;
+  const ingredients = (r.ingredients||'').split('\n').filter(Boolean);
+  const steps = (r.instructions||'').split('\n').filter(Boolean);
+  const erinsNote = r.erinsNote||r.note||'';
+  document.getElementById('recipe-modal-box').innerHTML = `
+    <div class="rmodal-header">
+      <button class="rmodal-close" onclick="document.getElementById('recipe-modal').classList.remove('show')">×</button>
+      <span class="rmodal-emoji">${r.emoji||'🍽️'}</span>
+      <div class="rmodal-name">${r.name}</div>
+      <div class="rmodal-meta">
+        ${r.time?'<span>⏱ '+r.time+'</span>':''}
+        ${r.serves?'<span>🍽 Serves '+r.serves+'</span>':''}
+        ${r.cuisine?'<span>🌍 '+r.cuisine+'</span>':''}
+      </div>
+    </div>
+    <div class="rmodal-body">
+      ${r.description?'<p style="font-family:Lora,serif;font-style:italic;color:var(--brown-mid);line-height:1.7;margin-bottom:24px;">'+r.description+'</p>':''}
+      ${ingredients.length?'<div class="rmodal-section"><div class="rmodal-section-label">Ingredients</div>'+ingredients.map(i=>'<div class="rmodal-ingredient">'+i+'</div>').join('')+'</div>':''}
+      ${steps.length?'<div class="rmodal-section"><div class="rmodal-section-label">Instructions</div>'+steps.map((s,i)=>'<div class="rmodal-step"><div class="rmodal-step-num">'+(i+1)+'</div><div class="rmodal-step-text">'+s+'</div></div>').join('')+'</div>':''}
+      ${erinsNote?'<div class="rmodal-note"><strong style="display:block;color:var(--brown-deep);margin-bottom:4px;">📝 Erin\'s Note</strong>'+erinsNote+'</div>':''}
+    </div>`;
+  const bg = document.getElementById('recipe-modal');
+  bg.style.display = 'flex';
+  requestAnimationFrame(()=>bg.classList.add('show'));
+}
+function closeRecipeModal(e){
+  if(e.target===document.getElementById('recipe-modal')){
+    document.getElementById('recipe-modal').classList.remove('show');
+  }
+}
 document.querySelectorAll('.meal-cell,.fb-card').forEach((el,i)=>{
   el.style.opacity='0';el.style.transform='translateY(14px)';
-  el.style.transition='opacity 0.4s ease '+(i*0.05)+'s, transform 0.4s ease '+(i*0.05)+'s';
+  el.style.transition='opacity 0.4s ease '+(i*0.05)+'s,transform 0.4s ease '+(i*0.05)+'s';
   setTimeout(()=>{el.style.opacity='1';el.style.transform='translateY(0)';},60);
 });
 </script>
