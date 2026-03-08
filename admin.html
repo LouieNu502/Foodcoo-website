@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Food COO</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F7F3EC;--warm-white:#FDFCF9;--brown-deep:#231810;--brown-mid:#5A3825;--brown-light:#8C6649;--taupe:#B8A898;--sand:#D8C9B0;--sage:#6B8A62;--sage-soft:#C8D8C2;--terra:#C46A42;--terra-soft:#EDD5C4;--gold:#C9A254;--gold-soft:#F0E0B8;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;}
+/* TOPBAR */
+.topbar{background:var(--brown-deep);padding:0 48px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;}
+.topbar-brand{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--cream);text-decoration:none;}
+.topbar-brand span{color:var(--gold);font-style:italic;}
+.topbar-right{display:flex;align-items:center;gap:16px;}
+.topbar-tag{background:var(--terra);color:white;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;padding:5px 14px;border-radius:100px;}
+.topbar-nav a{color:rgba(247,243,236,0.55);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;margin-left:20px;transition:color 0.2s;}
+.topbar-nav a:hover{color:var(--cream);}
+/* PIN SCREEN */
+.pin-screen{position:fixed;inset:0;background:var(--brown-deep);display:flex;align-items:center;justify-content:center;z-index:500;flex-direction:column;gap:28px;}
+.pin-screen.hidden{display:none;}
+.pin-logo{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--cream);text-align:center;}
+.pin-logo span{color:var(--gold);font-style:italic;}
+.pin-logo em{display:block;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--taupe);font-style:normal;margin-top:6px;}
+.pin-input-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.pin-input{background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.15);border-radius:6px;padding:14px 28px;font-family:'DM Sans',sans-serif;font-size:1.4rem;color:var(--cream);text-align:center;letter-spacing:0.3em;outline:none;width:180px;transition:border-color 0.2s;}
+.pin-input:focus{border-color:var(--gold);}
+.pin-input.error{border-color:var(--terra);animation:shake 0.3s;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.pin-btn{background:var(--terra);color:white;border:none;padding:12px 36px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
+.pin-btn:hover{background:var(--gold);color:var(--brown-deep);}
+.pin-hint{font-size:0.72rem;color:var(--taupe);}
+/* HERO */
+.hero{background:linear-gradient(125deg,var(--brown-mid),var(--brown-deep));padding:44px 48px 40px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 0%,rgba(201,162,84,0.12) 0%,transparent 55%);pointer-events:none;}
+.hero-inner{position:relative;z-index:1;}
+.hero-eyebrow{font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold);}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;color:var(--cream);line-height:1.1;margin-bottom:6px;}
+.hero-h1 em{color:var(--gold);font-style:italic;}
+.hero-sub{font-size:0.85rem;color:rgba(247,243,236,0.6);line-height:1.6;max-width:480px;}
+.hero-stats{display:flex;gap:28px;margin-top:20px;}
+.hero-stat{text-align:center;}
+.hero-stat-num{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);}
+.hero-stat-label{font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--taupe);margin-top:2px;}
+/* MAIN LAYOUT */
+.app-body{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 56px - 120px);}
+/* SIDEBAR */
+.sidebar{background:var(--brown-deep);padding:28px 0;border-right:1px solid rgba(255,255,255,0.06);}
+.sidebar-section-label{font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--taupe);padding:0 24px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.add-family-btn{background:none;border:none;cursor:pointer;color:var(--gold);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;display:flex;align-items:center;gap:4px;transition:opacity 0.2s;}
+.add-family-btn:hover{opacity:0.7;}
+.family-list{display:flex;flex-direction:column;}
+.family-item{padding:14px 24px;cursor:pointer;transition:background 0.15s;border-left:3px solid transparent;display:flex;align-items:center;gap:12px;}
+.family-item:hover{background:rgba(255,255,255,0.05);}
+.family-item.active{background:rgba(247,243,236,0.06);border-left-color:var(--terra);}
+.family-avatar{width:36px;height:36px;border-radius:50%;background:var(--terra);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;color:white;flex-shrink:0;}
+.family-info{flex:1;min-width:0;}
+.family-name{font-family:'Playfair Display',serif;font-size:0.9rem;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.family-meta{font-size:0.68rem;color:var(--taupe);margin-top:1px;}
+.family-week-badge{font-size:0.6rem;background:rgba(196,106,66,0.2);color:var(--terra);border:1px solid rgba(196,106,66,0.3);padding:2px 7px;border-radius:100px;flex-shrink:0;}
+.sidebar-divider{border:none;border-top:1px solid rgba(255,255,255,0.07);margin:20px 0;}
+.sidebar-link{display:flex;align-items:center;gap:10px;padding:10px 24px;color:rgba(247,243,236,0.5);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;transition:color 0.2s;cursor:pointer;}
+.sidebar-link:hover{color:var(--cream);}
+/* MAIN PANEL */
+.main-panel{overflow-y:auto;}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:60px;text-align:center;color:var(--taupe);}
+.empty-state-icon{font-size:3rem;margin-bottom:16px;opacity:0.5;}
+.empty-state h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--brown-light);margin-bottom:8px;}
+.empty-state p{font-size:0.85rem;line-height:1.6;max-width:320px;}
+/* FAMILY VIEW */
+.family-view{display:none;padding:36px 44px;}
+.family-view.active{display:block;}
+.fv-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--sand);}
+.fv-title{font-family:'Playfair Display',serif;font-size:2rem;color:var(--brown-deep);}
+.fv-title em{color:var(--terra);font-style:italic;}
+.fv-meta{font-size:0.78rem;color:var(--taupe);margin-top:4px;}
+.fv-actions{display:flex;gap:10px;}
+.btn-plan{background:var(--terra);color:white;border:none;padding:12px 24px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
+.btn-plan:hover{background:var(--brown-deep);}
+.btn-outline{background:transparent;color:var(--brown-mid);border:1.5px solid var(--sand);padding:12px 20px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.btn-outline:hover{border-color:var(--brown-mid);}
+/* TABS */
+.fv-tabs{display:flex;gap:0;border-bottom:1px solid var(--sand);margin-bottom:28px;}
+.fv-tab{padding:10px 20px;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;}
+.fv-tab:hover{color:var(--brown-mid);}
+.fv-tab.active{color:var(--terra);border-bottom-color:var(--terra);}
+.fv-tab-panel{display:none;}
+.fv-tab-panel.active{display:block;}
+/* PROFILE SECTIONS */
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+.profile-card{background:var(--warm-white);border:1px solid var(--sand);border-radius:6px;padding:20px;}
+.profile-card-full{grid-column:1/-1;}
+.pc-label{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--terra);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.pc-label::before{content:'';width:14px;height:1px;background:var(--terra);}
+.pc-value{font-size:0.85rem;color:var(--brown-mid);line-height:1.6;}
+.pc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;}
+.pc-tag{font-size:0.62rem;padding:3px 9px;border-radius:100px;border:1px solid var(--sand);color:var(--taupe);}
+.pc-tag.terra{border-color:var(--terra);color:var(--terra);}
+.pc-tag.red{border-color:#e74c3c;color:#e74c3c;}
+.pc-tag.green{border-color:var(--sage);color:var(--sage);}
+/* MEMBER PROFILES */
+.member-accordion{background:var(--warm-white);border:1px solid var(--sand);border-radius:6px;margin-bottom:10px;overflow:hidden;}
+.ma-header{padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.15s;}
+.ma-header:hover{background:var(--cream);}
+.ma-avatar{width:32px;height:32px;border-radius:50%;background:var(--terra);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:0.9rem;color:white;flex-shrink:0;}
+.ma-name{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--brown-deep);}
+.ma-meta{font-size:0.7rem;color:var(--taupe);margin-left:auto;}
+.ma-body{display:none;padding:16px 18px;border-top:1px solid var(--sand);background:var(--cream);}
+.ma-body.open{display:block;}
+.ma-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.ma-field label{font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--terra);display:block;margin-bottom:5px;}
+.ma-field p{font-size:0.82rem;color:var(--brown-mid);line-height:1.6;}
+/* HISTORY */
+.history-week{background:var(--warm-white);border:1px solid var(--sand);border-radius:6px;margin-bottom:14px;overflow:hidden;}
+.hw-header{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;background:var(--cream);border-bottom:1px solid var(--sand);}
+.hw-week{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--brown-deep);}
+.hw-date{font-size:0.72rem;color:var(--taupe);}
+.hw-meals{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:12px;}
+.hw-meal{text-align:center;padding:8px 4px;background:var(--cream);border-radius:4px;}
+.hw-meal-day{font-size:0.56rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);margin-bottom:3px;}
+.hw-meal-emoji{font-size:1rem;display:block;margin-bottom:2px;}
+.hw-meal-name{font-size:0.62rem;color:var(--brown-mid);line-height:1.3;}
+/* PLANNER */
+.planner-wrap{background:var(--warm-white);border:1.5px solid var(--sand);border-radius:8px;overflow:hidden;margin-bottom:24px;}
+.planner-header{background:var(--brown-deep);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;}
+.planner-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--cream);}
+.planner-week-select{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--cream);padding:7px 14px;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.78rem;outline:none;}
+.planner-body{padding:24px 28px;}
+.planner-last-week{background:var(--gold-soft);border:1px solid var(--gold);border-radius:4px;padding:12px 16px;font-size:0.78rem;color:var(--brown-mid);margin-bottom:20px;line-height:1.6;}
+.planner-last-week strong{color:var(--brown-deep);}
+.planner-meal-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.pmr{display:grid;grid-template-columns:90px 1fr 70px 100px 76px;gap:8px;align-items:center;background:var(--cream);border:1.5px solid var(--sand);border-radius:4px;padding:10px 14px;transition:border-color 0.2s;}
+.pmr.linked{border-color:var(--sage);background:rgba(200,216,194,0.1);}
+.pmr-day{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);font-weight:500;}
+.pmr input,.pmr select{padding:8px 10px;background:var(--warm-white);border:1px solid var(--sand);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--brown-deep);outline:none;width:100%;}
+.pmr input::placeholder{color:var(--taupe);font-size:0.75rem;}
+.pmr input:focus,.pmr select:focus{border-color:var(--terra);}
+.pick-btn{padding:8px 10px;background:var(--warm-white);border:1.5px solid var(--sand);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.7rem;cursor:pointer;color:var(--brown-mid);transition:all 0.2s;white-space:nowrap;width:100%;}
+.pick-btn:hover{border-color:var(--terra);color:var(--terra);}
+.pick-btn.active{border-color:var(--sage);color:var(--sage);background:var(--sage-soft);}
+.planner-note-section{margin-bottom:20px;}
+.planner-label{font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--brown-mid);margin-bottom:7px;font-weight:500;display:block;}
+.planner-textarea{width:100%;padding:12px 16px;background:var(--cream);border:1.5px solid var(--sand);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--brown-deep);resize:vertical;min-height:100px;outline:none;}
+.planner-textarea:focus{border-color:var(--terra);}
+.planner-input{width:100%;padding:11px 14px;background:var(--cream);border:1.5px solid var(--sand);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--brown-deep);outline:none;}
+.planner-input:focus{border-color:var(--terra);}
+.planner-visits{margin-bottom:20px;}
+.save-btn{width:100%;padding:14px;background:var(--terra);color:white;border:none;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;box-shadow:0 4px 16px rgba(196,106,66,0.25);}
+.save-btn:hover{background:var(--brown-deep);}
+/* DATA.JSON OUTPUT */
+.output-section{display:none;margin-top:24px;}
+.output-section.show{display:block;}
+.output-header{background:var(--brown-deep);padding:14px 22px;display:flex;align-items:center;justify-content:space-between;border-radius:6px 6px 0 0;}
+.output-title{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);}
+.copy-btn{background:var(--terra);color:white;border:none;padding:8px 18px;border-radius:3px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;transition:background 0.2s;}
+.copy-btn:hover,.copy-btn.copied{background:var(--sage);}
+.output-body{background:var(--warm-white);border:1px solid var(--sand);border-radius:0 0 6px 6px;padding:22px;}
+.output-instructions{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.oi{display:flex;gap:10px;align-items:flex-start;font-size:0.82rem;color:var(--brown-mid);line-height:1.5;}
+.oi-num{width:20px;height:20px;background:var(--terra);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.66rem;flex-shrink:0;}
+.oi code{background:var(--sand);padding:1px 5px;border-radius:2px;font-family:monospace;font-size:0.76rem;}
+.output-pre{background:var(--brown-deep);color:#d4c9b8;padding:16px;border-radius:4px;font-family:monospace;font-size:0.68rem;line-height:1.6;overflow-x:auto;max-height:200px;overflow-y:auto;display:none;margin-top:10px;}
+.show-raw-btn{background:none;border:1.5px solid var(--sand);color:var(--brown-mid);padding:7px 16px;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-top:10px;}
+/* RECIPE PICKER MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(26,18,8,0.72);z-index:9000;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+.modal-bg.show{display:flex;}
+.picker-inner{background:var(--cream);border-radius:8px;width:92%;max-width:540px;max-height:82vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,0.35);transform:translateY(16px);transition:transform 0.28s;}
+.modal-bg.show .picker-inner{transform:translateY(0);}
+.picker-head{background:var(--brown-deep);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.picker-head-title{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream);}
+.picker-head-close{background:none;border:none;cursor:pointer;font-size:1.4rem;color:var(--taupe);line-height:1;}
+.picker-search-wrap{padding:14px 20px;border-bottom:1px solid var(--sand);flex-shrink:0;}
+.picker-search-wrap input{width:100%;padding:10px 16px;background:var(--warm-white);border:1.5px solid var(--sand);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;color:var(--brown-deep);}
+.picker-search-wrap input:focus{border-color:var(--terra);}
+.picker-results{overflow-y:auto;flex:1;padding:12px 16px;}
+.picker-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:6px;cursor:pointer;border:1.5px solid transparent;transition:all 0.15s;margin-bottom:6px;}
+.picker-item:hover{background:var(--warm-white);border-color:var(--sand);}
+.picker-thumb{width:44px;height:44px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.picker-item-name{font-family:'Playfair Display',serif;font-size:0.93rem;color:var(--brown-deep);margin-bottom:2px;}
+.picker-item-meta{font-size:0.7rem;color:var(--taupe);}
+.picker-badge{font-size:0.58rem;padding:2px 8px;border-radius:100px;border:1px solid var(--terra);color:var(--terra);margin-left:auto;flex-shrink:0;}
+.picker-badge.ext{border-color:var(--taupe);color:var(--taupe);}
+.picker-empty{text-align:center;padding:36px 20px;color:var(--taupe);font-size:0.85rem;line-height:1.7;}
+/* FOOTER */
+.app-footer{background:var(--brown-deep);padding:20px 48px;display:flex;align-items:center;justify-content:space-between;}
+.footer-left{font-family:'Playfair Display',serif;font-size:0.88rem;color:var(--cream);}
+.footer-left span{color:var(--gold);font-style:italic;}
+.footer-right{font-size:0.7rem;color:var(--taupe);}
+/* UTILS */
+.slabel{font-size:0.64rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--terra);display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+.slabel::before{content:'';width:18px;height:1px;background:var(--terra);}
+@media(max-width:960px){.app-body{grid-template-columns:1fr;}.sidebar{display:none;}.topbar{padding:0 20px;}.family-view{padding:24px 20px;}.planner-body{padding:18px;}.pmr{grid-template-columns:70px 1fr;}.pmr .pick-btn,.pmr select{display:none;}}
+</style>
+</head>
+<body>
+
+<!-- PIN SCREEN -->
+<div class="pin-screen" id="pin-screen">
+  <div class="pin-logo">Food <span>COO</span><em>Admin Dashboard</em></div>
+  <div class="pin-input-wrap">
+    <input class="pin-input" type="password" id="pin-input" placeholder="••••" maxlength="4" oninput="checkPin(this)" autocomplete="off">
+    <div class="pin-hint">Enter your admin PIN to continue</div>
+  </div>
+</div>
+
+<div class="topbar">
+  <a href="index.html" class="topbar-brand">Food <span>COO</span></a>
+  <div class="topbar-right">
+    <div class="topbar-tag">Admin</div>
+    <nav class="topbar-nav">
+      <a href="index.html">Home</a>
+      <a href="recipes.html">Recipes</a>
+      <a href="new-client-setup.html">New Client</a>
+    </nav>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Client Dashboard</div>
+    <h1 class="hero-h1">Your <em>Families</em></h1>
+    <p class="hero-sub">Select a family to view their profile, meal history, and plan this week's menu.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-num" id="stat-families">0</div><div class="hero-stat-label">Active Families</div></div>
+      <div class="hero-stat"><div class="hero-stat-num" id="stat-weeks">0</div><div class="hero-stat-label">Weeks Planned</div></div>
+      <div class="hero-stat"><div class="hero-stat-num" id="stat-recipes">0</div><div class="hero-stat-label">Recipes in Library</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="app-body">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section-label">
+      Active Families
+      <a href="new-client-setup.html" class="add-family-btn">+ New</a>
+    </div>
+    <div class="family-list" id="family-list"></div>
+    <hr class="sidebar-divider">
+    <a href="recipes.html" class="sidebar-link">📖 Recipe Library</a>
+    <a href="new-client-setup.html" class="sidebar-link">⚙️ New Client Setup</a>
+    <div class="sidebar-link" onclick="exportDataJSON()">💾 Export data.json</div>
+  </div>
+
+  <!-- MAIN PANEL -->
+  <div class="main-panel" id="main-panel">
+    <div class="empty-state" id="empty-state">
+      <div class="empty-state-icon">👨‍👩‍👧‍👦</div>
+      <h3>Select a family</h3>
+      <p>Choose a family from the sidebar to view their profile, meal history, and plan this week's menu.</p>
+    </div>
+
+    <!-- FAMILY VIEW (cloned per family via JS) -->
+    <div class="family-view" id="family-view-template">
+      <div class="fv-header">
+        <div>
+          <div class="fv-title" id="fv-title">The <em>Smith</em> Family</div>
+          <div class="fv-meta" id="fv-meta">Week 1 · Balanced Nutrition · 4 members</div>
+        </div>
+        <div class="fv-actions">
+          <button class="btn-outline" onclick="switchFvTab('profile')">View Profile</button>
+          <button class="btn-plan" onclick="switchFvTab('plan')">📅 Plan This Week</button>
+        </div>
+      </div>
+
+      <div class="fv-tabs">
+        <div class="fv-tab active" onclick="switchFvTab('profile',this)">Profile</div>
+        <div class="fv-tab" onclick="switchFvTab('members',this)">Family Members</div>
+        <div class="fv-tab" onclick="switchFvTab('history',this)">Meal History</div>
+        <div class="fv-tab" onclick="switchFvTab('plan',this)">Plan This Week</div>
+      </div>
+
+      <!-- PROFILE TAB -->
+      <div class="fv-tab-panel active" id="fv-panel-profile">
+        <div class="profile-grid" id="fv-profile-grid"></div>
+      </div>
+
+      <!-- MEMBERS TAB -->
+      <div class="fv-tab-panel" id="fv-panel-members">
+        <div class="slabel">Individual Food Profiles</div>
+        <div id="fv-members-list"></div>
+      </div>
+
+      <!-- HISTORY TAB -->
+      <div class="fv-tab-panel" id="fv-panel-history">
+        <div class="slabel">Meal History</div>
+        <div id="fv-history-list"></div>
+      </div>
+
+      <!-- PLAN TAB -->
+      <div class="fv-tab-panel" id="fv-panel-plan">
+        <div class="planner-wrap">
+          <div class="planner-header">
+            <div class="planner-title">📅 Plan This Week's Meals</div>
+            <select class="planner-week-select" id="planner-week">
+              <option value="1">Week 1</option><option value="2">Week 2</option><option value="3">Week 3</option>
+              <option value="4">Week 4</option><option value="5">Week 5</option><option value="6">Week 6</option>
+              <option value="7">Week 7</option><option value="8">Week 8</option>
+            </select>
+          </div>
+          <div class="planner-body">
+            <div class="planner-last-week" id="planner-last-week-notice"></div>
+            <div class="planner-meal-rows" id="planner-meal-rows"></div>
+            <div class="planner-note-section">
+              <label class="planner-label">Erin's Note for This Week</label>
+              <textarea class="planner-textarea" id="planner-note" placeholder="A personal note to the family — what's the strategy this week? Anything to prep ahead?"></textarea>
+            </div>
+            <div class="planner-visits">
+              <label class="planner-label">Upcoming Visits (one per line)</label>
+              <textarea class="planner-textarea" id="planner-visits" style="min-height:70px;" placeholder="Tuesday, March 18 · 3–6pm — Prep session&#10;Friday, March 21 · 4–5pm — Check-in"></textarea>
+            </div>
+            <div style="margin-bottom:20px;">
+              <label class="planner-label">Note Date</label>
+              <input class="planner-input" id="planner-note-date" type="text" placeholder="e.g. March 16, 2026">
+            </div>
+            <button class="save-btn" onclick="savePlan()">💾 Save Plan &amp; Generate data.json</button>
+          </div>
+        </div>
+
+        <div class="output-section" id="output-section">
+          <div class="output-header">
+            <div class="output-title">data.json — Ready to paste into GitHub</div>
+            <button class="copy-btn" id="copy-data-btn" onclick="copyDataJSON()">Copy data.json</button>
+          </div>
+          <div class="output-body">
+            <div class="output-instructions">
+              <div class="oi"><div class="oi-num">1</div><span>Go to GitHub → open <code>data.json</code> → click ✏️ pencil to edit</span></div>
+              <div class="oi"><div class="oi-num">2</div><span>Select all the text in the file and delete it</span></div>
+              <div class="oi"><div class="oi-num">3</div><span>Click <strong>Copy data.json</strong> above and paste it in</span></div>
+              <div class="oi"><div class="oi-num">4</div><span>Click <strong>Commit changes</strong> — all portals update instantly</span></div>
+            </div>
+            <button class="show-raw-btn" onclick="toggleRaw(this)">Show data.json ▾</button>
+            <pre class="output-pre" id="output-pre"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RECIPE PICKER MODAL -->
+<div class="modal-bg" id="picker-modal" onclick="closePickerOutside(event)">
+  <div class="picker-inner">
+    <div class="picker-head">
+      <div class="picker-head-title">📖 Pick a Recipe</div>
+      <button class="picker-head-close" onclick="closePicker()">×</button>
+    </div>
+    <div class="picker-search-wrap">
+      <input type="text" id="picker-search" placeholder="Search your recipe library..." oninput="renderPickerList()">
+    </div>
+    <div class="picker-results" id="picker-results"></div>
+  </div>
+</div>
+
+<div class="app-footer">
+  <div class="footer-left">Food <span>COO</span> Admin</div>
+  <div class="footer-right">Erin Wiedmar, RDN, MEd, CDE</div>
+</div>
+
+<script>
+// ── CONSTANTS ──
+const PIN = '0466';
+const DAYS = ['mon','tue','wed','thu','fri','sat','sun'];
+const DAY_LABELS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const DAY_ABBR = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+// ── STATE ──
+let allFamilies = {}; // { slug: familyData }
+let allHistory  = {}; // { slug: [ { week, date, meals[], note } ] }
+let currentFamily = null;
+let mealLinks = {}; // { mon: recipeObj }
+let pickerTargetDay = null;
+let currentDataJSON = '';
+
+// ── STORAGE KEYS ──
+const KEY_FAMILIES = 'foodcoo_families';
+const KEY_HISTORY  = 'foodcoo_history';
+
+// ── LOAD / SAVE ──
+function load() {
+  try { allFamilies = JSON.parse(localStorage.getItem(KEY_FAMILIES)||'{}'); } catch(e){ allFamilies={}; }
+  try { allHistory  = JSON.parse(localStorage.getItem(KEY_HISTORY)||'{}');  } catch(e){ allHistory={}; }
+}
+function save() {
+  localStorage.setItem(KEY_FAMILIES, JSON.stringify(allFamilies));
+  localStorage.setItem(KEY_HISTORY,  JSON.stringify(allHistory));
+}
+function loadLibrary() {
+  try { return JSON.parse(localStorage.getItem('foodcoo_recipes')||'[]'); } catch(e){ return []; }
+}
+
+// ── PIN ──
+function checkPin(input) {
+  if (input.value.length < 4) return;
+  if (input.value === PIN) {
+    document.getElementById('pin-screen').classList.add('hidden');
+    init();
+  } else {
+    input.classList.add('error');
+    setTimeout(()=>{ input.classList.remove('error'); input.value=''; }, 800);
+  }
+}
+
+// ── INIT ──
+function init() {
+  load();
+  renderFamilyList();
+  updateStats();
+}
+
+// ── STATS ──
+function updateStats() {
+  const families = Object.keys(allFamilies).length;
+  const weeks = Object.values(allHistory).reduce((sum,h)=>sum+(h.length||0),0);
+  const recipes = loadLibrary().length;
+  document.getElementById('stat-families').textContent = families;
+  document.getElementById('stat-weeks').textContent = weeks;
+  document.getElementById('stat-recipes').textContent = recipes;
+}
+
+// ── FAMILY LIST ──
+function renderFamilyList() {
+  const list = document.getElementById('family-list');
+  const families = Object.values(allFamilies);
+  if (families.length === 0) {
+    list.innerHTML = '<div style="padding:16px 24px;font-size:0.78rem;color:var(--taupe);">No families yet. <a href="new-client-setup.html" style="color:var(--terra);">Add one →</a></div>';
+    return;
+  }
+  list.innerHTML = families.map(f => {
+    const history = allHistory[f.slug] || [];
+    const latestWeek = history.length > 0 ? 'Week '+history[history.length-1].week : 'Not started';
+    return `<div class="family-item${currentFamily===f.slug?' active':''}" onclick="selectFamily('${f.slug}')">
+      <div class="family-avatar">${(f.name||'?')[0].toUpperCase()}</div>
+      <div class="family-info">
+        <div class="family-name">The ${f.name} Family</div>
+        <div class="family-meta">${f.members?f.members.length+' members · ':''} ${latestWeek}</div>
+      </div>
+      <div class="family-week-badge">${latestWeek}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── SELECT FAMILY ──
+function selectFamily(slug) {
+  currentFamily = slug;
+  mealLinks = {};
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('family-view-template').style.display = 'block';
+  renderFamilyList();
+  renderFamilyView();
+}
+
+function renderFamilyView() {
+  const f = allFamilies[currentFamily];
+  if (!f) return;
+  const history = allHistory[currentFamily] || [];
+  const memberCount = (f.members||[]).length;
+
+  document.getElementById('fv-title').innerHTML = `The <em>${f.name}</em> Family`;
+  document.getElementById('fv-meta').textContent = `${f.goal||'Balanced Nutrition'} · ${memberCount} member${memberCount!==1?'s':''} · ${history.length} week${history.length!==1?'s':''} planned`;
+
+  renderProfileTab(f);
+  renderMembersTab(f);
+  renderHistoryTab(history);
+  renderPlannerTab(f, history);
+  switchFvTab('profile');
+}
+
+// ── PROFILE TAB ──
+function renderProfileTab(f) {
+  const grid = document.getElementById('fv-profile-grid');
+  const painPoints = (f.painPoints||[]).map(p=>`<span class="pc-tag red">${p}</span>`).join('');
+  const interests = (f.interests||[]).map(p=>`<span class="pc-tag green">${p}</span>`).join('');
+  const values = (f.values||[]).map(p=>`<span class="pc-tag">${p}</span>`).join('');
+  const appliances = (f.appliances||[]).map(a=>`<span class="pc-tag">${a}</span>`).join('');
+  grid.innerHTML = `
+    <div class="profile-card">
+      <div class="pc-label">Contact</div>
+      <div class="pc-value">${f.contactName||'—'}<br><span style="color:var(--taupe);font-size:0.78rem;">${f.email||''} ${f.phone?'· '+f.phone:''}</span></div>
+    </div>
+    <div class="profile-card">
+      <div class="pc-label">Primary Goal</div>
+      <div class="pc-value">${f.goal||'—'}</div>
+      ${f.budget?`<div class="pc-label" style="margin-top:12px;">Weekly Budget</div><div class="pc-value">${f.budget}</div>`:''}
+    </div>
+    ${f.weekdayRoutine?`<div class="profile-card profile-card-full"><div class="pc-label">Weekday Routine</div><div class="pc-value">${f.weekdayRoutine}</div></div>`:''}
+    ${f.fallsApart?`<div class="profile-card"><div class="pc-label">When Things Fall Apart</div><div class="pc-value">${f.fallsApart}</div></div>`:''}
+    ${f.magicWand?`<div class="profile-card"><div class="pc-label">Magic Wand Answer</div><div class="pc-value" style="font-style:italic;">"${f.magicWand}"</div></div>`:''}
+    ${painPoints?`<div class="profile-card"><div class="pc-label">Pain Points</div><div class="pc-tags">${painPoints}</div></div>`:''}
+    ${interests?`<div class="profile-card"><div class="pc-label">Interests</div><div class="pc-tags">${interests}</div></div>`:''}
+    ${appliances?`<div class="profile-card profile-card-full"><div class="pc-label">Kitchen Appliances</div><div class="pc-tags">${appliances}</div></div>`:''}
+    ${f.leftovers?`<div class="profile-card"><div class="pc-label">Leftovers</div><div class="pc-value">${f.leftovers}</div></div>`:''}
+    ${f.success3mo?`<div class="profile-card profile-card-full"><div class="pc-label">Success in 3 Months</div><div class="pc-value" style="font-style:italic;">"${f.success3mo}"</div></div>`:''}
+  `;
+}
+
+// ── MEMBERS TAB ──
+function renderMembersTab(f) {
+  const list = document.getElementById('fv-members-list');
+  const members = f.members || [];
+  if (members.length === 0) { list.innerHTML = '<div style="color:var(--taupe);font-size:0.85rem;">No members on file.</div>'; return; }
+  list.innerHTML = members.map((m,i) => {
+    const proteins = (m.proteins||[]).map(p=>`<span class="pc-tag terra">${p}</span>`).join('');
+    const textures = (m.textures||[]).filter(t=>t!=='None').map(t=>`<span class="pc-tag">${t}</span>`).join('');
+    return `<div class="member-accordion">
+      <div class="ma-header" onclick="this.nextElementSibling.classList.toggle('open')">
+        <div class="ma-avatar">${(m.name||'?')[0].toUpperCase()}</div>
+        <div><div class="ma-name">${m.name}</div>${m.allergies?`<div style="font-size:0.68rem;color:var(--terra);margin-top:2px;">⚠️ ${m.allergies}</div>`:''}</div>
+        <div class="ma-meta">${m.age?'Age '+m.age:''}${m.schedule?' · '+m.schedule:''}</div>
+      </div>
+      <div class="ma-body">
+        <div class="ma-grid">
+          ${m.favBreakfast?`<div class="ma-field"><label>Favorite Breakfasts</label><p>${m.favBreakfast}</p></div>`:''}
+          ${m.favLunch?`<div class="ma-field"><label>Favorite Lunches</label><p>${m.favLunch}</p></div>`:''}
+          ${m.favDinner?`<div class="ma-field"><label>Favorite Dinners</label><p>${m.favDinner}</p></div>`:''}
+          ${m.favSnacks?`<div class="ma-field"><label>Favorite Snacks</label><p>${m.favSnacks}</p></div>`:''}
+          ${m.dislikes?`<div class="ma-field"><label>Dislikes / Still Learning</label><p>${m.dislikes}</p></div>`:''}
+          ${m.fruitsVeg?`<div class="ma-field"><label>Fruits &amp; Veggies</label><p>${m.fruitsVeg}</p></div>`:''}
+        </div>
+        ${proteins?`<div style="margin-top:10px;"><div class="ma-field"><label>Proteins</label></div><div class="pc-tags">${proteins}</div></div>`:''}
+        ${textures?`<div style="margin-top:10px;"><div class="ma-field"><label>Texture Sensitivities</label></div><div class="pc-tags">${textures}</div></div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── HISTORY TAB ──
+function renderHistoryTab(history) {
+  const list = document.getElementById('fv-history-list');
+  if (history.length === 0) { list.innerHTML = '<div style="color:var(--taupe);font-size:0.85rem;padding:20px 0;">No weeks planned yet. Use the <strong>Plan This Week</strong> tab to get started.</div>'; return; }
+  const sorted = [...history].reverse();
+  list.innerHTML = sorted.map(h => {
+    const meals = h.meals || [];
+    return `<div class="history-week">
+      <div class="hw-header">
+        <div class="hw-week">Week ${h.week}</div>
+        <div class="hw-date">${h.date||''}</div>
+      </div>
+      <div class="hw-meals">
+        ${DAY_ABBR.map((d,i)=>{const m=meals[i]||{}; return `<div class="hw-meal"><div class="hw-meal-day">${d}</div><span class="hw-meal-emoji">${m.emoji||'🍽️'}</span><div class="hw-meal-name">${m.name||'—'}</div></div>`;}).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── PLANNER TAB ──
+function renderPlannerTab(f, history) {
+  mealLinks = {};
+  const rows = document.getElementById('planner-meal-rows');
+  rows.innerHTML = DAYS.map((d,i) => `
+    <div class="pmr" id="pmr-${d}">
+      <div class="pmr-day">${DAY_LABELS[i]}</div>
+      <input type="text" id="pmeal-${d}" placeholder="Meal name" oninput="onMealType('${d}')">
+      <input type="text" id="pemoji-${d}" placeholder="🍽️" style="max-width:70px;text-align:center;">
+      <select id="ptype-${d}"><option>Dinner</option><option>Lunch</option><option>Breakfast</option>${d==='sun'?'<option>Batch Cook</option>':''}</select>
+      <button class="pick-btn" id="ppick-${d}" onclick="openPicker('${d}')">📖 Pick</button>
+    </div>`).join('');
+
+  // Auto-set week number to next logical week
+  const nextWeek = history.length > 0 ? Math.min(history[history.length-1].week + 1, 8) : 1;
+  document.getElementById('planner-week').value = nextWeek;
+
+  // Show last week's meals as reference
+  const notice = document.getElementById('planner-last-week-notice');
+  if (history.length > 0) {
+    const last = history[history.length-1];
+    const mealNames = (last.meals||[]).map(m=>m.name||'—').filter(n=>n!=='—');
+    notice.style.display = 'block';
+    notice.innerHTML = `<strong>Last week (Week ${last.week}):</strong> ${mealNames.join(', ')} — don't repeat these!`;
+  } else {
+    notice.style.display = 'none';
+  }
+
+  // Reset note and visits
+  document.getElementById('planner-note').value = '';
+  document.getElementById('planner-visits').value = '';
+  document.getElementById('planner-note-date').value = '';
+  document.getElementById('output-section').classList.remove('show');
+}
+
+// ── MEAL TYPE HANDLER ──
+function onMealType(d) {
+  if (mealLinks[d]) {
+    delete mealLinks[d];
+    document.getElementById('pmr-'+d).classList.remove('linked');
+    document.getElementById('ppick-'+d).textContent = '📖 Pick';
+    document.getElementById('ppick-'+d).classList.remove('active');
+  }
+}
+
+// ── TAB SWITCHER ──
+function switchFvTab(name, el) {
+  document.querySelectorAll('.fv-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.fv-tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('fv-panel-'+name).classList.add('active');
+  if (el) el.classList.add('active');
+  else {
+    const tabs = document.querySelectorAll('.fv-tab');
+    const map = {profile:0,members:1,history:2,plan:3};
+    if (map[name]!==undefined) tabs[map[name]].classList.add('active');
+  }
+}
+
+// ── RECIPE PICKER ──
+function openPicker(day) {
+  pickerTargetDay = day;
+  document.getElementById('picker-search').value = '';
+  renderPickerList();
+  const modal = document.getElementById('picker-modal');
+  modal.style.display = 'flex';
+  requestAnimationFrame(()=>modal.classList.add('show'));
+  document.getElementById('picker-search').focus();
+}
+function closePicker() {
+  const modal = document.getElementById('picker-modal');
+  modal.classList.remove('show');
+  setTimeout(()=>modal.style.display='none', 280);
+}
+function closePickerOutside(e) { if(e.target===document.getElementById('picker-modal'))closePicker(); }
+function renderPickerList() {
+  const q = document.getElementById('picker-search').value.toLowerCase();
+  const recipes = loadLibrary();
+  const el = document.getElementById('picker-results');
+  if (recipes.length===0) { el.innerHTML=`<div class="picker-empty">No recipes yet.<br><a href="recipes.html" target="_blank">Add recipes →</a></div>`; return; }
+  const filtered = q ? recipes.filter(r=>r.name.toLowerCase().includes(q)||(r.tags||[]).join(' ').toLowerCase().includes(q)) : recipes;
+  if (filtered.length===0) { el.innerHTML=`<div class="picker-empty">No matches for "<strong>${q}</strong>"</div>`; return; }
+
+  // Get meal history for this family to flag recently used recipes
+  const history = allHistory[currentFamily]||[];
+  const recentMealNames = new Set();
+  history.slice(-2).forEach(h=>(h.meals||[]).forEach(m=>{ if(m.name)recentMealNames.add(m.name.toLowerCase()); }));
+
+  el.innerHTML = filtered.map(r=>{
+    const isExt = r.type==='external';
+    const recentlyUsed = recentMealNames.has(r.name.toLowerCase());
+    const meta = [r.time||'', r.serves?'Serves '+r.serves:'', isExt?r.source||'External':'Your recipe'].filter(Boolean).join(' · ');
+    const recentBadge = recentlyUsed ? '<span style="font-size:0.58rem;color:var(--terra);margin-left:6px;">⚠️ Used recently</span>' : '';
+    return `<div class="picker-item${recentlyUsed?' style="opacity:0.65"':''}" onclick='selectRecipe(${JSON.stringify(r).replace(/'/g,"&#39;")})'>
+      <div class="picker-thumb" style="background:${r.color||'#EDD5C4'}">${r.emoji||'🍽️'}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="picker-item-name">${r.name}${recentBadge}</div>
+        <div class="picker-item-meta">${meta}</div>
+      </div>
+      <div class="picker-badge${isExt?' ext':''}">${isExt?'Link':'Recipe'}</div>
+    </div>`;
+  }).join('');
+}
+function selectRecipe(r) {
+  const d = pickerTargetDay;
+  mealLinks[d] = r;
+  document.getElementById('pmeal-'+d).value = r.name;
+  document.getElementById('pemoji-'+d).value = r.emoji||'🍽️';
+  document.getElementById('pmr-'+d).classList.add('linked');
+  document.getElementById('ppick-'+d).textContent = '✓ Linked';
+  document.getElementById('ppick-'+d).classList.add('active');
+  closePicker();
+}
+
+// ── SAVE PLAN ──
+function savePlan() {
+  const f = allFamilies[currentFamily];
+  if (!f) return;
+
+  const week = parseInt(document.getElementById('planner-week').value);
+  const note = document.getElementById('planner-note').value;
+  const noteDate = document.getElementById('planner-note-date').value || new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  const visitsRaw = document.getElementById('planner-visits').value;
+  const visits = visitsRaw.split('\n').filter(l=>l.trim());
+
+  const meals = DAYS.map(d=>({
+    name:   document.getElementById('pmeal-'+d).value||'—',
+    emoji:  document.getElementById('pemoji-'+d).value||'🍽️',
+    type:   document.getElementById('ptype-'+d).value||'Dinner',
+    recipe: mealLinks[d]||null
+  }));
+
+  // Save to history (replace if same week exists)
+  if (!allHistory[currentFamily]) allHistory[currentFamily] = [];
+  const existingIdx = allHistory[currentFamily].findIndex(h=>h.week===week);
+  const entry = { week, date: noteDate, meals, note, visits };
+  if (existingIdx >= 0) allHistory[currentFamily][existingIdx] = entry;
+  else allHistory[currentFamily].push(entry);
+
+  // Update current week on family record
+  allFamilies[currentFamily].currentWeek = week;
+  save();
+
+  // Generate data.json
+  generateDataJSON();
+
+  // Refresh UI
+  renderHistoryTab(allHistory[currentFamily]);
+  renderFamilyList();
+  updateStats();
+  document.getElementById('output-section').classList.add('show');
+  document.getElementById('output-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── GENERATE data.json ──
+function generateDataJSON() {
+  // Build a flat object: { slug: { currentWeek: {...}, history: [...] } }
+  const data = {};
+  Object.keys(allFamilies).forEach(slug => {
+    const f = allFamilies[slug];
+    const history = allHistory[slug]||[];
+    const current = history.length>0 ? history[history.length-1] : null;
+    data[slug] = {
+      name: f.name,
+      slug: slug,
+      currentWeek: current ? current.week : 1,
+      note: current ? current.note : '',
+      noteDate: current ? current.date : '',
+      visits: current ? current.visits : [],
+      meals: current ? current.meals : [],
+      history: history
+    };
+  });
+  currentDataJSON = JSON.stringify(data, null, 2);
+  document.getElementById('output-pre').textContent = currentDataJSON;
+}
+
+function exportDataJSON() {
+  generateDataJSON();
+  document.getElementById('output-section').classList.add('show');
+  switchFvTab('plan');
+  document.getElementById('output-section').scrollIntoView({behavior:'smooth'});
+}
+
+function copyDataJSON() {
+  if (!currentDataJSON) { generateDataJSON(); }
+  navigator.clipboard.writeText(currentDataJSON).then(()=>{
+    const btn = document.getElementById('copy-data-btn');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent='Copy data.json'; btn.classList.remove('copied'); },3000);
+  });
+}
+function toggleRaw(btn) {
+  const pre = document.getElementById('output-pre');
+  const show = pre.style.display==='block';
+  pre.style.display = show?'none':'block';
+  btn.textContent = show?'Show data.json ▾':'Hide data.json ▴';
+}
+
+// ── REGISTER FAMILY (called from new-client-setup) ──
+// new-client-setup will call: foodcoo_registerFamily(familyData)
+// We store it in localStorage so admin can see it
+window.foodcoo_registerFamily = function(f) {
+  load();
+  allFamilies[f.slug] = f;
+  save();
+};
+
+// ── KEYBOARD ──
+document.getElementById('pin-input').addEventListener('keydown', e=>{ if(e.key==='Enter')checkPin(e.target); });
+
+// On load — check if already unlocked this session
+if (sessionStorage.getItem('foodcoo_admin_auth')==='1') {
+  document.getElementById('pin-screen').classList.add('hidden');
+  init();
+}
+document.getElementById('pin-screen').querySelector('.pin-input') && 
+  document.getElementById('pin-input').addEventListener('input', function(){ 
+    if(this.value===PIN){ sessionStorage.setItem('foodcoo_admin_auth','1'); } 
+  });
+</script>
+</body>
+</html>
