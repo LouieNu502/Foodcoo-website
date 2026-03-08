@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Client Setup — Food COO</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:      #F7F3EC;
+  --warm-white: #FDFCF9;
+  --brown-deep: #231810;
+  --brown-mid:  #5A3825;
+  --brown-light:#8C6649;
+  --taupe:      #B8A898;
+  --sand:       #D8C9B0;
+  --sage:       #6B8A62;
+  --sage-soft:  #C8D8C2;
+  --terra:      #C46A42;
+  --terra-soft: #EDD5C4;
+  --gold:       #C9A254;
+  --gold-soft:  #F0E0B8;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:var(--brown-deep);padding:0 48px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:200;
+}
+.topbar-brand{
+  font-family:'Playfair Display',serif;font-size:0.95rem;
+  color:var(--cream);text-decoration:none;
+  display:flex;align-items:center;gap:8px;
+}
+.topbar-brand span{color:var(--gold);font-style:italic;}
+.topbar-tag{
+  background:var(--terra);color:white;
+  font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;
+  padding:5px 14px;border-radius:100px;
+}
+.topbar-nav{display:flex;gap:20px;align-items:center;}
+.topbar-nav a{
+  color:rgba(247,243,236,0.55);font-size:0.72rem;
+  letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;
+  transition:color 0.2s;
+}
+.topbar-nav a:hover{color:var(--cream);}
+
+/* ── HERO ── */
+.hero{
+  background:linear-gradient(125deg,var(--brown-mid),var(--brown-deep));
+  padding:52px 48px 44px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 80% 0%,rgba(201,162,84,0.12) 0%,transparent 55%);
+  pointer-events:none;
+}
+.hero::after{
+  content:'⚙';position:absolute;right:60px;bottom:-20px;
+  font-size:10rem;opacity:0.05;pointer-events:none;
+}
+.hero-inner{position:relative;z-index:1;max-width:600px;}
+.hero-eyebrow{
+  font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold);}
+.hero-h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,3.5vw,3rem);font-weight:900;
+  color:var(--cream);line-height:1.1;margin-bottom:12px;
+}
+.hero-h1 em{color:var(--gold);font-style:italic;}
+.hero-sub{
+  font-family:'Lora',serif;font-style:italic;
+  font-size:1rem;color:rgba(247,243,236,0.65);
+  line-height:1.7;max-width:480px;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{
+  background:var(--warm-white);border-bottom:1px solid var(--sand);
+  padding:20px 48px;position:sticky;top:56px;z-index:100;
+}
+.progress-steps{
+  display:flex;gap:0;max-width:700px;
+}
+.pstep{
+  flex:1;display:flex;align-items:center;gap:10px;
+  padding:10px 16px 10px 0;
+  border-bottom:2px solid var(--sand);
+  transition:border-color 0.3s;cursor:pointer;
+}
+.pstep.active{border-color:var(--terra);}
+.pstep.done{border-color:var(--sage);}
+.pstep-num{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.72rem;font-weight:500;
+  background:var(--sand);color:var(--brown-mid);
+  transition:all 0.3s;
+}
+.pstep.active .pstep-num{background:var(--terra);color:white;}
+.pstep.done .pstep-num{background:var(--sage);color:white;}
+.pstep-label{font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--taupe);}
+.pstep.active .pstep-label{color:var(--terra);font-weight:500;}
+.pstep.done .pstep-label{color:var(--sage);}
+
+/* ── MAIN LAYOUT ── */
+.main{
+  display:grid;grid-template-columns:1fr 400px;
+  gap:0;max-width:1200px;margin:0 auto;
+  padding:40px 48px;gap:40px;
+}
+
+/* ── FORM PANEL ── */
+.form-panel{}
+.step-panel{display:none;}
+.step-panel.active{display:block;animation:fadeUp 0.3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.step-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem;color:var(--brown-deep);
+  margin-bottom:6px;
+}
+.step-title em{font-style:italic;color:var(--terra);}
+.step-desc{
+  font-size:0.85rem;color:var(--taupe);
+  margin-bottom:32px;line-height:1.6;
+}
+
+/* Form elements */
+.frow{margin-bottom:20px;}
+.frow-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.frow-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;}
+.flabel{
+  display:block;font-size:0.68rem;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--brown-mid);
+  margin-bottom:7px;font-weight:500;
+}
+.finput,.fselect,.ftextarea{
+  width:100%;padding:12px 16px;
+  background:var(--warm-white);border:1.5px solid var(--sand);
+  border-radius:4px;font-family:'DM Sans',sans-serif;
+  font-size:0.88rem;color:var(--brown-deep);outline:none;
+  transition:border-color 0.2s;
+}
+.finput:focus,.fselect:focus,.ftextarea:focus{border-color:var(--terra);}
+.finput::placeholder,.ftextarea::placeholder{color:var(--taupe);}
+.ftextarea{resize:vertical;min-height:90px;}
+
+/* Chip selects */
+.chip-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+.chip{
+  padding:7px 16px;border:1.5px solid var(--sand);
+  border-radius:100px;font-size:0.75rem;cursor:pointer;
+  transition:all 0.18s;color:var(--brown-mid);
+  background:var(--warm-white);user-select:none;
+}
+.chip:hover{border-color:var(--terra);color:var(--terra);}
+.chip.on{background:var(--terra);border-color:var(--terra);color:white;}
+.chip.sage.on{background:var(--sage);border-color:var(--sage);color:white;}
+.chip.gold.on{background:var(--gold);border-color:var(--gold);color:var(--brown-deep);}
+
+/* Meal rows */
+.meal-rows{display:flex;flex-direction:column;gap:10px;}
+.meal-row{
+  display:grid;grid-template-columns:80px 1fr 100px 100px;
+  gap:10px;align-items:center;
+  background:var(--warm-white);border:1px solid var(--sand);
+  border-radius:4px;padding:10px 14px;
+}
+.meal-row-day{
+  font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--taupe);font-weight:500;
+}
+.meal-row input,.meal-row select{
+  padding:8px 12px;background:var(--cream);
+  border:1px solid var(--sand);border-radius:3px;
+  font-family:'DM Sans',sans-serif;font-size:0.8rem;
+  color:var(--brown-deep);outline:none;transition:border-color 0.2s;width:100%;
+}
+.meal-row input:focus,.meal-row select:focus{border-color:var(--terra);}
+.meal-row input::placeholder{color:var(--taupe);font-size:0.78rem;}
+
+/* Nav buttons */
+.btn-row{display:flex;gap:12px;margin-top:32px;}
+.btn-next{
+  background:var(--brown-deep);color:var(--cream);
+  border:none;padding:14px 36px;border-radius:4px;
+  font-family:'DM Sans',sans-serif;font-size:0.78rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  cursor:pointer;transition:background 0.2s;
+}
+.btn-next:hover{background:var(--terra);}
+.btn-back{
+  background:transparent;color:var(--brown-mid);
+  border:1.5px solid var(--sand);padding:14px 28px;border-radius:4px;
+  font-family:'DM Sans',sans-serif;font-size:0.78rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.2s;
+}
+.btn-back:hover{border-color:var(--brown-mid);}
+.btn-generate{
+  background:var(--terra);color:white;
+  border:none;padding:16px 40px;border-radius:4px;
+  font-family:'DM Sans',sans-serif;font-size:0.82rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.2s;
+  box-shadow:0 4px 16px rgba(196,106,66,0.3);
+}
+.btn-generate:hover{background:var(--brown-deep);box-shadow:none;}
+
+/* ── PREVIEW PANEL ── */
+.preview-panel{
+  position:sticky;top:calc(56px + 80px);
+  height:fit-content;
+}
+.preview-card{
+  background:var(--brown-deep);border-radius:8px;
+  padding:28px;color:var(--cream);
+  margin-bottom:16px;
+}
+.preview-title{
+  font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.preview-title::before{content:'';width:16px;height:1px;background:var(--gold);}
+.preview-family{
+  font-family:'Playfair Display',serif;
+  font-size:1.4rem;color:var(--cream);margin-bottom:4px;
+}
+.preview-family em{color:var(--gold);font-style:italic;}
+.preview-url{
+  font-size:0.72rem;color:var(--taupe);
+  background:rgba(255,255,255,0.06);
+  padding:8px 12px;border-radius:3px;
+  margin:12px 0;font-family:monospace;
+  border:1px solid rgba(255,255,255,0.1);
+  word-break:break-all;
+}
+.preview-tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;}
+.preview-tag{
+  font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;
+  border:1px solid rgba(255,255,255,0.2);
+  color:rgba(247,243,236,0.65);
+  padding:4px 10px;border-radius:100px;
+}
+.preview-tag.active{border-color:var(--gold);color:var(--gold);}
+.preview-meals{margin-top:16px;}
+.preview-meal-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06);
+  font-size:0.78rem;
+}
+.preview-meal-row:last-child{border-bottom:none;}
+.preview-meal-day{color:var(--taupe);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;}
+.preview-meal-name{color:var(--cream);}
+
+.hint-card{
+  background:var(--gold-soft);border:1px solid var(--gold);
+  border-radius:6px;padding:20px;
+  font-size:0.8rem;color:var(--brown-mid);line-height:1.6;
+}
+.hint-card strong{color:var(--brown-deep);display:block;margin-bottom:6px;}
+
+/* ── CODE OUTPUT ── */
+.code-output{
+  display:none;
+  background:var(--warm-white);
+  border:1.5px solid var(--sand);
+  border-radius:8px;overflow:hidden;
+  margin-top:40px;
+}
+.code-output.show{display:block;animation:fadeUp 0.4s ease;}
+.code-header{
+  background:var(--brown-deep);padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.code-header-title{
+  font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--gold);
+}
+.copy-btn{
+  background:var(--terra);color:white;border:none;
+  padding:8px 20px;border-radius:3px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:0.72rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  transition:background 0.2s;
+}
+.copy-btn:hover{background:var(--sage);}
+.copy-btn.copied{background:var(--sage);}
+.code-body{
+  padding:24px;
+  background:var(--cream);
+}
+.code-instructions{
+  display:flex;flex-direction:column;gap:12px;margin-bottom:20px;
+}
+.instruction-step{
+  display:flex;gap:14px;align-items:flex-start;
+}
+.istep-num{
+  width:24px;height:24px;flex-shrink:0;
+  background:var(--terra);color:white;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:500;
+}
+.istep-text{font-size:0.84rem;color:var(--brown-mid);line-height:1.6;padding-top:2px;}
+.istep-text strong{color:var(--brown-deep);}
+.istep-text code{
+  background:var(--sand);padding:2px 7px;border-radius:3px;
+  font-family:monospace;font-size:0.8rem;color:var(--brown-deep);
+}
+.code-pre{
+  background:var(--brown-deep);color:#d4c9b8;
+  padding:20px;border-radius:4px;
+  font-family:monospace;font-size:0.72rem;
+  line-height:1.6;overflow-x:auto;
+  max-height:300px;overflow-y:auto;
+  display:none;
+}
+.show-code-btn{
+  background:none;border:1.5px solid var(--sand);
+  color:var(--brown-mid);padding:10px 20px;border-radius:3px;
+  font-family:'DM Sans',sans-serif;font-size:0.72rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.2s;margin-top:12px;
+}
+.show-code-btn:hover{border-color:var(--brown-mid);color:var(--brown-deep);}
+
+/* ── FOOTER ── */
+.portal-footer{
+  background:var(--brown-deep);padding:24px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:60px;
+}
+.footer-left{font-family:'Playfair Display',serif;font-size:0.9rem;color:var(--cream);}
+.footer-left span{color:var(--gold);font-style:italic;}
+.footer-right{font-size:0.72rem;color:var(--taupe);text-align:right;line-height:1.7;}
+
+@media(max-width:900px){
+  .topbar{padding:0 20px;}
+  .topbar-nav{display:none;}
+  .hero{padding:36px 20px;}
+  .progress-wrap{padding:16px 20px;}
+  .main{grid-template-columns:1fr;padding:24px 20px;gap:24px;}
+  .preview-panel{position:static;}
+  .frow-2,.frow-3{grid-template-columns:1fr;}
+  .meal-row{grid-template-columns:60px 1fr;gap:8px;}
+  .meal-row select{display:none;}
+  .portal-footer{flex-direction:column;gap:12px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a href="index.html" class="topbar-brand">Food <span>COO</span></a>
+  <div class="topbar-tag">Erin Only</div>
+  <nav class="topbar-nav">
+    <a href="index.html">Home</a>
+    <a href="recipes.html">Recipes</a>
+  </nav>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Admin Tool</div>
+    <h1 class="hero-h1">New Client <em>Setup</em></h1>
+    <p class="hero-sub">Fill in the family's details and Erin's first week plan — get a ready-to-paste portal page in seconds.</p>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="pstep active" onclick="goToStep(1)">
+      <div class="pstep-num">1</div>
+      <div class="pstep-label">Family Info</div>
+    </div>
+    <div class="pstep" onclick="goToStep(2)">
+      <div class="pstep-num">2</div>
+      <div class="pstep-label">Taste Profile</div>
+    </div>
+    <div class="pstep" onclick="goToStep(3)">
+      <div class="pstep-num">3</div>
+      <div class="pstep-label">Week 1 Meals</div>
+    </div>
+    <div class="pstep" onclick="goToStep(4)">
+      <div class="pstep-num">4</div>
+      <div class="pstep-label">Erin's Note</div>
+    </div>
+    <div class="pstep" onclick="goToStep(5)">
+      <div class="pstep-num">5</div>
+      <div class="pstep-label">Generate</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="form-panel">
+
+    <!-- STEP 1: Family Info -->
+    <div class="step-panel active" id="step-1">
+      <div class="step-title">Family <em>Information</em></div>
+      <div class="step-desc">Basic details pulled from their intake form. This drives the page title, URL, and header.</div>
+
+      <div class="frow-2">
+        <div>
+          <label class="flabel">Family Last Name</label>
+          <input class="finput" id="family-name" type="text" placeholder="e.g. Smith" oninput="updatePreview()">
+        </div>
+        <div>
+          <label class="flabel">Page URL Slug</label>
+          <input class="finput" id="url-slug" type="text" placeholder="e.g. smithfamily" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="frow-2">
+        <div>
+          <label class="flabel">Number of Adults</label>
+          <select class="fselect" id="adults" onchange="updatePreview()">
+            <option value="1">1 adult</option>
+            <option value="2" selected>2 adults</option>
+            <option value="3">3 adults</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">Number of Kids</label>
+          <select class="fselect" id="kids" onchange="updatePreview()">
+            <option value="0">No kids</option>
+            <option value="1">1 kid</option>
+            <option value="2" selected>2 kids</option>
+            <option value="3">3 kids</option>
+            <option value="4">4+ kids</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow-2">
+        <div>
+          <label class="flabel">Pilot Week Number</label>
+          <select class="fselect" id="week-num" onchange="updatePreview()">
+            <option value="1" selected>Week 1</option>
+            <option value="2">Week 2</option>
+            <option value="3">Week 3</option>
+            <option value="4">Week 4</option>
+            <option value="5">Week 5</option>
+            <option value="6">Week 6</option>
+            <option value="7">Week 7</option>
+            <option value="8">Week 8</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">Preferred Grocery Service</label>
+          <select class="fselect" id="grocery" onchange="updatePreview()">
+            <option value="Instacart">Instacart</option>
+            <option value="Walmart+">Walmart+</option>
+            <option value="Amazon Fresh">Amazon Fresh</option>
+            <option value="Kroger">Kroger</option>
+            <option value="Whole Foods">Whole Foods</option>
+            <option value="Local Pickup">Local Pickup</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow">
+        <label class="flabel">Next In-Home Visit Date & Time</label>
+        <input class="finput" id="next-visit" type="text" placeholder="e.g. Tuesday, March 11 · 3–6pm" oninput="updatePreview()">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-next" onclick="goToStep(2)">Next: Taste Profile →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Taste Profile -->
+    <div class="step-panel" id="step-2">
+      <div class="step-title">Taste <em>Profile</em></div>
+      <div class="step-desc">Select everything relevant from their intake form responses. These appear as tags on their portal banner.</div>
+
+      <div class="frow">
+        <label class="flabel">Primary Nutrition Goal</label>
+        <select class="fselect" id="goal" onchange="updatePreview()">
+          <option value="Heart Health">Heart Health</option>
+          <option value="Balanced Nutrition">Balanced Nutrition</option>
+          <option value="Weight Management">Weight Management</option>
+          <option value="Blood Sugar Control">Blood Sugar Control</option>
+          <option value="Reduce Processed Foods">Reduce Processed Foods</option>
+          <option value="Sports Performance">Sports Performance</option>
+          <option value="Reduce Takeout">Reduce Takeout</option>
+        </select>
+      </div>
+
+      <div class="frow">
+        <label class="flabel">Cuisines They Love</label>
+        <div class="chip-group" id="cuisines-loved">
+          <span class="chip gold" onclick="toggleChip(this)" data-val="Italian">🍝 Italian</span>
+          <span class="chip gold" onclick="toggleChip(this)" data-val="Mexican">🌮 Mexican</span>
+          <span class="chip gold" onclick="toggleChip(this)" data-val="Mediterranean">🥗 Mediterranean</span>
+          <span class="chip gold" onclick="toggleChip(this)" data-val="Asian">🍜 Asian</span>
+          <span class="chip gold" onclick="toggleChip(this)" data-val="Indian">🍛 Indian</span>
+          <span class="chip gold" onclick="toggleChip(this)" data-val="American">🥩 American</span>
+          <span class="chip gold" onclick="toggleChip(this)" data-val="Seafood">🐟 Seafood</span>
+        </div>
+      </div>
+
+      <div class="frow">
+        <label class="flabel">Dietary Restrictions / Needs</label>
+        <div class="chip-group" id="dietary">
+          <span class="chip sage" onclick="toggleChip(this)" data-val="Gluten-Free">Gluten-Free</span>
+          <span class="chip sage" onclick="toggleChip(this)" data-val="Dairy-Free">Dairy-Free</span>
+          <span class="chip sage" onclick="toggleChip(this)" data-val="Nut Allergy">Nut Allergy</span>
+          <span class="chip sage" onclick="toggleChip(this)" data-val="Low Sodium">Low Sodium</span>
+          <span class="chip sage" onclick="toggleChip(this)" data-val="Diabetic-Friendly">Diabetic-Friendly</span>
+          <span class="chip sage" onclick="toggleChip(this)" data-val="No Shellfish">No Shellfish</span>
+          <span class="chip sage" onclick="toggleChip(this)" data-val="Vegetarian">Vegetarian</span>
+          <span class="chip sage" onclick="toggleChip(this)" data-val="Vegan">Vegan</span>
+        </div>
+      </div>
+
+      <div class="frow">
+        <label class="flabel">Foods Nobody Will Eat</label>
+        <input class="finput" id="avoid-foods" type="text" placeholder="e.g. mushrooms, spicy food, fish" oninput="updatePreview()">
+      </div>
+
+      <div class="frow">
+        <label class="flabel">Weeknight Cook Time Available</label>
+        <select class="fselect" id="cook-time">
+          <option value="Under 20 min">Under 20 minutes</option>
+          <option value="20–30 min" selected>20–30 minutes</option>
+          <option value="30–45 min">30–45 minutes</option>
+          <option value="Up to 1 hour">Up to 1 hour</option>
+        </select>
+      </div>
+
+      <div class="frow">
+        <label class="flabel">Key Notes from Intake Form</label>
+        <textarea class="ftextarea" id="intake-notes" placeholder="Any important context: picky kids, travel schedule, budget, medical notes from their form responses..."></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="goToStep(1)">← Back</button>
+        <button class="btn-next" onclick="goToStep(3)">Next: Week 1 Meals →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Meals -->
+    <div class="step-panel" id="step-3">
+      <div class="step-title">Week 1 <em>Meal Plan</em></div>
+      <div class="step-desc">Enter the 7 meals for their first week. Use recipe names from your library or keep it simple — you can always update it later.</div>
+
+      <div class="meal-rows">
+        <div class="meal-row">
+          <div class="meal-row-day">Monday</div>
+          <input type="text" id="meal-mon" placeholder="e.g. Sheet Pan Salmon" oninput="updatePreview()">
+          <input type="text" id="emoji-mon" placeholder="🐟 emoji" style="max-width:80px;" oninput="updatePreview()">
+          <select id="type-mon" onchange="updatePreview()"><option>Dinner</option><option>Lunch</option><option>Breakfast</option></select>
+        </div>
+        <div class="meal-row">
+          <div class="meal-row-day">Tuesday</div>
+          <input type="text" id="meal-tue" placeholder="Meal name" oninput="updatePreview()">
+          <input type="text" id="emoji-tue" placeholder="🍝 emoji" style="max-width:80px;" oninput="updatePreview()">
+          <select id="type-tue" onchange="updatePreview()"><option>Dinner</option><option>Lunch</option><option>Breakfast</option></select>
+        </div>
+        <div class="meal-row">
+          <div class="meal-row-day">Wednesday</div>
+          <input type="text" id="meal-wed" placeholder="Meal name" oninput="updatePreview()">
+          <input type="text" id="emoji-wed" placeholder="🌮 emoji" style="max-width:80px;" oninput="updatePreview()">
+          <select id="type-wed" onchange="updatePreview()"><option>Dinner</option><option>Lunch</option><option>Breakfast</option></select>
+        </div>
+        <div class="meal-row">
+          <div class="meal-row-day">Thursday</div>
+          <input type="text" id="meal-thu" placeholder="Meal name" oninput="updatePreview()">
+          <input type="text" id="emoji-thu" placeholder="🥗 emoji" style="max-width:80px;" oninput="updatePreview()">
+          <select id="type-thu" onchange="updatePreview()"><option>Dinner</option><option>Lunch</option><option>Breakfast</option></select>
+        </div>
+        <div class="meal-row">
+          <div class="meal-row-day">Friday</div>
+          <input type="text" id="meal-fri" placeholder="Meal name" oninput="updatePreview()">
+          <input type="text" id="emoji-fri" placeholder="🍕 emoji" style="max-width:80px;" oninput="updatePreview()">
+          <select id="type-fri" onchange="updatePreview()"><option>Dinner</option><option>Lunch</option><option>Breakfast</option></select>
+        </div>
+        <div class="meal-row">
+          <div class="meal-row-day">Saturday</div>
+          <input type="text" id="meal-sat" placeholder="Meal name" oninput="updatePreview()">
+          <input type="text" id="emoji-sat" placeholder="🥩 emoji" style="max-width:80px;" oninput="updatePreview()">
+          <select id="type-sat" onchange="updatePreview()"><option>Dinner</option><option>Lunch</option><option>Breakfast</option></select>
+        </div>
+        <div class="meal-row">
+          <div class="meal-row-day">Sunday</div>
+          <input type="text" id="meal-sun" placeholder="Meal name" oninput="updatePreview()">
+          <input type="text" id="emoji-sun" placeholder="🍲 emoji" style="max-width:80px;" oninput="updatePreview()">
+          <select id="type-sun" onchange="updatePreview()"><option>Dinner</option><option>Lunch</option><option>Breakfast</option><option>Batch Cook</option></select>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="goToStep(2)">← Back</button>
+        <button class="btn-next" onclick="goToStep(4)">Next: Erin's Note →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Erin's Note -->
+    <div class="step-panel" id="step-4">
+      <div class="step-title">Erin's <em>Personal Note</em></div>
+      <div class="step-desc">This appears as a warm welcome message at the top of their portal. Make it specific to them — reference something from your first meeting.</div>
+
+      <div class="frow">
+        <label class="flabel">Your Note to This Family</label>
+        <textarea class="ftextarea" id="erins-note" style="min-height:160px;" placeholder="e.g. I am so excited to start this journey with your family! After our conversation I can already tell how much you care about building healthier rhythms at home. Week 1 is intentionally gentle — let's just start building the habit together..."></textarea>
+      </div>
+
+      <div class="frow">
+        <label class="flabel">Upcoming Visits (one per line)</label>
+        <textarea class="ftextarea" id="upcoming-visits" style="min-height:100px;" placeholder="Tuesday, March 11 · 3–6pm — First in-home prep session&#10;Friday, March 14 · 4–6pm — Kitchen reset + Week 2 planning"></textarea>
+      </div>
+
+      <div class="frow">
+        <label class="flabel">Today's Date (for note signature)</label>
+        <input class="finput" id="note-date" type="text" placeholder="e.g. March 8, 2026">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="goToStep(3)">← Back</button>
+        <button class="btn-next" onclick="goToStep(5)">Next: Review & Generate →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: Generate -->
+    <div class="step-panel" id="step-5">
+      <div class="step-title">Review & <em>Generate</em></div>
+      <div class="step-desc">Everything looks good in the preview? Hit generate to get your ready-to-paste code.</div>
+
+      <div id="review-summary" style="background:var(--warm-white);border:1px solid var(--sand);border-radius:6px;padding:24px;margin-bottom:28px;"></div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="goToStep(4)">← Back</button>
+        <button class="btn-generate" onclick="generateCode()">⚡ Generate Portal Page</button>
+      </div>
+    </div>
+
+    <!-- CODE OUTPUT -->
+    <div class="code-output" id="code-output">
+      <div class="code-header">
+        <div class="code-header-title" id="code-filename">smithfamily.html — Ready to paste into GitHub</div>
+        <button class="copy-btn" id="copy-btn" onclick="copyCode()">Copy All Code</button>
+      </div>
+      <div class="code-body">
+        <div class="code-instructions">
+          <div class="instruction-step">
+            <div class="istep-num">1</div>
+            <div class="istep-text">Go to your GitHub repository and click <strong>Add file → Create new file</strong></div>
+          </div>
+          <div class="instruction-step">
+            <div class="istep-num">2</div>
+            <div class="istep-text">Name the file <code id="filename-display">smithfamily.html</code> (exactly as shown, all lowercase)</div>
+          </div>
+          <div class="instruction-step">
+            <div class="istep-num">3</div>
+            <div class="istep-text">Click <strong>Copy All Code</strong> above, then paste it into the GitHub editor</div>
+          </div>
+          <div class="instruction-step">
+            <div class="istep-num">4</div>
+            <div class="istep-text">Click <strong>Commit changes</strong> — the page goes live at <code id="url-display">louienu502.com/smithfamily</code></div>
+          </div>
+        </div>
+        <button class="show-code-btn" onclick="toggleCodeView(this)">Show Raw Code ▾</button>
+        <pre class="code-pre" id="code-pre"></pre>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PREVIEW PANEL -->
+  <div class="preview-panel">
+    <div class="preview-card">
+      <div class="preview-title">Live Preview</div>
+      <div class="preview-family" id="prev-name">The <em>Smith</em> Family</div>
+      <div class="preview-url" id="prev-url">louienu502.com/smithfamily</div>
+      <div class="preview-tags" id="prev-tags">
+        <span class="preview-tag active">Heart Health</span>
+        <span class="preview-tag">4 people</span>
+        <span class="preview-tag">Instacart</span>
+        <span class="preview-tag">Week 1</span>
+      </div>
+      <div class="preview-meals" id="prev-meals">
+        <div style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Week 1 Meals</div>
+        <div class="preview-meal-row"><span class="preview-meal-day">Mon</span><span class="preview-meal-name" id="prev-mon">—</span></div>
+        <div class="preview-meal-row"><span class="preview-meal-day">Tue</span><span class="preview-meal-name" id="prev-tue">—</span></div>
+        <div class="preview-meal-row"><span class="preview-meal-day">Wed</span><span class="preview-meal-name" id="prev-wed">—</span></div>
+        <div class="preview-meal-row"><span class="preview-meal-day">Thu</span><span class="preview-meal-name" id="prev-thu">—</span></div>
+        <div class="preview-meal-row"><span class="preview-meal-day">Fri</span><span class="preview-meal-name" id="prev-fri">—</span></div>
+        <div class="preview-meal-row"><span class="preview-meal-day">Sat</span><span class="preview-meal-name" id="prev-sat">—</span></div>
+        <div class="preview-meal-row"><span class="preview-meal-day">Sun</span><span class="preview-meal-name" id="prev-sun">—</span></div>
+      </div>
+    </div>
+    <div class="hint-card">
+      <strong>💡 How to use this tool</strong>
+      Fill in all 4 steps using the family's Google Form responses. Hit Generate to get the code, paste it into GitHub, and their portal is live — usually in under 5 minutes.
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="portal-footer">
+  <div class="footer-left">Your Family's <span>"Food COO"</span></div>
+  <div class="footer-right">Erin Wiedmar, RDN, MEd, CDE<br>502-930-5845 · erin.louienu@gmail.com</div>
+</div>
+
+<script>
+let currentStep = 1;
+const totalSteps = 5;
+
+function goToStep(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.pstep').forEach((s, i) => {
+    s.classList.remove('active','done');
+    if (i + 1 < n) s.classList.add('done');
+    if (i + 1 === n) s.classList.add('active');
+  });
+  document.getElementById('step-' + n).classList.add('active');
+  currentStep = n;
+  if (n === 5) buildReviewSummary();
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+function toggleChip(el) {
+  el.classList.toggle('on');
+  updatePreview();
+}
+
+function getChips(groupId) {
+  return Array.from(document.querySelectorAll(`#${groupId} .chip.on`)).map(c => c.dataset.val);
+}
+
+function updatePreview() {
+  const name = document.getElementById('family-name').value || 'Smith';
+  const slug = document.getElementById('url-slug').value || name.toLowerCase() + 'family';
+  const week = document.getElementById('week-num').value;
+  const goal = document.getElementById('goal') ? document.getElementById('goal').value : 'Heart Health';
+  const grocery = document.getElementById('grocery').value;
+  const dietary = getChips('dietary');
+  const adults = document.getElementById('adults').value;
+  const kids = document.getElementById('kids').value;
+  const total = parseInt(adults) + parseInt(kids);
+
+  document.getElementById('prev-name').innerHTML = `The <em>${name}</em> Family`;
+  document.getElementById('prev-url').textContent = `louienu502.com/${slug}`;
+
+  // Tags
+  const tagsEl = document.getElementById('prev-tags');
+  let tags = `<span class="preview-tag active">${goal}</span>`;
+  tags += `<span class="preview-tag">${total} people</span>`;
+  tags += `<span class="preview-tag">${grocery}</span>`;
+  tags += `<span class="preview-tag">Week ${week}</span>`;
+  dietary.slice(0,2).forEach(d => tags += `<span class="preview-tag active">${d}</span>`);
+  tagsEl.innerHTML = tags;
+
+  // Meals
+  ['mon','tue','wed','thu','fri','sat','sun'].forEach(day => {
+    const meal = document.getElementById('meal-' + day);
+    const emoji = document.getElementById('emoji-' + day);
+    if (meal) {
+      const val = meal.value ? (emoji && emoji.value ? emoji.value + ' ' : '') + meal.value : '—';
+      document.getElementById('prev-' + day).textContent = val;
+    }
+  });
+}
+
+function buildReviewSummary() {
+  const name = document.getElementById('family-name').value || '—';
+  const slug = document.getElementById('url-slug').value || '—';
+  const week = document.getElementById('week-num').value;
+  const goal = document.getElementById('goal').value;
+  const grocery = document.getElementById('grocery').value;
+  const dietary = getChips('dietary').join(', ') || 'None selected';
+  const cuisines = getChips('cuisines-loved').join(', ') || 'None selected';
+  const note = document.getElementById('erins-note').value;
+  const meals = ['mon','tue','wed','thu','fri','sat','sun'].map(d => {
+    const m = document.getElementById('meal-' + d).value;
+    return m || '—';
+  });
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+  document.getElementById('review-summary').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div>
+        <div style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--terra);margin-bottom:8px;">Family</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:4px;">The ${name} Family</div>
+        <div style="font-size:0.78rem;color:var(--taupe);">louienu502.com/${slug}</div>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--terra);margin-bottom:8px;">Details</div>
+        <div style="font-size:0.8rem;color:var(--brown-mid);line-height:1.8;">
+          Week ${week} · ${goal}<br>${grocery} · ${dietary}
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--sand);">
+      <div style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--terra);margin-bottom:8px;">Week 1 Meals</div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;">
+        ${days.map((d,i) => `<div style="text-align:center;background:var(--warm-white);border:1px solid var(--sand);border-radius:3px;padding:8px 4px;"><div style="font-size:0.58rem;color:var(--taupe);text-transform:uppercase;margin-bottom:4px;">${d}</div><div style="font-size:0.72rem;color:var(--brown-deep);line-height:1.3;">${meals[i]}</div></div>`).join('')}
+      </div>
+    </div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--sand);">
+      <div style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--terra);margin-bottom:8px;">Erin's Note Preview</div>
+      <div style="font-size:0.82rem;color:var(--brown-mid);font-style:italic;line-height:1.6;">${note ? '"' + note.substring(0,120) + (note.length > 120 ? '...' : '') + '"' : '<span style="color:var(--taupe)">No note added yet</span>'}</div>
+    </div>
+  `;
+}
+
+function generateCode() {
+  const name = document.getElementById('family-name').value || 'Smith';
+  const slug = (document.getElementById('url-slug').value || name.toLowerCase() + 'family').toLowerCase();
+  const week = document.getElementById('week-num').value;
+  const goal = document.getElementById('goal').value;
+  const grocery = document.getElementById('grocery').value;
+  const dietary = getChips('dietary');
+  const cuisines = getChips('cuisines-loved');
+  const avoid = document.getElementById('avoid-foods').value;
+  const adults = document.getElementById('adults').value;
+  const kids = document.getElementById('kids').value;
+  const total = parseInt(adults) + parseInt(kids);
+  const note = document.getElementById('erins-note').value || 'I am so excited to start this journey with your family!';
+  const noteDate = document.getElementById('note-date').value || 'March 2026';
+  const nextVisit = document.getElementById('next-visit').value || 'Coming soon';
+  const upcomingRaw = document.getElementById('upcoming-visits').value || '';
+  const upcomingLines = upcomingRaw.split('\n').filter(l => l.trim());
+
+  const days = ['mon','tue','wed','thu','fri','sat','sun'];
+  const dayLabels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const fullDays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const meals = days.map(d => ({
+    name: document.getElementById('meal-' + d).value || '—',
+    emoji: document.getElementById('emoji-' + d).value || '🍽️',
+    type: document.getElementById('type-' + d).value || 'Dinner'
+  }));
+
+  const dietaryTags = dietary.map(d => `<span class="banner-tag active">${d}</span>`).join('\n      ');
+  const mealCells = meals.map((m, i) => `
+      <div class="meal-cell${i===0?' today':''}" >
+        <div class="meal-day-abbr">${dayLabels[i]}</div>
+        <span class="meal-emoji">${m.emoji}</span>
+        <div class="meal-name">${m.name}</div>
+        <div class="meal-type">${m.type}</div>
+      </div>`).join('');
+
+  const upcomingItems = upcomingLines.length > 0
+    ? upcomingLines.map(l => `<div class="next-item"><div class="next-item-dot"></div><div>${l}</div></div>`).join('\n        ')
+    : `<div class="next-item"><div class="next-item-dot"></div><div><strong>${nextVisit}</strong>In-home prep session</div></div>`;
+
+  const profileLoves = cuisines.map(c => `<span class="ptag green">${c}</span>`).join('');
+  const profileAvoids = dietary.map(d => `<span class="ptag">${d}</span>`).join('');
+
+  const groceryOptions = ['Instacart','Walmart+','Amazon Fresh','Kroger','Whole Foods','Local Pickup'];
+  const groceryBtns = groceryOptions.map(g => `
+        <a href="#" class="grocery-btn${g===grocery?' preferred':''}">
+          <div class="grocery-btn-left">
+            <span class="grocery-btn-icon">${g==='Instacart'?'🛒':g==='Walmart+'?'🔵':g==='Amazon Fresh'?'📦':g==='Kroger'?'🏪':g==='Whole Foods'?'🌿':'🚗'}</span>
+            <div>
+              <div class="grocery-btn-name">${g}</div>
+              ${g===grocery?'<div class="grocery-btn-tag">Preferred</div>':''}
+            </div>
+          </div>
+          <span class="grocery-btn-arrow">→</span>
+        </a>`).join('');
+
+  const feedbackCards = meals.slice(0,2).map((m,i) => `
+      <div class="fb-card">
+        <div class="fb-meal-name">${dayLabels[i]} — ${m.name}</div>
+        <div class="fb-stars">
+          <span class="fb-star" onclick="rateMeal(this,1)">★</span>
+          <span class="fb-star" onclick="rateMeal(this,2)">★</span>
+          <span class="fb-star" onclick="rateMeal(this,3)">★</span>
+          <span class="fb-star" onclick="rateMeal(this,4)">★</span>
+          <span class="fb-star" onclick="rateMeal(this,5)">★</span>
+        </div>
+        <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea>
+        <br><button class="fb-submit" onclick="sendFeedback(this)">Send to Erin →</button>
+        <div class="fb-sent">✓ Sent! Erin will adjust next week's plan.</div>
+      </div>`).join('');
+
+  const code = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The ${name} Family — Food COO Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F7F3EC;--warm-white:#FDFCF9;--brown-deep:#231810;--brown-mid:#5A3825;--brown-light:#8C6649;--taupe:#B8A898;--sand:#D8C9B0;--sage:#6B8A62;--sage-soft:#C8D8C2;--terra:#C46A42;--terra-soft:#EDD5C4;--gold:#C9A254;--gold-soft:#F0E0B8;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;}
+.topbar{background:var(--brown-deep);padding:0 48px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.topbar-brand{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--cream);text-decoration:none;}
+.topbar-brand span{color:var(--gold);font-style:italic;}
+.topbar-family{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--taupe);}
+.topbar-right{display:flex;align-items:center;gap:20px;}
+.topbar-week{background:var(--terra);color:white;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;padding:5px 14px;border-radius:100px;}
+.topbar-nav a{color:rgba(247,243,236,0.55);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.topbar-nav a:hover{color:var(--cream);}
+.topbar-nav{display:flex;gap:20px;}
+.hero-banner{background:linear-gradient(120deg,var(--brown-mid) 0%,var(--brown-deep) 60%);padding:52px 48px 48px;position:relative;overflow:hidden;}
+.hero-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 0%,rgba(201,162,84,0.12) 0%,transparent 55%);}
+.hero-banner-text{position:relative;z-index:1;padding-bottom:48px;}
+.banner-greeting{font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.banner-greeting::before{content:'';width:28px;height:1px;background:var(--gold);}
+.banner-h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,4vw,3.8rem);font-weight:900;color:var(--cream);line-height:1.05;margin-bottom:8px;}
+.banner-h1 em{color:var(--gold);font-style:italic;}
+.banner-sub{font-family:'Lora',serif;font-size:1.05rem;font-style:italic;color:rgba(247,243,236,0.65);margin-top:14px;max-width:480px;line-height:1.7;}
+.banner-tags{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;}
+.banner-tag{border:1px solid rgba(255,255,255,0.2);color:rgba(247,243,236,0.7);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;padding:5px 12px;border-radius:100px;}
+.banner-tag.active{border-color:var(--gold);color:var(--gold);background:rgba(201,162,84,0.1);}
+.main-grid{display:grid;grid-template-columns:1fr 380px;}
+.left-panel{padding:40px 48px;border-right:1px solid var(--sand);}
+.right-panel{padding:40px 32px;background:var(--warm-white);display:flex;flex-direction:column;gap:32px;}
+.slabel{font-size:0.65rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--terra);font-weight:500;display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.slabel::before{content:'';width:22px;height:1px;background:var(--terra);}
+.meal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:40px;}
+.meal-cell{background:var(--warm-white);border:1.5px solid var(--sand);border-radius:6px;padding:14px 8px 12px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;}
+.meal-cell:hover{border-color:var(--brown-light);transform:translateY(-3px);box-shadow:0 6px 20px rgba(44,31,20,0.1);}
+.meal-cell.today{border-color:var(--terra);background:var(--terra-soft);}
+.meal-day-abbr{font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--taupe);margin-bottom:8px;}
+.meal-emoji{font-size:1.5rem;margin-bottom:6px;display:block;}
+.meal-name{font-size:0.7rem;color:var(--brown-mid);line-height:1.35;}
+.meal-type{font-size:0.58rem;color:var(--taupe);margin-top:4px;text-transform:uppercase;letter-spacing:0.08em;}
+.prep-card{background:var(--brown-deep);border-radius:6px;padding:28px 32px;color:var(--cream);margin-bottom:40px;}
+.prep-col-title{font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.prep-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.prep-list li{display:flex;align-items:flex-start;gap:10px;font-size:0.82rem;color:rgba(247,243,236,0.8);line-height:1.5;}
+.prep-list li::before{content:'—';color:var(--terra);flex-shrink:0;}
+.fb-card{background:var(--warm-white);border:1.5px solid var(--sand);border-radius:6px;padding:20px 22px;margin-bottom:12px;}
+.fb-meal-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--brown-deep);margin-bottom:10px;}
+.fb-stars{display:flex;gap:4px;margin-bottom:10px;}
+.fb-star{font-size:1.3rem;cursor:pointer;color:var(--sand);transition:color 0.15s;}
+.fb-star.lit{color:var(--gold);}
+.fb-input{width:100%;background:var(--cream);border:1px solid var(--sand);border-radius:3px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--brown-deep);resize:none;outline:none;}
+.fb-submit{margin-top:8px;background:none;border:1.5px solid var(--sand);padding:8px 20px;font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--brown-mid);cursor:pointer;border-radius:2px;}
+.fb-sent{font-size:0.78rem;color:var(--sage);display:none;margin-top:8px;}
+.gform-zone{background:var(--warm-white);border:2px dashed var(--sand);border-radius:6px;padding:36px;text-align:center;margin-bottom:40px;}
+.gform-placeholder{background:var(--cream);border:1px solid var(--sand);border-radius:4px;padding:12px 16px;font-size:0.72rem;color:var(--taupe);text-transform:uppercase;letter-spacing:0.1em;}
+.erins-note{background:var(--brown-deep);border-radius:6px;padding:28px;color:var(--cream);position:relative;overflow:hidden;}
+.erins-note::before{content:'"';font-family:'Playfair Display',serif;font-size:7rem;position:absolute;top:-10px;right:16px;color:rgba(201,162,84,0.15);font-style:italic;line-height:1;}
+.note-from{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.note-from::before{content:'';width:18px;height:1px;background:var(--gold);}
+.note-text{font-family:'Lora',serif;font-size:0.95rem;font-style:italic;line-height:1.75;color:rgba(247,243,236,0.88);position:relative;z-index:1;}
+.note-date{margin-top:16px;font-size:0.68rem;color:var(--taupe);}
+.profile-card{background:var(--cream);border:1px solid var(--sand);border-radius:6px;padding:24px;}
+.profile-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--brown-deep);margin-bottom:16px;}
+.profile-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--sand);font-size:0.8rem;}
+.profile-row:last-child{border-bottom:none;}
+.profile-key{color:var(--taupe);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;}
+.profile-tags{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;}
+.ptag{font-size:0.65rem;padding:3px 9px;border-radius:100px;border:1px solid var(--terra);color:var(--terra);}
+.ptag.green{border-color:var(--sage);color:var(--sage);}
+.grocery-panel{background:var(--cream);border:1px solid var(--sand);border-radius:6px;padding:24px;}
+.grocery-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--brown-deep);margin-bottom:6px;}
+.grocery-sub{font-size:0.78rem;color:var(--taupe);margin-bottom:18px;line-height:1.5;}
+.grocery-btn{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--warm-white);border:1.5px solid var(--sand);border-radius:4px;cursor:pointer;transition:all 0.2s;text-decoration:none;margin-bottom:8px;}
+.grocery-btn:hover{border-color:var(--terra);}
+.grocery-btn.preferred{border-color:var(--sage);background:var(--sage-soft);}
+.grocery-btn-left{display:flex;align-items:center;gap:10px;}
+.grocery-btn-icon{font-size:1.1rem;}
+.grocery-btn-name{font-size:0.82rem;color:var(--brown-deep);}
+.grocery-btn-tag{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--sage);}
+.grocery-btn-arrow{color:var(--taupe);}
+.next-card{background:var(--terra);border-radius:6px;padding:24px;color:white;}
+.next-title{font-family:'Playfair Display',serif;font-size:0.95rem;margin-bottom:14px;}
+.next-list{display:flex;flex-direction:column;gap:10px;}
+.next-item{display:flex;align-items:flex-start;gap:10px;font-size:0.8rem;color:rgba(255,255,255,0.88);}
+.next-item-dot{width:6px;height:6px;background:rgba(255,255,255,0.4);border-radius:50%;flex-shrink:0;margin-top:6px;}
+.next-item strong{color:white;display:block;font-weight:500;}
+.portal-footer{background:var(--brown-deep);padding:24px 48px;display:flex;align-items:center;justify-content:space-between;}
+.footer-left{font-family:'Playfair Display',serif;font-size:0.9rem;color:var(--cream);}
+.footer-left span{color:var(--gold);font-style:italic;}
+.footer-right{font-size:0.72rem;color:var(--taupe);text-align:right;line-height:1.7;}
+@media(max-width:900px){.main-grid{grid-template-columns:1fr;}.left-panel{padding:28px 20px;}.right-panel{padding:28px 20px;}.meal-week{gap:3px;}.meal-cell{padding:10px 4px 8px;}.meal-emoji{font-size:1.1rem;}.portal-footer{flex-direction:column;gap:12px;text-align:center;}.topbar{padding:0 20px;}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="index.html" class="topbar-brand">Food <span>COO</span></a>
+  <div class="topbar-family">The ${name} Family</div>
+  <div class="topbar-right">
+    <nav class="topbar-nav">
+      <a href="index.html">Home</a>
+      <a href="recipes.html">Recipes</a>
+    </nav>
+    <div class="topbar-week">Week ${week} of Pilot</div>
+  </div>
+</div>
+<div class="hero-banner">
+  <div class="hero-banner-text">
+    <div class="banner-greeting">Your personalized portal</div>
+    <h1 class="banner-h1">Welcome, <em>${name}s</em> 👋</h1>
+    <p class="banner-sub">Your week is planned, your groceries are ready to order, and Erin has a note for you below.</p>
+    <div class="banner-tags">
+      ${dietaryTags}
+      <span class="banner-tag">${total} people</span>
+      <span class="banner-tag active">${goal}</span>
+    </div>
+  </div>
+</div>
+<div class="main-grid">
+  <div class="left-panel">
+    <div class="slabel">This Week's Meal Plan</div>
+    <div class="meal-week">${mealCells}</div>
+    <div class="slabel">Erin's Prep Notes</div>
+    <div class="prep-card">
+      <div class="prep-col-title">This Week's Strategy</div>
+      <ul class="prep-list">
+        <li>Erin will add prep notes here at your first session</li>
+        <li>Cook-once, eat-twice opportunities will be noted</li>
+        <li>Strategic batch cooking planned for the week</li>
+      </ul>
+    </div>
+    <div class="slabel">Rate This Week's Meals</div>
+    ${feedbackCards}
+    <div class="gform-zone">
+      <div style="font-size:2rem;margin-bottom:10px;">📋</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--brown-deep);margin-bottom:6px;">Monthly Check-In Survey</div>
+      <div style="font-size:0.82rem;color:var(--taupe);margin-bottom:16px;line-height:1.6;">Paste your Google Form embed code below</div>
+      <div class="gform-placeholder">← Paste Google Form iframe embed code here</div>
+    </div>
+  </div>
+  <div class="right-panel">
+    <div class="erins-note">
+      <div class="note-from">A note from Erin</div>
+      <div class="note-text">${note}</div>
+      <div class="note-date">— Erin W. · ${noteDate}</div>
+    </div>
+    <div class="profile-card">
+      <div class="profile-title">Family Profile</div>
+      <div class="profile-row"><span class="profile-key">Family</span><span>The ${name}s</span></div>
+      <div class="profile-row"><span class="profile-key">Size</span><span>${adults} adult${parseInt(adults)>1?'s':''}, ${kids} kid${parseInt(kids)!==1?'s':''}</span></div>
+      <div class="profile-row"><span class="profile-key">Goal</span><span>${goal}</span></div>
+      <div class="profile-row"><span class="profile-key">Loves</span><div class="profile-tags">${profileLoves || '<span class="ptag green">To be added</span>'}</div></div>
+      <div class="profile-row"><span class="profile-key">Avoids</span><div class="profile-tags">${profileAvoids || '<span class="ptag">None</span>'}</div></div>
+    </div>
+    <div class="grocery-panel">
+      <div class="grocery-title">Grocery Delivery</div>
+      <div class="grocery-sub">Tap your preferred service to open your pre-filled cart.</div>
+      ${groceryBtns}
+    </div>
+    <div class="next-card">
+      <div class="next-title">Upcoming With Erin</div>
+      <div class="next-list">${upcomingItems}</div>
+    </div>
+  </div>
+</div>
+<div class="portal-footer">
+  <div class="footer-left">Your Family's <span>"Food COO"</span></div>
+  <div class="footer-right">Erin Wiedmar, RDN, MEd, CDE<br>502-930-5845 · erin.louienu@gmail.com</div>
+</div>
+<script>
+function rateMeal(star,n){const row=star.closest('.fb-stars');row.querySelectorAll('.fb-star').forEach((s,i)=>s.classList.toggle('lit',i<n));}
+function sendFeedback(btn){const card=btn.closest('.fb-card');card.querySelector('.fb-sent').style.display='block';btn.style.display='none';}
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});},{threshold:0.08});
+document.querySelectorAll('.meal-cell,.fb-card,.erins-note,.profile-card').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(16px)';el.style.transition='opacity 0.5s ease,transform 0.5s ease';obs.observe(el);});
+<\/script>
+</body>
+</html>`;
+
+  document.getElementById('code-pre').textContent = code;
+  document.getElementById('code-filename').textContent = `${slug}.html — Ready to paste into GitHub`;
+  document.getElementById('filename-display').textContent = `${slug}.html`;
+  document.getElementById('url-display').textContent = `louienu502.com/${slug}`;
+  document.getElementById('code-output').classList.add('show');
+  document.getElementById('code-output').scrollIntoView({behavior:'smooth', block:'start'});
+  window._generatedCode = code;
+}
+
+function copyCode() {
+  if (!window._generatedCode) return;
+  navigator.clipboard.writeText(window._generatedCode).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy All Code'; btn.classList.remove('copied'); }, 3000);
+  });
+}
+
+function toggleCodeView(btn) {
+  const pre = document.getElementById('code-pre');
+  if (pre.style.display === 'block') {
+    pre.style.display = 'none';
+    btn.textContent = 'Show Raw Code ▾';
+  } else {
+    pre.style.display = 'block';
+    btn.textContent = 'Hide Raw Code ▴';
+  }
+}
+
+// Auto-fill slug from name
+document.getElementById('family-name').addEventListener('input', function() {
+  const slug = this.value.toLowerCase().replace(/\s+/g,'') + 'family';
+  document.getElementById('url-slug').value = slug;
+  updatePreview();
+});
+
+updatePreview();
+</script>
+</body>
+</html>
