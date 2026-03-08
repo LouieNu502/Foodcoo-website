@@ -73,7 +73,7 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 
 /* MEAL ROWS */
 .meal-rows{display:flex;flex-direction:column;gap:8px;}
-.meal-row{display:grid;grid-template-columns:90px 1fr 70px 100px 76px;gap:8px;align-items:center;background:var(--warm-white);border:1.5px solid var(--sand);border-radius:4px;padding:10px 14px;transition:border-color 0.2s;}
+.meal-row{display:grid;grid-template-columns:90px 1fr 1fr 1fr 90px;gap:8px;align-items:center;background:var(--warm-white);border:1.5px solid var(--sand);border-radius:4px;padding:10px 14px;transition:border-color 0.2s;}
 .meal-row.linked{border-color:var(--sage);background:rgba(200,216,194,0.1);}
 .meal-row-day{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);font-weight:500;}
 .meal-row input,.meal-row select{padding:8px 10px;background:var(--cream);border:1px solid var(--sand);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--brown-deep);outline:none;transition:border-color 0.2s;width:100%;}
@@ -363,13 +363,13 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
       </div>
 
       <div class="meal-rows">
-        <div class="meal-row" id="mrow-mon"><div class="meal-row-day">Monday</div><input type="text" id="meal-mon" placeholder="Meal name" oninput="onMealType('mon')"><input type="text" id="emoji-mon" placeholder="🍽️" style="max-width:70px;text-align:center;" oninput="updatePreview()"><select id="type-mon" class="type-sel"><option>Dinner</option><option>Lunch</option><option>Breakfast</option></select><button class="pick-btn" id="pick-mon" onclick="openPicker('mon')">📖 Pick</button></div>
-        <div class="meal-row" id="mrow-tue"><div class="meal-row-day">Tuesday</div><input type="text" id="meal-tue" placeholder="Meal name" oninput="onMealType('tue')"><input type="text" id="emoji-tue" placeholder="🍽️" style="max-width:70px;text-align:center;" oninput="updatePreview()"><select id="type-tue" class="type-sel"><option>Dinner</option><option>Lunch</option><option>Breakfast</option></select><button class="pick-btn" id="pick-tue" onclick="openPicker('tue')">📖 Pick</button></div>
-        <div class="meal-row" id="mrow-wed"><div class="meal-row-day">Wednesday</div><input type="text" id="meal-wed" placeholder="Meal name" oninput="onMealType('wed')"><input type="text" id="emoji-wed" placeholder="🍽️" style="max-width:70px;text-align:center;" oninput="updatePreview()"><select id="type-wed" class="type-sel"><option>Dinner</option><option>Lunch</option><option>Breakfast</option></select><button class="pick-btn" id="pick-wed" onclick="openPicker('wed')">📖 Pick</button></div>
-        <div class="meal-row" id="mrow-thu"><div class="meal-row-day">Thursday</div><input type="text" id="meal-thu" placeholder="Meal name" oninput="onMealType('thu')"><input type="text" id="emoji-thu" placeholder="🍽️" style="max-width:70px;text-align:center;" oninput="updatePreview()"><select id="type-thu" class="type-sel"><option>Dinner</option><option>Lunch</option><option>Breakfast</option></select><button class="pick-btn" id="pick-thu" onclick="openPicker('thu')">📖 Pick</button></div>
-        <div class="meal-row" id="mrow-fri"><div class="meal-row-day">Friday</div><input type="text" id="meal-fri" placeholder="Meal name" oninput="onMealType('fri')"><input type="text" id="emoji-fri" placeholder="🍽️" style="max-width:70px;text-align:center;" oninput="updatePreview()"><select id="type-fri" class="type-sel"><option>Dinner</option><option>Lunch</option><option>Breakfast</option></select><button class="pick-btn" id="pick-fri" onclick="openPicker('fri')">📖 Pick</button></div>
-        <div class="meal-row" id="mrow-sat"><div class="meal-row-day">Saturday</div><input type="text" id="meal-sat" placeholder="Meal name" oninput="onMealType('sat')"><input type="text" id="emoji-sat" placeholder="🍽️" style="max-width:70px;text-align:center;" oninput="updatePreview()"><select id="type-sat" class="type-sel"><option>Dinner</option><option>Lunch</option><option>Breakfast</option></select><button class="pick-btn" id="pick-sat" onclick="openPicker('sat')">📖 Pick</button></div>
-        <div class="meal-row" id="mrow-sun"><div class="meal-row-day">Sunday</div><input type="text" id="meal-sun" placeholder="Meal name" oninput="onMealType('sun')"><input type="text" id="emoji-sun" placeholder="🍽️" style="max-width:70px;text-align:center;" oninput="updatePreview()"><select id="type-sun" class="type-sel"><option>Dinner</option><option>Lunch</option><option>Breakfast</option><option>Batch Cook</option></select><button class="pick-btn" id="pick-sun" onclick="openPicker('sun')">📖 Pick</button></div>
+        <div class="meal-row" id="mrow-mon"><div class="meal-row-day">Monday</div><input type="text" id="meal-mon-b" placeholder="Breakfast" oninput="onMealType('mon-b')"><input type="text" id="meal-mon-l" placeholder="Lunch" oninput="onMealType('mon-l')"><input type="text" id="meal-mon-d" placeholder="Dinner" oninput="onMealType('mon-d')"><button class="pick-btn" id="pick-mon" onclick="openPicker('mon-d')">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-tue"><div class="meal-row-day">Tuesday</div><input type="text" id="meal-tue-b" placeholder="Breakfast" oninput="onMealType('tue-b')"><input type="text" id="meal-tue-l" placeholder="Lunch" oninput="onMealType('tue-l')"><input type="text" id="meal-tue-d" placeholder="Dinner" oninput="onMealType('tue-d')"><button class="pick-btn" id="pick-tue" onclick="openPicker('tue-d')">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-wed"><div class="meal-row-day">Wednesday</div><input type="text" id="meal-wed-b" placeholder="Breakfast" oninput="onMealType('wed-b')"><input type="text" id="meal-wed-l" placeholder="Lunch" oninput="onMealType('wed-l')"><input type="text" id="meal-wed-d" placeholder="Dinner" oninput="onMealType('wed-d')"><button class="pick-btn" id="pick-wed" onclick="openPicker('wed-d')">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-thu"><div class="meal-row-day">Thursday</div><input type="text" id="meal-thu-b" placeholder="Breakfast" oninput="onMealType('thu-b')"><input type="text" id="meal-thu-l" placeholder="Lunch" oninput="onMealType('thu-l')"><input type="text" id="meal-thu-d" placeholder="Dinner" oninput="onMealType('thu-d')"><button class="pick-btn" id="pick-thu" onclick="openPicker('thu-d')">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-fri"><div class="meal-row-day">Friday</div><input type="text" id="meal-fri-b" placeholder="Breakfast" oninput="onMealType('fri-b')"><input type="text" id="meal-fri-l" placeholder="Lunch" oninput="onMealType('fri-l')"><input type="text" id="meal-fri-d" placeholder="Dinner" oninput="onMealType('fri-d')"><button class="pick-btn" id="pick-fri" onclick="openPicker('fri-d')">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-sat"><div class="meal-row-day">Saturday</div><input type="text" id="meal-sat-b" placeholder="Breakfast" oninput="onMealType('sat-b')"><input type="text" id="meal-sat-l" placeholder="Lunch" oninput="onMealType('sat-l')"><input type="text" id="meal-sat-d" placeholder="Dinner" oninput="onMealType('sat-d')"><button class="pick-btn" id="pick-sat" onclick="openPicker('sat-d')">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-sun"><div class="meal-row-day">Sunday</div><input type="text" id="meal-sun-b" placeholder="Breakfast" oninput="onMealType('sun-b')"><input type="text" id="meal-sun-l" placeholder="Lunch" oninput="onMealType('sun-l')"><input type="text" id="meal-sun-d" placeholder="Dinner" oninput="onMealType('sun-d')"><button class="pick-btn" id="pick-sun" onclick="openPicker('sun-d')">📖 Pick Dinner</button></div>
       </div>
 
       <div class="btn-row"><button class="btn-back" onclick="goToStep(5)">← Back</button><button class="btn-next" onclick="goToStep(7)">Next: Erin's Note →</button></div>
@@ -735,21 +735,22 @@ function generateCode() {
   const dayFull = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
   const dayAbbr = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
-  // Meals — carry linked recipe object if picked
+  // Meals — 3 per day: breakfast, lunch, dinner
   const meals = days.map(d => ({
-    name:   document.getElementById('meal-'+d).value||'—',
-    emoji:  document.getElementById('emoji-'+d).value||'🍽️',
-    type:   document.getElementById('type-'+d).value||'Dinner',
-    recipe: mealLinks[d]||null
+    day: d,
+    breakfast: { name: document.getElementById('meal-'+d+'-b').value||'', emoji:'🌅', type:'Breakfast' },
+    lunch:     { name: document.getElementById('meal-'+d+'-l').value||'', emoji:'☀️', type:'Lunch' },
+    dinner:    { name: document.getElementById('meal-'+d+'-d').value||'—', emoji: document.getElementById('emoji-'+d) ? (document.getElementById('emoji-'+d).value||'🍽️') : '🍽️', type:'Dinner', recipe: mealLinks[d+'-d']||null }
   }));
 
-  // Embed only the recipes actually used (deduplicated)
+  // Embed only the dinner recipes actually used (deduplicated)
   const usedRecipes = [];
   const seenIds = new Set();
   meals.forEach(m => {
-    if (m.recipe && !seenIds.has(m.recipe.id)) {
-      seenIds.add(m.recipe.id);
-      usedRecipes.push(m.recipe);
+    const r = m.dinner.recipe;
+    if (r && !seenIds.has(r.id)) {
+      seenIds.add(r.id);
+      usedRecipes.push(r);
     }
   });
   const recipesJSON = JSON.stringify(usedRecipes).replace(/`/g,"'").replace(/\\/g,'\\\\').replace(/\${/g,'\\${');
@@ -766,24 +767,28 @@ function generateCode() {
     ? upcomingLines.map(l=>`<div class="next-item"><div class="next-dot"></div><div>${l}</div></div>`).join('')
     : `<div class="next-item"><div class="next-dot"></div><div><strong>${nextVisit}</strong></div></div>`;
 
-  // Meal cells — linked meals show "View Recipe" badge and are clickable
+  // Meal grid — one column per day, 3 rows each (B/L/D)
   const mealCells = meals.map((m,i)=>{
-    const r = m.recipe;
+    const r = m.dinner.recipe;
     const clickable = r ? (r.type==='external'?`onclick="window.open('${r.url}','_blank')"`:``+`onclick="openRecipeModal('${r.id}')"`) : '';
-    const badge = r ? `<div class="meal-link-badge">${r.type==='external'?'Open Recipe ↗':'View Recipe →'}</div>` : '';
-    const linked = r ? ' linked' : '';
-    return `<div class="meal-cell${i===0?' today':''}${linked}" ${clickable}><div class="meal-day-abbr">${dayAbbr[i]}</div><span class="meal-emoji">${m.emoji}</span><div class="meal-name">${m.name}</div><div class="meal-type">${m.type}</div>${badge}</div>`;
+    const dBadge = r ? `<div class="meal-link-badge">${r.type==='external'?'↗':'→'}</div>` : '';
+    return `<div class="meal-cell${i===0?' today':''}">
+      <div class="meal-day-abbr">${dayAbbr[i]}</div>
+      ${m.breakfast.name?`<div class="meal-slot breakfast"><span class="slot-label">B</span><span class="slot-name">${m.breakfast.name}</span></div>`:''}
+      ${m.lunch.name?`<div class="meal-slot lunch"><span class="slot-label">L</span><span class="slot-name">${m.lunch.name}</span></div>`:''}
+      <div class="meal-slot dinner${r?' linked':''}\" ${clickable}><span class="slot-label">D</span><span class="slot-name">${m.dinner.name}</span>${dBadge}</div>
+    </div>`;
   }).join('');
 
-  // Feedback cards — linked recipes show "View Recipe" button
+  // Feedback cards — one per day covering the dinner (primary planned meal)
   const fbCards = meals.map((m,i)=>{
-    const r = m.recipe;
+    const r = m.dinner.recipe;
     const viewBtn = r ? (r.type==='external'
-      ? `<a href="${r.url}" target="_blank" class="fb-recipe-btn">📖 View Full Recipe ↗</a>`
-      : `<button class="fb-recipe-btn" onclick="openRecipeModal('${r.id}')">📖 View Full Recipe →</button>`)
+      ? `<a href="${r.url}" target="_blank" class="fb-recipe-btn">📖 View Recipe ↗</a>`
+      : `<button class="fb-recipe-btn" onclick="openRecipeModal('${r.id}')">📖 View Recipe →</button>`)
       : '';
     return `<div class="fb-card">
-      <div class="fb-meal-name">${dayAbbr[i]} — ${m.name}</div>
+      <div class="fb-meal-name">${dayAbbr[i]} — ${m.dinner.name}</div>
       ${viewBtn}
       <div class="fb-stars"><span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span></div>
       <textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br>
@@ -855,15 +860,16 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 .slabel::before{content:'';width:22px;height:1px;background:var(--terra);}
 /* MEAL GRID */
 .meal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:36px;}
-.meal-cell{background:var(--warm-white);border:1.5px solid var(--sand);border-radius:6px;padding:14px 8px 12px;text-align:center;transition:all 0.2s;}
-.meal-cell.linked{border-color:var(--sage);cursor:pointer;}
-.meal-cell.linked:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(44,31,20,0.12);}
+.meal-cell{background:var(--warm-white);border:1.5px solid var(--sand);border-radius:6px;padding:10px 6px 10px;text-align:center;}
 .meal-cell.today{border-color:var(--terra);background:var(--terra-soft);}
 .meal-day-abbr{font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--taupe);margin-bottom:6px;}
-.meal-emoji{font-size:1.5rem;margin-bottom:5px;display:block;}
-.meal-name{font-size:0.7rem;color:var(--brown-mid);line-height:1.35;}
-.meal-type{font-size:0.58rem;color:var(--taupe);margin-top:4px;text-transform:uppercase;letter-spacing:0.08em;}
-.meal-link-badge{font-size:0.58rem;color:var(--sage);margin-top:5px;letter-spacing:0.04em;}
+.meal-slot{display:flex;align-items:flex-start;gap:4px;text-align:left;padding:4px 0;border-top:1px solid var(--sand);}
+.meal-slot:first-of-type{border-top:none;}
+.meal-slot.dinner.linked{cursor:pointer;}
+.meal-slot.dinner.linked:hover .slot-name{color:var(--sage);text-decoration:underline;}
+.slot-label{font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);width:12px;flex-shrink:0;padding-top:2px;}
+.slot-name{font-size:0.68rem;color:var(--brown-mid);line-height:1.35;flex:1;}
+.meal-link-badge{font-size:0.55rem;color:var(--sage);flex-shrink:0;}
 /* FEEDBACK */
 .fb-card{background:var(--warm-white);border:1.5px solid var(--sand);border-radius:6px;padding:18px 20px;margin-bottom:12px;}
 .fb-meal-name{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--brown-deep);margin-bottom:10px;}
@@ -1253,6 +1259,22 @@ document.querySelectorAll('.meal-cell,.fb-card').forEach((el,i)=>{
     const existing = JSON.parse(localStorage.getItem('foodcoo_families')||'{}');
     existing[slug] = familyRecord;
     localStorage.setItem('foodcoo_families', JSON.stringify(existing));
+
+    // Also save week 1 meals to history so admin sees them immediately
+    const existingHistory = JSON.parse(localStorage.getItem('foodcoo_history')||'{}');
+    if (!existingHistory[slug]) existingHistory[slug] = [];
+    const weekNum = parseInt(week);
+    const alreadyExists = existingHistory[slug].find(h=>h.week===weekNum);
+    if (!alreadyExists) {
+      existingHistory[slug].push({
+        week: weekNum,
+        date: noteDate,
+        note: note,
+        visits: upcomingLines,
+        meals: meals
+      });
+    }
+    localStorage.setItem('foodcoo_history', JSON.stringify(existingHistory));
   } catch(e) { console.warn('Could not register family in admin:', e); }
 }
 
