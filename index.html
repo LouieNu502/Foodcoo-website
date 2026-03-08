@@ -811,117 +811,51 @@
 <section class="client-portal" id="portal">
   <div class="section-label">Client Portal</div>
   <h2 class="section-h2">Your personalized <em>food dashboard</em></h2>
-  <p class="section-body">A living system built around your family's unique tastes, schedule, and grocery preferences — updated and refined every week.</p>
+  <p class="section-body">Once you're a client, Erin sets up a private portal just for your family — with your meal plan, grocery delivery, and feedback all in one place.</p>
 
   <div class="portal-grid">
-    <!-- ONBOARDING FORM -->
+    <!-- HOW IT WORKS EXPLAINER -->
     <div>
       <div class="form-card">
-        <h3>Taste Profile</h3>
-        <p>Help Erin understand your family's food world. This drives every meal plan she creates for you.</p>
+        <h3>How Your Portal Works</h3>
+        <p>Every client gets their own private page, built by Erin after your initial consultation. Here's what's inside:</p>
 
-        <div class="form-row form-row-2">
-          <div>
-            <label class="form-label">First Name</label>
-            <input class="form-input" type="text" placeholder="e.g. Sarah">
+        <div style="display:flex;flex-direction:column;gap:16px;margin-top:8px;">
+          <div style="display:flex;gap:16px;align-items:flex-start;padding:16px;background:var(--warm-white);border-radius:3px;border-left:3px solid var(--terracotta);">
+            <span style="font-size:1.3rem;">📋</span>
+            <div>
+              <strong style="display:block;color:var(--brown-deep);margin-bottom:4px;font-weight:500;">Your Weekly Meal Plan</strong>
+              <span style="font-size:0.84rem;color:var(--brown-mid);line-height:1.6;">7 meals planned by Erin every week, tailored to your family's tastes, schedule, and nutrition goals.</span>
+            </div>
           </div>
-          <div>
-            <label class="form-label">Family Size</label>
-            <select class="form-select">
-              <option>2 people</option>
-              <option>3 people</option>
-              <option>4 people</option>
-              <option>5+ people</option>
-            </select>
+          <div style="display:flex;gap:16px;align-items:flex-start;padding:16px;background:var(--warm-white);border-radius:3px;border-left:3px solid var(--terracotta);">
+            <span style="font-size:1.3rem;">🛒</span>
+            <div>
+              <strong style="display:block;color:var(--brown-deep);margin-bottom:4px;font-weight:500;">One-Tap Grocery Delivery</strong>
+              <span style="font-size:0.84rem;color:var(--brown-mid);line-height:1.6;">Your shopping list is pre-built. Connect Instacart, Walmart+, Amazon Fresh or Kroger — order in seconds.</span>
+            </div>
           </div>
-        </div>
-
-        <div class="form-row">
-          <label class="form-label">Cuisines You Love</label>
-          <div class="taste-grid" id="likes-grid">
-            <span class="taste-chip" onclick="toggleChip(this, 'likes')">🌮 Mexican</span>
-            <span class="taste-chip" onclick="toggleChip(this, 'likes')">🍜 Asian</span>
-            <span class="taste-chip" onclick="toggleChip(this, 'likes')">🍝 Italian</span>
-            <span class="taste-chip" onclick="toggleChip(this, 'likes')">🥗 Mediterranean</span>
-            <span class="taste-chip" onclick="toggleChip(this, 'likes')">🍛 Indian</span>
-            <span class="taste-chip" onclick="toggleChip(this, 'likes')">🥩 American</span>
-            <span class="taste-chip" onclick="toggleChip(this, 'likes')">🐟 Seafood</span>
-            <span class="taste-chip" onclick="toggleChip(this, 'likes')">🥬 Plant-Based</span>
+          <div style="display:flex;gap:16px;align-items:flex-start;padding:16px;background:var(--warm-white);border-radius:3px;border-left:3px solid var(--terracotta);">
+            <span style="font-size:1.3rem;">⭐</span>
+            <div>
+              <strong style="display:block;color:var(--brown-deep);margin-bottom:4px;font-weight:500;">Meal Feedback Loop</strong>
+              <span style="font-size:0.84rem;color:var(--brown-mid);line-height:1.6;">Rate each meal and leave notes for Erin. Every response shapes the following week's plan.</span>
+            </div>
           </div>
-        </div>
-
-        <div class="form-row">
-          <label class="form-label">Dietary Needs / Restrictions</label>
-          <div class="taste-grid">
-            <span class="taste-chip disliked" onclick="toggleChip(this, 'avoid')">Gluten-Free</span>
-            <span class="taste-chip disliked" onclick="toggleChip(this, 'avoid')">Dairy-Free</span>
-            <span class="taste-chip disliked" onclick="toggleChip(this, 'avoid')">Nut Allergy</span>
-            <span class="taste-chip disliked" onclick="toggleChip(this, 'avoid')">Low-Sodium</span>
-            <span class="taste-chip disliked" onclick="toggleChip(this, 'avoid')">Vegetarian</span>
-            <span class="taste-chip disliked" onclick="toggleChip(this, 'avoid')">Vegan</span>
-            <span class="taste-chip disliked" onclick="toggleChip(this, 'avoid')">Diabetic-Friendly</span>
-            <span class="taste-chip disliked" onclick="toggleChip(this, 'avoid')">No Shellfish</span>
+          <div style="display:flex;gap:16px;align-items:flex-start;padding:16px;background:var(--warm-white);border-radius:3px;border-left:3px solid var(--terracotta);">
+            <span style="font-size:1.3rem;">✉️</span>
+            <div>
+              <strong style="display:block;color:var(--brown-deep);margin-bottom:4px;font-weight:500;">A Note from Erin Every Week</strong>
+              <span style="font-size:0.84rem;color:var(--brown-mid);line-height:1.6;">A personal message explaining the week's strategy, prep tips, and what to expect — written just for your family.</span>
+            </div>
           </div>
         </div>
 
-        <div class="form-row">
-          <label class="form-label">Primary Nutrition Goal</label>
-          <select class="form-select">
-            <option>Balanced family nutrition</option>
-            <option>Weight management</option>
-            <option>Blood sugar control</option>
-            <option>Heart health</option>
-            <option>Sports performance</option>
-            <option>Reduce processed foods</option>
-          </select>
+        <div style="margin-top:24px;padding:18px 20px;background:var(--sand);border-radius:3px;font-size:0.84rem;color:var(--brown-mid);line-height:1.6;">
+          🔑 <strong style="color:var(--brown-deep);">Your portal is private.</strong> Erin sets it up after your first consultation and sends you a direct link. It's yours alone — no account or password needed.
         </div>
 
-        <div class="form-row">
-          <label class="form-label">Preferred Grocery Service</label>
-          <div class="taste-grid" id="grocery-grid">
-            <span class="taste-chip" onclick="toggleChip(this, 'grocery')">Instacart</span>
-            <span class="taste-chip" onclick="toggleChip(this, 'grocery')">Walmart+</span>
-            <span class="taste-chip" onclick="toggleChip(this, 'grocery')">Amazon Fresh</span>
-            <span class="taste-chip" onclick="toggleChip(this, 'grocery')">Kroger</span>
-            <span class="taste-chip" onclick="toggleChip(this, 'grocery')">Whole Foods</span>
-            <span class="taste-chip" onclick="toggleChip(this, 'grocery')">Local Pickup</span>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <label class="form-label">Anything Else Erin Should Know?</label>
-          <textarea class="form-textarea" placeholder="Picky eaters, time constraints, budget notes, things you've tried before..."></textarea>
-        </div>
-
-        <button class="btn-primary" style="width:100%" onclick="showSuccess()">Submit Taste Profile →</button>
-        <div class="success-msg" id="success-msg" style="margin-top:16px">
-          ✅ Profile received! Erin will review this before your next session and update your meal plan accordingly.
-        </div>
-      </div>
-
-      <!-- MEAL FEEDBACK -->
-      <div class="form-card" style="margin-top:24px">
-        <h3>Meal Feedback</h3>
-        <p>Let Erin know how this week's meals landed. Your feedback shapes next week's plan.</p>
-        <div class="form-row">
-          <label class="form-label">Which meal?</label>
-          <input class="form-input" type="text" placeholder="e.g. Tuesday's sheet pan salmon">
-        </div>
-        <div class="form-row">
-          <label class="form-label">How did the family rate it?</label>
-          <div class="stars" id="star-rating">
-            <span class="star" onclick="setStars(1)">★</span>
-            <span class="star" onclick="setStars(2)">★</span>
-            <span class="star" onclick="setStars(3)">★</span>
-            <span class="star" onclick="setStars(4)">★</span>
-            <span class="star" onclick="setStars(5)">★</span>
-          </div>
-        </div>
-        <div class="form-row">
-          <label class="form-label">Notes for Erin</label>
-          <textarea class="form-textarea" placeholder="Too spicy, kids loved the sauce, could use less salt..."></textarea>
-        </div>
-        <button class="btn-ghost" style="width:100%">Send Feedback →</button>
+        <a href="#contact" class="btn-primary" style="display:block;text-align:center;margin-top:24px;">Book a Consult to Get Started →</a>
       </div>
     </div>
 
