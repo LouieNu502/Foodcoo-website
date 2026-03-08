@@ -470,10 +470,10 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 
 <div class="portal-footer">
   <div class="footer-left">Your Family's <span>"Food COO"</span></div>
-  <div class="footer-right">Erin Wiedmar, RDN, MEd, CDE<br>502-930-5845 · erin.louienu@gmail.com</div>
+  <div class="footer-right">Erin Wiedmar, RDN, MEd, CDE<br>502-930-5845 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="87e2f5eee9a9ebe8f2eee2e9f2c7e0eae6eeeba9e4e8ea">[email&#160;protected]</a></div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── STATE ──
 let currentStep = 1;
 let members = [];
@@ -1088,7 +1088,81 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 </div>
 
 <script>
+// Embedded recipes (for recipe detail modal — baked in at generation time)
 const RECIPES = ${recipesJSON};
+const FAMILY_SLUG = '${slug}';
+
+// ── LOAD WEEKLY DATA FROM data.json ──
+async function loadWeeklyData() {
+  try {
+    const res = await fetch('/data.json?t=' + Date.now());
+    if (!res.ok) throw new Error('no data.json');
+    const data = await res.json();
+    const f = data[FAMILY_SLUG];
+    if (!f) return;
+    renderWeeklyMeals(f.meals || []);
+    renderNote(f.note || '', f.noteDate || '');
+    renderVisits(f.visits || []);
+    renderFeedbackCards(f.meals || []);
+    const weekBadge = document.querySelector('.topbar-week');
+    if (weekBadge && f.currentWeek) weekBadge.textContent = 'Week ' + f.currentWeek + ' of Pilot';
+  } catch(e) {
+    // data.json not yet on GitHub — use fallback static content already in DOM
+    console.log('data.json not found, using static content');
+  }
+}
+
+function renderWeeklyMeals(meals) {
+  const grid = document.querySelector('.meal-week');
+  if (!grid || meals.length === 0) return;
+  const dayAbbr = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  grid.innerHTML = meals.map((m,i) => {
+    const r = m.recipe;
+    const clickAction = r ? (r.type==='external' ? \`onclick="window.open('\${r.url}','_blank')"\` : \`onclick="openRecipeModal('\${r.id}')"\`) : '';
+    const badge = r ? \`<div class="meal-link-badge">\${r.type==='external'?'Open Recipe ↗':'View Recipe →'}</div>\` : '';
+    return \`<div class="meal-cell\${i===0?' today':''}\${r?' linked':''}" \${clickAction}>
+      <div class="meal-day-abbr">\${dayAbbr[i]}</div>
+      <span class="meal-emoji">\${m.emoji||'🍽️'}</span>
+      <div class="meal-name">\${m.name||'—'}</div>
+      <div class="meal-type">\${m.type||'Dinner'}</div>
+      \${badge}
+    </div>\`;
+  }).join('');
+}
+
+function renderNote(note, date) {
+  const noteEl = document.querySelector('.note-text');
+  const dateEl = document.querySelector('.note-date');
+  if (noteEl && note) noteEl.textContent = note;
+  if (dateEl && date) dateEl.textContent = '— Erin W. · ' + date;
+}
+
+function renderVisits(visits) {
+  const list = document.querySelector('.next-list');
+  if (!list || visits.length === 0) return;
+  list.innerHTML = visits.map(v => \`<div class="next-item"><div class="next-dot"></div><div>\${v}</div></div>\`).join('');
+}
+
+function renderFeedbackCards(meals) {
+  const container = document.querySelector('.left-panel');
+  if (!container || meals.length === 0) return;
+  const dayAbbr = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const fbSection = container.querySelector('.slabel:last-of-type');
+  if (!fbSection) return;
+  // Remove existing fb-cards and rebuild
+  container.querySelectorAll('.fb-card').forEach(c=>c.remove());
+  meals.forEach((m,i) => {
+    const r = m.recipe;
+    const viewBtn = r ? (r.type==='external'
+      ? \`<a href="\${r.url}" target="_blank" class="fb-recipe-btn">📖 View Full Recipe ↗</a>\`
+      : \`<button class="fb-recipe-btn" onclick="openRecipeModal('\${r.id}')">📖 View Full Recipe →</button>\`)
+      : '';
+    const card = document.createElement('div');
+    card.className = 'fb-card';
+    card.innerHTML = \`<div class="fb-meal-name">\${dayAbbr[i]} — \${m.name||'—'}</div>\${viewBtn}<div class="fb-stars"><span class="fb-star" onclick="rate(this,1)">★</span><span class="fb-star" onclick="rate(this,2)">★</span><span class="fb-star" onclick="rate(this,3)">★</span><span class="fb-star" onclick="rate(this,4)">★</span><span class="fb-star" onclick="rate(this,5)">★</span></div><textarea class="fb-input" rows="2" placeholder="Notes for Erin..."></textarea><br><button class="fb-submit" onclick="sendFb(this)">Send to Erin →</button><div class="fb-sent">✓ Sent!</div>\`;
+    container.appendChild(card);
+  });
+}
 
 function switchTab(name,el){
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
@@ -1105,7 +1179,8 @@ function submitSchedule(btn){
   setTimeout(()=>{ window.location.href='mailto:erin.louienu@gmail.com?subject=Weekly%20Schedule%20-%20The%20${name}%20Family&body=Schedule%20submitted%20from%20portal.'; },800);
 }
 function openRecipeModal(id){
-  const r = RECIPES.find(x=>x.id===id);
+  // First check embedded recipes, then try data from data.json
+  let r = RECIPES.find(x=>x.id===id);
   if(!r) return;
   const ingredients = (r.ingredients||'').split('\\n').filter(Boolean);
   const steps = (r.instructions||'').split('\\n').filter(Boolean);
@@ -1136,6 +1211,8 @@ function closeRecipeModal(e){
     document.getElementById('recipe-modal').classList.remove('show');
   }
 }
+// Load live data on page start
+loadWeeklyData();
 document.querySelectorAll('.meal-cell,.fb-card').forEach((el,i)=>{
   el.style.opacity='0';el.style.transform='translateY(14px)';
   el.style.transition='opacity 0.4s ease '+(i*0.05)+'s,transform 0.4s ease '+(i*0.05)+'s';
@@ -1152,6 +1229,31 @@ document.querySelectorAll('.meal-cell,.fb-card').forEach((el,i)=>{
   document.getElementById('code-output').classList.add('show');
   document.getElementById('code-output').scrollIntoView({behavior:'smooth',block:'start'});
   window._generatedCode = code;
+
+  // Register this family in the admin dashboard
+  const familyRecord = {
+    slug, name, contactName: document.getElementById('contact-name').value,
+    email: document.getElementById('contact-email').value,
+    phone: document.getElementById('contact-phone').value,
+    goal, budget, members: members.map(m=>({...m})),
+    weekdayRoutine: document.getElementById('weekday-routine').value,
+    weekendRoutine: document.getElementById('weekend-routine').value,
+    fallsApart: document.getElementById('fallsapart').value,
+    magicWand: document.getElementById('magic-wand').value,
+    success3mo: document.getElementById('success-3mo').value,
+    painPoints: getChips('pain-chips'),
+    interests: getChips('interests'),
+    values: getChips('values'),
+    appliances: getChips('appliances'),
+    leftovers: document.getElementById('leftovers').value,
+    scheduleDay: document.getElementById('schedule-day').value,
+    currentWeek: parseInt(week)
+  };
+  try {
+    const existing = JSON.parse(localStorage.getItem('foodcoo_families')||'{}');
+    existing[slug] = familyRecord;
+    localStorage.setItem('foodcoo_families', JSON.stringify(existing));
+  } catch(e) { console.warn('Could not register family in admin:', e); }
 }
 
 function copyCode() {
