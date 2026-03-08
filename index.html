@@ -131,10 +131,7 @@
   .hero-credentials {
     display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 40px;
   }
-  .hero-headshot {
-    width: 44px; height: 44px; border-radius: 50%; object-fit: cover;
-    border: 2px solid var(--sand); margin-right: 4px; flex-shrink: 0;
-  }
+  .hero-headshot { display: none; }
   .cred-tag {
     border: 1px solid var(--taupe);
     padding: 6px 14px;
@@ -178,14 +175,39 @@
 
   .hero-visual {
     position: relative;
-    display: flex; align-items: center; justify-content: center;
+    display: flex; align-items: stretch;
     animation: fadeIn 1.2s ease both 0.3s;
+    overflow: hidden;
   }
-  .hero-visual-bg {
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, var(--sand) 0%, var(--terracotta-light) 60%, var(--sage-light) 100%);
+  .hero-visual-bg { display: none; }
+  .hero-photo-wrap {
+    position: relative; width: 100%;
     clip-path: polygon(8% 0%, 100% 0%, 100% 100%, 0% 100%);
   }
+  .hero-photo-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
+    display: block;
+  }
+  .hero-photo-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(35,24,16,0.88) 0%, rgba(35,24,16,0.4) 55%, transparent 100%);
+    padding: 36px 40px 36px 48px;
+  }
+  .hero-photo-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--cream); margin-bottom: 8px;
+  }
+  .hero-photo-creds {
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .hero-photo-cred {
+    font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid rgba(247,243,236,0.35); color: rgba(247,243,236,0.8);
+    padding: 4px 10px; border-radius: 100px;
+  }
+  .hero-photo-cred.gold { border-color: var(--gold); color: var(--gold); }
   .hero-card {
     position: relative; z-index: 2;
     background: rgba(245,240,232,0.9);
@@ -713,8 +735,8 @@
     .nav-links { display: none; }
     .hero { grid-template-columns: 1fr; min-height: auto; padding: 100px 0 0; }
     .hero-text { padding: 40px 24px; }
-    .hero-visual { min-height: 300px; }
-    .hero-visual-bg { clip-path: none; }
+    .hero-visual { min-height: 420px; }
+    .hero-photo-wrap { clip-path: none; }
     section { padding: 60px 24px; }
     .steps-grid { grid-template-columns: 1fr; }
     .portal-grid { grid-template-columns: 1fr; }
@@ -745,7 +767,6 @@
     <h1 class="hero-h1">Your Family's <em>"Food COO"</em></h1>
     <p class="hero-sub">I remove the operational and mental load of meals — creating calm, efficient, sustainable food systems tailored entirely to your family.</p>
     <div class="hero-credentials">
-      <img src="headshot.png" alt="Erin Wiedmar" class="hero-headshot">
       <span class="cred-tag">RDN</span>
       <span class="cred-tag">MEd</span>
       <span class="cred-tag">CDE</span>
@@ -757,27 +778,16 @@
     </div>
   </div>
   <div class="hero-visual">
-    <div class="hero-visual-bg"></div>
-    <div class="hero-card">
-      <div class="hero-card-name">A System Where...</div>
-      <div class="hero-card-title">Everything just works</div>
-      <div class="hero-card-divider"></div>
-      <div class="hero-pillars">
-        <div class="pillar">
-          <div class="pillar-icon">📋</div>
-          <div class="pillar-text"><strong>Everyone knows the plan</strong>No more "what's for dinner?" chaos</div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-icon">🛒</div>
-          <div class="pillar-text"><strong>Groceries handled for you</strong>Erin shops so you don't have to</div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-icon">🧘</div>
-          <div class="pillar-text"><strong>Decision fatigue disappears</strong>The mental load is mine, not yours</div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-icon">🔄</div>
-          <div class="pillar-text"><strong>In-time adjustments</strong>Flexible systems that evolve with you</div>
+    <div class="hero-photo-wrap">
+      <img src="headshot.png" alt="Erin Wiedmar, RDN">
+      <div class="hero-photo-overlay">
+        <div class="hero-photo-name">Erin Wiedmar</div>
+        <div class="hero-photo-creds">
+          <span class="hero-photo-cred gold">RDN</span>
+          <span class="hero-photo-cred gold">MEd</span>
+          <span class="hero-photo-cred gold">CDE</span>
+          <span class="hero-photo-cred">Registered Dietitian</span>
+          <span class="hero-photo-cred">Louisville, KY</span>
         </div>
       </div>
     </div>
