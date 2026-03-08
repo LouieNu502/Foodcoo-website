@@ -129,7 +129,11 @@
     max-width: 420px;
   }
   .hero-credentials {
-    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 40px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 40px;
+  }
+  .hero-headshot {
+    width: 44px; height: 44px; border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--sand); margin-right: 4px; flex-shrink: 0;
   }
   .cred-tag {
     border: 1px solid var(--taupe);
@@ -741,6 +745,7 @@
     <h1 class="hero-h1">Your Family's <em>"Food COO"</em></h1>
     <p class="hero-sub">I remove the operational and mental load of meals — creating calm, efficient, sustainable food systems tailored entirely to your family.</p>
     <div class="hero-credentials">
+      <img src="headshot.png" alt="Erin Wiedmar" class="hero-headshot">
       <span class="cred-tag">RDN</span>
       <span class="cred-tag">MEd</span>
       <span class="cred-tag">CDE</span>
@@ -972,9 +977,9 @@
         <span class="contact-link-icon">📞</span>
         <div><strong>Call or Text</strong>502-930-5845</div>
       </a>
-      <a href="mailto:erin.louienu@gmail.com" class="contact-link">
+      <a href="/cdn-cgi/l/email-protection#0560776c6b2b696a706c606b70456268646c692b666a68" class="contact-link">
         <span class="contact-link-icon">✉️</span>
-        <div><strong>Email</strong>erin.louienu@gmail.com</div>
+        <div><strong>Email</strong><span class="__cf_email__" data-cfemail="84e1f6edeaaae8ebf1ede1eaf1c4e3e9e5ede8aae7ebe9">[email&#160;protected]</span></div>
       </a>
       <a href="https://instagram.com/LouieNu502" target="_blank" class="contact-link">
         <span class="contact-link-icon">📱</span>
@@ -1004,7 +1009,7 @@
   </div>
   <div class="footer-copy">
     502-930-5845<br>
-    erin.louienu@gmail.com<br>
+    <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f09582999ede9c9f8599959e85b0979d91999cde939f9d">[email&#160;protected]</a><br>
     @LouieNu502
   </div>
 </footer>
@@ -1052,7 +1057,7 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   function toggleChip(el, type) {
     el.classList.toggle('selected');
   }
@@ -1067,18 +1072,3 @@
   function showSuccess() {
     const msg = document.getElementById('success-msg');
     msg.classList.add('show');
-    setTimeout(() => msg.classList.remove('show'), 5000);
-  }
-
-  function openModal() {
-    document.getElementById('modal').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    document.getElementById('modal').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  function closeModalOutside(e) {
-    if (e
