@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recipe Library — Food COO</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:      #F7F3EC;
+  --warm-white: #FDFCF9;
+  --brown-deep: #231810;
+  --brown-mid:  #5A3825;
+  --brown-light:#8C6649;
+  --taupe:      #B8A898;
+  --sand:       #D8C9B0;
+  --sage:       #6B8A62;
+  --sage-soft:  #C8D8C2;
+  --terra:      #C46A42;
+  --terra-soft: #EDD5C4;
+  --gold:       #C9A254;
+  --gold-soft:  #F0E0B8;
+  --ink:        #1A1208;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-serif;font-weight:300;}
+
+/* ── TOP BAR ── */
+.topbar{
+  background:var(--brown-deep);
+  padding:0 48px; height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:200;
+}
+.topbar-brand{
+  font-family:'Playfair Display',serif;
+  font-size:0.95rem;color:var(--cream);
+  display:flex;align-items:center;gap:10px;
+  text-decoration:none;
+}
+.topbar-brand span{color:var(--gold);font-style:italic;}
+.topbar-nav{display:flex;gap:4px;}
+.nav-pill{
+  padding:7px 16px;border-radius:100px;
+  font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(247,243,236,0.6);text-decoration:none;
+  transition:all 0.2s;border:1px solid transparent;
+}
+.nav-pill:hover{color:var(--cream);border-color:rgba(255,255,255,0.2);}
+.nav-pill.active{background:var(--terra);color:white;border-color:var(--terra);}
+
+/* ── HERO ── */
+.hero{
+  background:linear-gradient(130deg,var(--brown-mid) 0%,var(--brown-deep) 65%);
+  padding:56px 48px 48px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 85% 20%,rgba(201,162,84,0.13) 0%,transparent 55%),
+    radial-gradient(ellipse at 5% 90%,rgba(196,106,66,0.1) 0%,transparent 45%);
+  pointer-events:none;
+}
+.hero::after{
+  content:'🌿';
+  position:absolute;right:48px;bottom:-10px;
+  font-size:9rem;opacity:0.07;
+  pointer-events:none;
+}
+.hero-inner{position:relative;z-index:1;max-width:640px;}
+.hero-eyebrow{
+  font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold);}
+.hero-h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900;
+  color:var(--cream);line-height:1.08;margin-bottom:14px;
+}
+.hero-h1 em{color:var(--gold);font-style:italic;}
+.hero-sub{
+  font-family:'Lora',serif;font-style:italic;
+  font-size:1.05rem;color:rgba(247,243,236,0.65);
+  line-height:1.7;margin-bottom:28px;max-width:480px;
+}
+.hero-stats{display:flex;gap:32px;}
+.hstat-num{
+  font-family:'Playfair Display',serif;
+  font-size:1.8rem;font-weight:900;color:var(--gold);display:block;line-height:1;
+}
+.hstat-label{font-size:0.65rem;color:var(--taupe);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;}
+
+/* ── SEARCH + FILTER BAR ── */
+.filter-bar{
+  background:var(--warm-white);
+  border-bottom:1px solid var(--sand);
+  padding:20px 48px;
+  display:flex;align-items:center;gap:16px;
+  flex-wrap:wrap;
+  position:sticky;top:56px;z-index:100;
+}
+.search-wrap{
+  position:relative;flex:1;min-width:200px;max-width:320px;
+}
+.search-wrap input{
+  width:100%;padding:10px 16px 10px 38px;
+  background:var(--cream);border:1.5px solid var(--sand);
+  border-radius:100px;font-family:'DM Sans',sans-serif;
+  font-size:0.82rem;color:var(--brown-deep);outline:none;
+  transition:border-color 0.2s;
+}
+.search-wrap input:focus{border-color:var(--terra);}
+.search-wrap input::placeholder{color:var(--taupe);}
+.search-icon{
+  position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  font-size:0.85rem;pointer-events:none;
+}
+.filter-chips{display:flex;gap:6px;flex-wrap:wrap;}
+.fchip{
+  padding:7px 16px;border:1.5px solid var(--sand);
+  border-radius:100px;font-size:0.72rem;cursor:pointer;
+  transition:all 0.2s;color:var(--brown-mid);
+  background:var(--cream);user-select:none;white-space:nowrap;
+}
+.fchip:hover{border-color:var(--terra);color:var(--terra);}
+.fchip.on{background:var(--terra);border-color:var(--terra);color:white;}
+.fchip.sage.on{background:var(--sage);border-color:var(--sage);}
+.fchip.gold.on{background:var(--gold);border-color:var(--gold);color:var(--brown-deep);}
+.filter-count{
+  margin-left:auto;font-size:0.72rem;color:var(--taupe);
+  white-space:nowrap;letter-spacing:0.05em;
+}
+
+/* ── MAIN LAYOUT ── */
+.page-body{
+  display:grid;grid-template-columns:240px 1fr;
+  min-height:calc(100vh - 56px - 180px);
+}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  padding:32px 24px;
+  border-right:1px solid var(--sand);
+  background:var(--warm-white);
+  position:sticky;top:calc(56px + 65px);
+  height:fit-content;
+}
+.sidebar-section{margin-bottom:28px;}
+.sidebar-title{
+  font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--terra);margin-bottom:12px;font-weight:500;
+  display:flex;align-items:center;gap:8px;
+}
+.sidebar-title::before{content:'';width:16px;height:1px;background:var(--terra);}
+.sidebar-list{list-style:none;display:flex;flex-direction:column;gap:2px;}
+.sidebar-list li a{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 12px;border-radius:4px;
+  font-size:0.8rem;color:var(--brown-mid);text-decoration:none;
+  transition:all 0.15s;
+}
+.sidebar-list li a:hover{background:var(--cream);color:var(--brown-deep);}
+.sidebar-list li a.active{background:var(--terra-soft);color:var(--terra);font-weight:500;}
+.sidebar-count{
+  font-size:0.68rem;color:var(--taupe);
+  background:var(--cream);padding:2px 7px;border-radius:100px;
+}
+.sidebar-divider{height:1px;background:var(--sand);margin:20px 0;}
+
+/* ── ADD RECIPE BTN ── */
+.add-recipe-btn{
+  width:100%;padding:12px;
+  background:var(--brown-deep);color:var(--cream);
+  border:none;border-radius:4px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:0.75rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  transition:background 0.2s;margin-bottom:10px;
+}
+.add-recipe-btn:hover{background:var(--terra);}
+.add-link-btn{
+  width:100%;padding:12px;
+  background:transparent;color:var(--brown-mid);
+  border:1.5px solid var(--sand);border-radius:4px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:0.75rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  transition:all 0.2s;
+}
+.add-link-btn:hover{border-color:var(--terra);color:var(--terra);}
+
+/* ── RECIPE GRID ── */
+.recipe-grid-wrap{padding:32px 40px;}
+.section-heading{
+  font-family:'Playfair Display',serif;
+  font-size:1.4rem;color:var(--brown-deep);
+  margin-bottom:24px;display:flex;align-items:center;gap:12px;
+}
+.section-heading em{font-style:italic;color:var(--terra);}
+.section-heading-line{flex:1;height:1px;background:var(--sand);}
+
+.recipe-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:20px;margin-bottom:48px;
+}
+
+/* ── RECIPE CARD ── */
+.recipe-card{
+  background:var(--warm-white);
+  border:1.5px solid var(--sand);
+  border-radius:8px;overflow:hidden;
+  transition:all 0.25s;cursor:pointer;
+  position:relative;
+}
+.recipe-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 36px rgba(44,31,20,0.12);
+  border-color:var(--taupe);
+}
+.recipe-card.external .card-thumb::after{
+  content:'↗';
+  position:absolute;top:10px;right:10px;
+  background:rgba(26,18,8,0.6);color:white;
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.8rem;
+}
+.card-thumb{
+  height:160px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:4rem;
+  position:relative;
+  overflow:hidden;
+}
+.card-thumb-img{
+  width:100%;height:100%;object-fit:cover;
+  position:absolute;inset:0;
+}
+.card-body{padding:18px 20px 20px;}
+.card-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;}
+.card-tag{
+  font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;
+  padding:3px 9px;border-radius:100px;
+  border:1px solid var(--sand);color:var(--taupe);
+}
+.card-tag.terra{border-color:var(--terra);color:var(--terra);}
+.card-tag.sage{border-color:var(--sage);color:var(--sage);}
+.card-tag.gold{border-color:var(--gold);color:var(--gold);}
+.card-name{
+  font-family:'Playfair Display',serif;
+  font-size:1.05rem;color:var(--brown-deep);
+  margin-bottom:6px;line-height:1.3;
+}
+.card-desc{
+  font-size:0.78rem;color:var(--brown-light);
+  line-height:1.6;margin-bottom:14px;
+}
+.card-meta{
+  display:flex;gap:14px;align-items:center;
+  font-size:0.7rem;color:var(--taupe);
+}
+.card-meta-item{display:flex;align-items:center;gap:4px;}
+.card-source{
+  margin-left:auto;
+  font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--taupe);
+}
+.card-source.erin{color:var(--terra);}
+.card-footer{
+  padding:12px 20px;
+  border-top:1px solid var(--sand);
+  display:flex;gap:8px;align-items:center;
+}
+.card-assign-btn{
+  flex:1;padding:8px;background:var(--cream);
+  border:1px solid var(--sand);border-radius:3px;
+  font-family:'DM Sans',sans-serif;font-size:0.7rem;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--brown-mid);cursor:pointer;transition:all 0.2s;
+}
+.card-assign-btn:hover{border-color:var(--sage);color:var(--sage);}
+.card-view-btn{
+  padding:8px 14px;background:var(--brown-deep);
+  border:none;border-radius:3px;color:var(--cream);
+  font-family:'DM Sans',sans-serif;font-size:0.7rem;
+  letter-spacing:0.08em;text-transform:uppercase;
+  cursor:pointer;transition:background 0.2s;text-decoration:none;
+  display:inline-flex;align-items:center;
+}
+.card-view-btn:hover{background:var(--terra);}
+
+/* ── NO RESULTS ── */
+.no-results{
+  grid-column:1/-1;text-align:center;
+  padding:60px 20px;color:var(--taupe);
+}
+.no-results-icon{font-size:3rem;margin-bottom:12px;}
+.no-results p{font-size:0.9rem;line-height:1.6;}
+
+/* ── MODAL BASE ── */
+.modal-bg{
+  position:fixed;inset:0;background:rgba(26,18,8,0.72);
+  backdrop-filter:blur(6px);z-index:500;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity 0.3s;
+}
+.modal-bg.show{opacity:1;pointer-events:all;}
+.modal-box{
+  background:var(--cream);border-radius:8px;
+  padding:44px;max-width:560px;width:92%;
+  max-height:88vh;overflow-y:auto;
+  transform:translateY(18px);transition:transform 0.3s;
+  box-shadow:0 40px 80px rgba(26,18,8,0.35);
+}
+.modal-bg.show .modal-box{transform:translateY(0);}
+.modal-x{
+  float:right;background:none;border:none;cursor:pointer;
+  font-size:1.4rem;color:var(--taupe);line-height:1;
+}
+.modal-x:hover{color:var(--brown-deep);}
+.modal-h2{
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem;color:var(--brown-deep);
+  margin:0 0 4px;clear:both;
+}
+.modal-sub{font-size:0.82rem;color:var(--taupe);margin-bottom:24px;line-height:1.5;}
+.mrow{margin-bottom:18px;}
+.mrow-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.mlabel{
+  display:block;font-size:0.68rem;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--brown-mid);margin-bottom:7px;font-weight:500;
+}
+.minput,.mselect,.mtextarea{
+  width:100%;padding:11px 14px;
+  background:var(--warm-white);border:1.5px solid var(--sand);
+  border-radius:3px;font-family:'DM Sans',sans-serif;
+  font-size:0.85rem;color:var(--brown-deep);outline:none;
+  transition:border-color 0.2s;
+}
+.minput:focus,.mselect:focus,.mtextarea:focus{border-color:var(--terra);}
+.mtextarea{resize:vertical;min-height:90px;}
+.chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px;}
+.mchip{
+  padding:6px 14px;border:1.5px solid var(--sand);
+  border-radius:100px;font-size:0.75rem;cursor:pointer;
+  transition:all 0.2s;color:var(--brown-mid);
+  background:var(--warm-white);user-select:none;
+}
+.mchip:hover{border-color:var(--terra);color:var(--terra);}
+.mchip.on{background:var(--terra);border-color:var(--terra);color:white;}
+.mchip.sage.on{background:var(--sage);border-color:var(--sage);color:white;}
+.mbtn{
+  width:100%;background:var(--brown-deep);color:var(--cream);
+  border:none;padding:15px;border-radius:3px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:0.78rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  transition:background 0.2s;margin-top:4px;
+}
+.mbtn:hover{background:var(--terra);}
+.msuccess{
+  display:none;margin-top:14px;
+  background:var(--sage-soft);border:1px solid var(--sage);
+  border-radius:3px;padding:14px 18px;
+  font-size:0.82rem;color:var(--brown-deep);
+}
+.msuccess.show{display:block;}
+.modal-tabs{display:flex;gap:0;margin-bottom:28px;border:1.5px solid var(--sand);border-radius:4px;overflow:hidden;}
+.modal-tab{
+  flex:1;padding:11px;text-align:center;
+  font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.2s;color:var(--brown-mid);
+  background:var(--warm-white);border:none;font-family:'DM Sans',sans-serif;
+}
+.modal-tab.active{background:var(--brown-deep);color:var(--cream);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── RECIPE DETAIL MODAL ── */
+.detail-modal .modal-box{max-width:640px;}
+.detail-emoji{font-size:3.5rem;margin-bottom:12px;display:block;}
+.detail-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.detail-meta-row{
+  display:flex;gap:24px;padding:16px 0;
+  border-top:1px solid var(--sand);border-bottom:1px solid var(--sand);
+  margin-bottom:20px;
+}
+.detail-meta-item{text-align:center;}
+.detail-meta-val{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--brown-deep);display:block;}
+.detail-meta-key{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--taupe);}
+.detail-section-title{
+  font-size:0.68rem;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--terra);margin:20px 0 10px;font-weight:500;
+}
+.detail-ingredients{
+  columns:2;gap:20px;list-style:none;margin-bottom:20px;
+}
+.detail-ingredients li{
+  font-size:0.84rem;color:var(--brown-mid);
+  padding:5px 0;border-bottom:1px solid rgba(216,201,176,0.4);
+  break-inside:avoid;
+  display:flex;align-items:center;gap:8px;
+}
+.detail-ingredients li::before{content:'·';color:var(--terra);}
+.detail-steps{list-style:none;display:flex;flex-direction:column;gap:14px;}
+.detail-step{display:flex;gap:14px;align-items:flex-start;}
+.step-num-badge{
+  width:26px;height:26px;flex-shrink:0;
+  background:var(--terra);color:white;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.72rem;font-weight:500;
+}
+.step-text{font-size:0.84rem;color:var(--brown-mid);line-height:1.65;padding-top:3px;}
+.detail-erins-note{
+  background:var(--gold-soft);border-left:3px solid var(--gold);
+  padding:14px 18px;border-radius:0 4px 4px 0;
+  font-size:0.82rem;color:var(--brown-mid);line-height:1.6;margin-top:20px;
+}
+.detail-erins-note strong{color:var(--brown-deep);}
+.detail-external-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:14px;margin-top:20px;
+  background:var(--brown-deep);color:var(--cream);
+  border:none;border-radius:4px;cursor:pointer;text-decoration:none;
+  font-family:'DM Sans',sans-serif;font-size:0.78rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  transition:background 0.2s;
+}
+.detail-external-btn:hover{background:var(--terra);}
+
+/* ── ASSIGN MODAL ── */
+.client-check-list{display:flex;flex-direction:column;gap:8px;}
+.client-check{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;background:var(--warm-white);
+  border:1.5px solid var(--sand);border-radius:4px;cursor:pointer;
+  transition:all 0.2s;
+}
+.client-check:hover{border-color:var(--sage);}
+.client-check.checked{border-color:var(--sage);background:var(--sage-soft);}
+.client-check input{accent-color:var(--sage);width:16px;height:16px;}
+.client-check-name{font-size:0.85rem;color:var(--brown-deep);font-weight:400;}
+.client-check-sub{font-size:0.72rem;color:var(--taupe);}
+
+/* ── FOOTER ── */
+.portal-footer{
+  background:var(--brown-deep);padding:24px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.footer-left{font-family:'Playfair Display',serif;font-size:0.9rem;color:var(--cream);}
+.footer-left span{color:var(--gold);font-style:italic;}
+.footer-right{font-size:0.72rem;color:var(--taupe);text-align:right;line-height:1.7;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .topbar{padding:0 20px;}
+  .topbar-nav{display:none;}
+  .hero{padding:40px 20px 36px;}
+  .filter-bar{padding:14px 20px;}
+  .page-body{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .recipe-grid-wrap{padding:24px 20px;}
+  .portal-footer{flex-direction:column;gap:12px;text-align:center;}
+  .detail-ingredients{columns:1;}
+  .mrow-2{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a href="index.html" class="topbar-brand">Food <span>COO</span></a>
+  <nav class="topbar-nav">
+    <a href="index.html" class="nav-pill">Home</a>
+    <a href="recipes.html" class="nav-pill active">Recipes</a>
+    <a href="Andersonfamily.html" class="nav-pill">Client Portal</a>
+  </nav>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Erin's Kitchen</div>
+    <h1 class="hero-h1">The Recipe <em>Library</em></h1>
+    <p class="hero-sub">Erin's hand-picked collection of family-tested recipes and trusted links — organized, tagged, and ready to assign to any client's weekly plan.</p>
+    <div class="hero-stats">
+      <div>
+        <span class="hstat-num" id="total-count">12</span>
+        <span class="hstat-label">Total Recipes</span>
+      </div>
+      <div>
+        <span class="hstat-num">6</span>
+        <span class="hstat-label">Erin's Own</span>
+      </div>
+      <div>
+        <span class="hstat-num">6</span>
+        <span class="hstat-label">Trusted Links</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="Search recipes..." oninput="filterRecipes()">
+  </div>
+  <div class="filter-chips">
+    <span class="fchip on" onclick="toggleFilter(this,'all')" data-filter="all">All</span>
+    <span class="fchip" onclick="toggleFilter(this,'erin')" data-filter="erin">✦ Erin's Own</span>
+    <span class="fchip sage" onclick="toggleFilter(this,'gluten-free')" data-filter="gluten-free">Gluten-Free</span>
+    <span class="fchip sage" onclick="toggleFilter(this,'dairy-free')" data-filter="dairy-free">Dairy-Free</span>
+    <span class="fchip sage" onclick="toggleFilter(this,'heart-healthy')" data-filter="heart-healthy">Heart Healthy</span>
+    <span class="fchip gold" onclick="toggleFilter(this,'quick')" data-filter="quick">Under 30 Min</span>
+    <span class="fchip gold" onclick="toggleFilter(this,'kid-friendly')" data-filter="kid-friendly">Kid-Friendly</span>
+    <span class="fchip" onclick="toggleFilter(this,'batch')" data-filter="batch">Batch Cook</span>
+  </div>
+  <div class="filter-count" id="filter-count">Showing 12 recipes</div>
+</div>
+
+<!-- BODY -->
+<div class="page-body">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div style="margin-bottom:20px;">
+      <button class="add-recipe-btn" onclick="openAddModal('recipe')">+ Add My Recipe</button>
+      <button class="add-link-btn" onclick="openAddModal('link')">+ Add External Link</button>
+    </div>
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">By Cuisine</div>
+      <ul class="sidebar-list">
+        <li><a href="#" onclick="sidebarFilter('italian')" class="active">Italian <span class="sidebar-count">3</span></a></li>
+        <li><a href="#" onclick="sidebarFilter('mexican')">Mexican <span class="sidebar-count">2</span></a></li>
+        <li><a href="#" onclick="sidebarFilter('mediterranean')">Mediterranean <span class="sidebar-count">3</span></a></li>
+        <li><a href="#" onclick="sidebarFilter('asian')">Asian <span class="sidebar-count">2</span></a></li>
+        <li><a href="#" onclick="sidebarFilter('american')">American <span class="sidebar-count">2</span></a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">By Meal Type</div>
+      <ul class="sidebar-list">
+        <li><a href="#" onclick="sidebarFilter('dinner')">Dinner <span class="sidebar-count">8</span></a></li>
+        <li><a href="#" onclick="sidebarFilter('lunch')">Lunch <span class="sidebar-count">2</span></a></li>
+        <li><a href="#" onclick="sidebarFilter('breakfast')">Breakfast <span class="sidebar-count">1</span></a></li>
+        <li><a href="#" onclick="sidebarFilter('snack')">Snacks <span class="sidebar-count">1</span></a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Assigned To</div>
+      <ul class="sidebar-list">
+        <li><a href="#" onclick="sidebarFilter('andersons')">Andersons <span class="sidebar-count">5</span></a></li>
+        <li><a href="#" onclick="sidebarFilter('smiths')">Smiths <span class="sidebar-count">3</span></a></li>
+        <li><a href="#" onclick="sidebarFilter('unassigned')">Unassigned <span class="sidebar-count">4</span></a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- RECIPE GRID -->
+  <div class="recipe-grid-wrap">
+
+    <!-- Erin's Own -->
+    <div class="section-heading">
+      <span>✦ <em>Erin's Own</em> Recipes</span>
+      <div class="section-heading-line"></div>
+      <span style="font-size:0.72rem;color:var(--taupe);font-family:'DM Sans',sans-serif;font-weight:300;">6 recipes</span>
+    </div>
+    <div class="recipe-grid" id="erin-grid">
+
+      <div class="recipe-card" data-tags="erin,gluten-free,heart-healthy,italian,dinner,batch,andersons" onclick="openDetail('bolognese')">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#E8D5C0,#C4A882);">🍝</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag terra">Erin's Own</span>
+            <span class="card-tag sage">GF</span>
+            <span class="card-tag sage">Heart Healthy</span>
+          </div>
+          <div class="card-name">Chickpea Pasta Bolognese</div>
+          <div class="card-desc">A family-friendly riff on classic bolognese — swapped to chickpea pasta for extra protein and fiber without losing comfort.</div>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 45 min</span>
+            <span class="card-meta-item">👨‍👩‍👧‍👦 Serves 4</span>
+            <span class="card-source erin">Erin's Recipe</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-assign-btn" onclick="event.stopPropagation();openAssign('Chickpea Pasta Bolognese')">Assign to Client</button>
+          <button class="card-view-btn" onclick="event.stopPropagation();openDetail('bolognese')">View →</button>
+        </div>
+      </div>
+
+      <div class="recipe-card" data-tags="erin,gluten-free,heart-healthy,mediterranean,dinner,andersons" onclick="openDetail('salmon')">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#C8D4E0,#8AAABB);">🐟</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag terra">Erin's Own</span>
+            <span class="card-tag sage">GF</span>
+            <span class="card-tag gold">Under 30 Min</span>
+          </div>
+          <div class="card-name">Sheet Pan Salmon & Seasonal Veg</div>
+          <div class="card-desc">Lemon-herb salmon with whatever veg is in season. One pan, minimal cleanup, maximum flavor. Kids approved.</div>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 28 min</span>
+            <span class="card-meta-item">👨‍👩‍👧‍👦 Serves 4</span>
+            <span class="card-source erin">Erin's Recipe</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-assign-btn" onclick="event.stopPropagation();openAssign('Sheet Pan Salmon')">Assign to Client</button>
+          <button class="card-view-btn" onclick="event.stopPropagation();openDetail('salmon')">View →</button>
+        </div>
+      </div>
+
+      <div class="recipe-card" data-tags="erin,gluten-free,mexican,dinner,kid-friendly,andersons" onclick="openDetail('taco')">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#E8D4A8,#C4A050);">🌮</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag terra">Erin's Own</span>
+            <span class="card-tag sage">GF</span>
+            <span class="card-tag gold">Kid-Friendly</span>
+          </div>
+          <div class="card-name">Build-Your-Own Chicken Taco Bowl</div>
+          <div class="card-desc">Deconstructed taco night — everyone customizes their bowl. Corn tortillas keep it naturally GF. Great for picky eaters.</div>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 25 min</span>
+            <span class="card-meta-item">👨‍👩‍👧‍👦 Serves 4–6</span>
+            <span class="card-source erin">Erin's Recipe</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-assign-btn" onclick="event.stopPropagation();openAssign('Chicken Taco Bowl')">Assign to Client</button>
+          <button class="card-view-btn" onclick="event.stopPropagation();openDetail('taco')">View →</button>
+        </div>
+      </div>
+
+      <div class="recipe-card" data-tags="erin,gluten-free,heart-healthy,mediterranean,dinner,quick,andersons" onclick="openDetail('grain')">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#C8D8C2,#7A9870);">🥗</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag terra">Erin's Own</span>
+            <span class="card-tag sage">Heart Healthy</span>
+            <span class="card-tag gold">Under 30 Min</span>
+          </div>
+          <div class="card-name">Greek Quinoa Grain Bowl</div>
+          <div class="card-desc">Quinoa base, roasted veg, hummus, cucumber, olives. Uses Tuesday's leftover veg — zero waste, maximum efficiency.</div>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 20 min</span>
+            <span class="card-meta-item">👨‍👩‍👧‍👦 Serves 4</span>
+            <span class="card-source erin">Erin's Recipe</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-assign-btn" onclick="event.stopPropagation();openAssign('Greek Grain Bowl')">Assign to Client</button>
+          <button class="card-view-btn" onclick="event.stopPropagation();openDetail('grain')">View →</button>
+        </div>
+      </div>
+
+      <div class="recipe-card" data-tags="erin,batch,dinner,american,heart-healthy" onclick="openDetail('soup')">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#E0D0C0,#B89878);">🍲</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag terra">Erin's Own</span>
+            <span class="card-tag">Batch Cook</span>
+            <span class="card-tag sage">Heart Healthy</span>
+          </div>
+          <div class="card-name">Slow Cooker Chicken Soup</div>
+          <div class="card-desc">Set-and-forget Sunday soup. Intentionally large batch — freezes beautifully for a future busy week. 15 minutes active time.</div>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 15 min + slow cook</span>
+            <span class="card-meta-item">🍱 Serves 6–8</span>
+            <span class="card-source erin">Erin's Recipe</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-assign-btn" onclick="event.stopPropagation();openAssign('Slow Cooker Soup')">Assign to Client</button>
+          <button class="card-view-btn" onclick="event.stopPropagation();openDetail('soup')">View →</button>
+        </div>
+      </div>
+
+      <div class="recipe-card" data-tags="erin,gluten-free,kid-friendly,breakfast,quick" onclick="openDetail('eggs')">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#F0E8C8,#D4C080);">🥚</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag terra">Erin's Own</span>
+            <span class="card-tag sage">GF</span>
+            <span class="card-tag gold">Kid-Friendly</span>
+          </div>
+          <div class="card-name">Veggie Egg Muffins</div>
+          <div class="card-desc">Meal-prep breakfast cups loaded with whatever veg you have. Bake Sunday, eat all week. Kids love choosing their fillings.</div>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 25 min</span>
+            <span class="card-meta-item">🍱 Makes 12</span>
+            <span class="card-source erin">Erin's Recipe</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-assign-btn" onclick="event.stopPropagation();openAssign('Veggie Egg Muffins')">Assign to Client</button>
+          <button class="card-view-btn" onclick="event.stopPropagation();openDetail('eggs')">View →</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Trusted External Links -->
+    <div class="section-heading" style="margin-top:20px;">
+      <span>↗ <em>Trusted</em> External Recipes</span>
+      <div class="section-heading-line"></div>
+      <span style="font-size:0.72rem;color:var(--taupe);font-family:'DM Sans',sans-serif;font-weight:300;">6 links</span>
+    </div>
+    <div class="recipe-grid" id="external-grid">
+
+      <div class="recipe-card external" data-tags="external,heart-healthy,dinner,mediterranean,gluten-free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#D4E8D8,#90B898);">🫘</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag">External Link</span>
+            <span class="card-tag sage">Heart Healthy</span>
+            <span class="card-tag sage">GF</span>
+          </div>
+          <div class="card-name">White Bean & Kale Soup</div>
+          <div class="card-desc">A Smitten Kitchen classic. Tuscan-style, deeply comforting, loaded with fiber. Erin recommends for heart health weeks.</div>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ ~40 min</span>
+            <span class="card-source">smittenkitchen.com</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-assign-btn" onclick="event.stopPropagation();openAssign('White Bean & Kale Soup')">Assign to Client</button>
+          <a class="card-view-btn" href="https://smittenkitchen.com" target="_blank" onclick="event.stopPropagation()">Visit ↗</a>
+        </div>
+      </div>
+
+      <div class="recipe-card external" data-tags="external,asian,dinner,gluten-free,quick,kid-friendly">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#E8D8C0,#C0A070);">🍜</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag">External Link</span>
+            <span class="card-tag gold">Under 30 Min</span>
+            <span class="card-tag gold">Kid-Friendly</span>
+          </div>
+          <div class="card-name">15-Minute Miso Ramen</div>
+          <div class="card-desc">Half Baked Harvest's crowd-pleaser. Customizable toppings make it a great family dinner — each person builds their own bowl.</div>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 15 min</span>
+            <span class="card-source">halfbakedharvest.com</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-assign-btn" onclick="event.stopPropagation();openAssign('15-Minute Miso Ramen')">Assign to Client</button>
+          <a class="card-view-btn" href="https://www.halfbakedharvest.com" target="_blank" onclick="event.stopPropagation()">Visit ↗</a>
+        </div>
+      </div>
+
+      <div class="recipe-card external" data-tags="external,dairy-free,dinner,batch,heart-healthy">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#E0C8C0,#B88878);">🥘</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag">External Link</span>
+            <span class="card-tag sage">Dairy-Free</span>
+            <span class="card-tag">Batch Cook</span>
+          </div>
+          <div class="card-name">One-Pot Lentil Dal</div>
+          <div class="card-desc">Cookie + Kate's reliable weeknight dal. Plant-based protein, pantry staples only, freezes perfectly for future weeks.</div>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 35 min</span>
+            <span class="card-source">cookieandkate.com</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-assign-btn" onclick="event.stopPropagation();openAssign('One-Pot Lentil Dal')">Assign to Client</button>
+          <a class="card-view-btn" href="https://cookieandkate.com" target="_blank" onclick="event.stopPropagation()">Visit ↗</a>
+        </div>
+      </div>
+
+      <div class="recipe-card external" data-tags="external,gluten-free,dinner,kid-friendly,american,quick">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#F0E0D0,#D0A888);">🍗</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag">External Link</span>
+            <span class="card-tag sage">GF</span>
+            <span class="card-tag gold">Kid-Friendly</span>
+          </div>
+          <div class="card-name">Honey Garlic Chicken Thighs</div>
+          <div class="card-desc">Budget-friendly, universally loved. Skillet to oven in 30 minutes. Pairs with any grain or roasted veg from earlier in the week.</div>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 30 min</span>
+            <span class="card-source">budgetbytes.com</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-assign-btn" onclick="event.stopPropagation();openAssign('Honey Garlic Chicken Thighs')">Assign to Client</button>
+          <a class="card-view-btn" href="https://www.budgetbytes.com" target="_blank" onclick="event.stopPropagation()">Visit ↗</a>
+        </div>
+      </div>
+
+      <div class="recipe-card external" data-tags="external,heart-healthy,dinner,mediterranean,dairy-free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#D8D0E8,#9888B8);">🫐</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag">External Link</span>
+            <span class="card-tag sage">Heart Healthy</span>
+            <span class="card-tag sage">Dairy-Free</span>
+          </div>
+          <div class="card-name">Mediterranean Stuffed Peppers</div>
+          <div class="card-desc">The Mediterranean Dish's vibrant stuffed peppers — rice, herbs, pine nuts. Great for families wanting variety without complexity.</div>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 50 min</span>
+            <span class="card-source">themediterraneandish.com</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-assign-btn" onclick="event.stopPropagation();openAssign('Mediterranean Stuffed Peppers')">Assign to Client</button>
+          <a class="card-view-btn" href="https://www.themediterraneandish.com" target="_blank" onclick="event.stopPropagation()">Visit ↗</a>
+        </div>
+      </div>
+
+      <div class="recipe-card external" data-tags="external,batch,breakfast,gluten-free,kid-friendly,quick">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#F0E8D8,#D4C0A0);">🫙</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag">External Link</span>
+            <span class="card-tag sage">GF</span>
+            <span class="card-tag">Batch Cook</span>
+          </div>
+          <div class="card-name">Overnight Oats 5 Ways</div>
+          <div class="card-desc">Minimalist Baker's ultimate make-ahead breakfast. Prep 5 jars Sunday night, breakfast is handled all week. Kids customize their own.</div>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 10 min + overnight</span>
+            <span class="card-source">minimalistbaker.com</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-assign-btn" onclick="event.stopPropagation();openAssign('Overnight Oats 5 Ways')">Assign to Client</button>
+          <a class="card-view-btn" href="https://minimalistbaker.com" target="_blank" onclick="event.stopPropagation()">Visit ↗</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="no-results" class="no-results" style="display:none;">
+      <div class="no-results-icon">🥄</div>
+      <p>No recipes match that search.<br>Try a different keyword or clear your filters.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="portal-footer">
+  <div class="footer-left">Your Family's <span>"Food COO"</span></div>
+  <div class="footer-right">Erin Wiedmar, RDN, MEd, CDE<br>502-930-5845 · erin.louienu@gmail.com</div>
+</div>
+
+<!-- ── ADD RECIPE MODAL ── -->
+<div class="modal-bg" id="add-modal" onclick="closeIfOutside(event,'add-modal')">
+  <div class="modal-box">
+    <button class="modal-x" onclick="closeModal('add-modal')">×</button>
+    <h2 class="modal-h2">Add to Library</h2>
+    <p class="modal-sub">Add one of your own recipes or save a link to a trusted external source.</p>
+
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchTab('recipe-tab',this)">✦ My Own Recipe</button>
+      <button class="modal-tab" onclick="switchTab('link-tab',this)">↗ External Link</button>
+    </div>
+
+    <!-- MY RECIPE TAB -->
+    <div class="tab-panel active" id="recipe-tab">
+      <div class="mrow mrow-2">
+        <div>
+          <label class="mlabel">Recipe Name</label>
+          <input class="minput" type="text" placeholder="e.g. Lemon Herb Chicken">
+        </div>
+        <div>
+          <label class="mlabel">Meal Type</label>
+          <select class="mselect">
+            <option>Dinner</option><option>Lunch</option>
+            <option>Breakfast</option><option>Snack</option><option>Dessert</option>
+          </select>
+        </div>
+      </div>
+      <div class="mrow mrow-2">
+        <div>
+          <label class="mlabel">Active Time</label>
+          <input class="minput" type="text" placeholder="e.g. 30 min">
+        </div>
+        <div>
+          <label class="mlabel">Serves</label>
+          <input class="minput" type="text" placeholder="e.g. 4–6">
+        </div>
+      </div>
+      <div class="mrow">
+        <label class="mlabel">Cuisine</label>
+        <select class="mselect">
+          <option>American</option><option>Italian</option><option>Mexican</option>
+          <option>Mediterranean</option><option>Asian</option><option>Indian</option><option>Other</option>
+        </select>
+      </div>
+      <div class="mrow">
+        <label class="mlabel">Tags</label>
+        <div class="chip-row">
+          <span class="mchip sage" onclick="this.classList.toggle('on')">Gluten-Free</span>
+          <span class="mchip sage" onclick="this.classList.toggle('on')">Dairy-Free</span>
+          <span class="mchip sage" onclick="this.classList.toggle('on')">Heart Healthy</span>
+          <span class="mchip" onclick="this.classList.toggle('on')">Kid-Friendly</span>
+          <span class="mchip" onclick="this.classList.toggle('on')">Under 30 Min</span>
+          <span class="mchip" onclick="this.classList.toggle('on')">Batch Cook</span>
+        </div>
+      </div>
+      <div class="mrow">
+        <label class="mlabel">Ingredients (one per line)</label>
+        <textarea class="mtextarea" placeholder="2 lbs chicken thighs&#10;3 cloves garlic&#10;1 lemon, zested..."></textarea>
+      </div>
+      <div class="mrow">
+        <label class="mlabel">Instructions</label>
+        <textarea class="mtextarea" style="min-height:110px;" placeholder="Step by step instructions..."></textarea>
+      </div>
+      <div class="mrow">
+        <label class="mlabel">Erin's Note (optional)</label>
+        <textarea class="mtextarea" style="min-height:60px;" placeholder="Why you love this recipe, tips for clients, substitutions..."></textarea>
+      </div>
+      <button class="mbtn" onclick="saveRecipe()">Save to Library →</button>
+      <div class="msuccess" id="recipe-success">✅ Recipe saved to your library!</div>
+    </div>
+
+    <!-- EXTERNAL LINK TAB -->
+    <div class="tab-panel" id="link-tab">
+      <div class="mrow">
+        <label class="mlabel">Recipe Name</label>
+        <input class="minput" type="text" placeholder="e.g. White Bean & Kale Soup">
+      </div>
+      <div class="mrow">
+        <label class="mlabel">URL / Link</label>
+        <input class="minput" type="url" placeholder="https://smittenkitchen.com/recipe/...">
+      </div>
+      <div class="mrow">
+        <label class="mlabel">Source Website</label>
+        <input class="minput" type="text" placeholder="e.g. Smitten Kitchen">
+      </div>
+      <div class="mrow mrow-2">
+        <div>
+          <label class="mlabel">Approx. Time</label>
+          <input class="minput" type="text" placeholder="~40 min">
+        </div>
+        <div>
+          <label class="mlabel">Meal Type</label>
+          <select class="mselect">
+            <option>Dinner</option><option>Lunch</option>
+            <option>Breakfast</option><option>Snack</option>
+          </select>
+        </div>
+      </div>
+      <div class="mrow">
+        <label class="mlabel">Tags</label>
+        <div class="chip-row">
+          <span class="mchip sage" onclick="this.classList.toggle('on')">Gluten-Free</span>
+          <span class="mchip sage" onclick="this.classList.toggle('on')">Dairy-Free</span>
+          <span class="mchip sage" onclick="this.classList.toggle('on')">Heart Healthy</span>
+          <span class="mchip" onclick="this.classList.toggle('on')">Kid-Friendly</span>
+          <span class="mchip" onclick="this.classList.toggle('on')">Under 30 Min</span>
+          <span class="mchip" onclick="this.classList.toggle('on')">Batch Cook</span>
+        </div>
+      </div>
+      <div class="mrow">
+        <label class="mlabel">Why Erin Recommends It</label>
+        <textarea class="mtextarea" placeholder="What makes this recipe great for your clients? Any modifications you suggest?"></textarea>
+      </div>
+      <button class="mbtn" onclick="saveRecipe()">Save Link to Library →</button>
+      <div class="msuccess" id="link-success">✅ Link saved to your library!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── RECIPE DETAIL MODAL ── -->
+<div class="modal-bg detail-modal" id="detail-modal" onclick="closeIfOutside(event,'detail-modal')">
+  <div class="modal-box" id="detail-content">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<!-- ── ASSIGN MODAL ── -->
+<div class="modal-bg" id="assign-modal" onclick="closeIfOutside(event,'assign-modal')">
+  <div class="modal-box" style="max-width:420px;">
+    <button class="modal-x" onclick="closeModal('assign-modal')">×</button>
+    <h2 class="modal-h2">Assign Recipe</h2>
+    <p class="modal-sub" id="assign-sub">Choose which families to add this recipe to their plan.</p>
+    <div class="client-check-list">
+      <label class="client-check" onclick="this.classList.toggle('checked')">
+        <input type="checkbox">
+        <div>
+          <div class="client-check-name">The Anderson Family</div>
+          <div class="client-check-sub">GF · Heart Health · Week 4</div>
+        </div>
+      </label>
+      <label class="client-check" onclick="this.classList.toggle('checked')">
+        <input type="checkbox">
+        <div>
+          <div class="client-check-name">The Smith Family</div>
+          <div class="client-check-sub">Dairy-Free · Balanced · Week 2</div>
+        </div>
+      </label>
+      <label class="client-check" onclick="this.classList.toggle('checked')">
+        <input type="checkbox">
+        <div>
+          <div class="client-check-name">The Johnson Family</div>
+          <div class="client-check-sub">No restrictions · Weight Mgmt · Week 1</div>
+        </div>
+      </label>
+    </div>
+    <button class="mbtn" style="margin-top:20px;" onclick="confirmAssign()">Confirm Assignment →</button>
+    <div class="msuccess" id="assign-success">✅ Recipe assigned! It will appear in their portal.</div>
+  </div>
+</div>
+
+<script>
+// ── Recipe data for detail view ──
+const recipes = {
+  bolognese: {
+    emoji:'🍝', name:'Chickpea Pasta Bolognese',
+    tags:['Erin\'s Own','GF','Heart Healthy'],
+    time:'45 min', serves:'4', cuisine:'Italian',
+    ingredients:['1 lb chickpea pasta','1 lb ground turkey or beef','1 can crushed tomatoes','1 onion, diced','4 cloves garlic','2 tbsp olive oil','1 carrot, finely diced','1 celery stalk, diced','1 tsp oregano','Salt & pepper to taste','Fresh basil to serve'],
+    steps:['Heat olive oil in a large pan over medium heat. Add onion, carrot, and celery. Cook 8 minutes until softened.','Add garlic and cook 1 minute more. Add ground meat, breaking up with a spoon. Cook until no longer pink.','Add crushed tomatoes, oregano, salt, and pepper. Simmer 20 minutes on low heat.','Cook chickpea pasta per package directions. Reserve ½ cup pasta water before draining.','Toss pasta with sauce, adding pasta water to loosen. Top with fresh basil.'],
+    note:'Swapping to chickpea pasta adds 14g protein per serving vs regular pasta — a seamless upgrade for heart health goals. Kids rarely notice the difference!'
+  },
+  salmon: {
+    emoji:'🐟', name:'Sheet Pan Salmon & Seasonal Veg',
+    tags:['Erin\'s Own','GF','Under 30 Min'],
+    time:'28 min', serves:'4', cuisine:'Mediterranean',
+    ingredients:['4 salmon fillets (6oz each)','2 cups broccoli florets','1 cup cherry tomatoes','2 tbsp olive oil','1 lemon, zested & juiced','3 cloves garlic, minced','1 tsp dried herbs (thyme, oregano)','Salt & pepper'],
+    steps:['Preheat oven to 425°F. Line a large baking sheet with parchment.','Toss vegetables with 1 tbsp olive oil, salt, and pepper. Spread on one half of the pan.','Mix remaining oil with garlic, lemon zest, herbs. Brush over salmon fillets.','Place salmon on other half of pan. Roast 15–18 minutes until salmon flakes easily.','Squeeze fresh lemon juice over everything before serving.'],
+    note:'I always make double the veg here — the leftovers go straight into Thursday\'s grain bowls. Two meals prepped in one step!'
+  },
+  taco: {
+    emoji:'🌮', name:'Build-Your-Own Chicken Taco Bowl',
+    tags:['Erin\'s Own','GF','Kid-Friendly'],
+    time:'25 min', serves:'4–6', cuisine:'Mexican',
+    ingredients:['1.5 lbs chicken breast','2 tsp cumin','1 tsp chili powder','1 tsp garlic powder','2 tbsp olive oil','Corn tortillas (naturally GF)','Black beans, rinsed','Shredded lettuce','Diced tomato','Sour cream or Greek yogurt','Shredded cheese','Lime wedges'],
+    steps:['Season chicken with cumin, chili powder, garlic powder, salt.','Heat oil in skillet over medium-high. Cook chicken 6–7 min per side until cooked through. Rest 5 minutes, then slice.','Warm beans in a small pot with a pinch of cumin.','Set out all toppings in bowls — everyone builds their own.','Serve with warm corn tortillas or over rice.'],
+    note:'The "build your own" format is magic for picky eaters — kids feel in control and parents get a nutritious meal on the table without battles.'
+  },
+  grain: {
+    emoji:'🥗', name:'Greek Quinoa Grain Bowl',
+    tags:['Erin\'s Own','Heart Healthy','Under 30 Min'],
+    time:'20 min', serves:'4', cuisine:'Mediterranean',
+    ingredients:['2 cups cooked quinoa (use leftovers!)','Roasted veg from earlier in the week','1 can chickpeas, drained','½ cucumber, diced','½ cup Kalamata olives','½ cup hummus','¼ cup feta (optional)','Lemon juice, olive oil','Fresh parsley'],
+    steps:['If using fresh quinoa: rinse and cook 1 cup dry quinoa in 2 cups water, 15 minutes.','Warm leftover roasted veg briefly in the oven or microwave.','Assemble bowls: quinoa base, veg, chickpeas, cucumber, olives.','Add a generous scoop of hummus per bowl.','Drizzle with lemon juice and olive oil. Top with feta and parsley.'],
+    note:'This bowl only works because of Tuesday\'s prep. If clients understand the "cook once, eat twice" principle here, it clicks for the whole system.'
+  },
+  soup: {
+    emoji:'🍲', name:'Slow Cooker Chicken Soup',
+    tags:['Erin\'s Own','Batch Cook','Heart Healthy'],
+    time:'15 min active', serves:'6–8', cuisine:'American',
+    ingredients:['2 lbs chicken thighs (bone-in)','4 cups chicken broth','3 carrots, sliced','3 celery stalks, sliced','1 onion, diced','4 cloves garlic','1 tsp thyme','1 bay leaf','Salt & pepper','Optional: egg noodles or GF pasta to serve'],
+    steps:['Add all ingredients except pasta to slow cooker. No browning needed.','Cook on LOW 7–8 hours or HIGH 4–5 hours.','Remove chicken, shred with two forks, return to pot. Discard bones.','If adding noodles, stir in and cook on HIGH 20 more minutes.','Ladle into bowls. Freeze leftovers in quart containers for up to 3 months.'],
+    note:'I specifically make this one big enough to freeze half. Those frozen portions become emergency dinners on the week everything goes sideways — and every family has those weeks.'
+  },
+  eggs: {
+    emoji:'🥚', name:'Veggie Egg Muffins',
+    tags:['Erin\'s Own','GF','Kid-Friendly'],
+    time:'25 min', serves:'12 muffins', cuisine:'American',
+    ingredients:['8 large eggs','¼ cup milk','1 cup diced bell peppers','½ cup spinach, chopped','½ cup mushrooms, diced','½ cup shredded cheese','Salt, pepper, garlic powder','Non-stick spray'],
+    steps:['Preheat oven to 350°F. Grease a 12-cup muffin tin well.','Whisk eggs with milk, salt, pepper, and garlic powder.','Divide vegetables evenly among muffin cups.','Pour egg mixture over vegetables, filling ¾ full.','Top with cheese. Bake 20–22 minutes until set and lightly golden. Cool before removing.'],
+    note:'Kids love these because they can choose their own fillings the night before. Store in the fridge up to 5 days, microwave 45 seconds — breakfast is done.'
+  }
+};
+
+// ── Filter logic ──
+let activeFilters = ['all'];
+function toggleFilter(el, tag) {
+  if (tag === 'all') {
+    activeFilters = ['all'];
+    document.querySelectorAll('.fchip').forEach(c => c.classList.remove('on'));
+    el.classList.add('on');
+  } else {
+    document.querySelector('.fchip[data-filter="all"]').classList.remove('on');
+    el.classList.toggle('on');
+    activeFilters = Array.from(document.querySelectorAll('.fchip.on')).map(c => c.dataset.filter).filter(f => f !== 'all');
+    if (activeFilters.length === 0) {
+      activeFilters = ['all'];
+      document.querySelector('.fchip[data-filter="all"]').classList.add('on');
+    }
+  }
+  filterRecipes();
+}
+
+function filterRecipes() {
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const cards = document.querySelectorAll('.recipe-card');
+  let visible = 0;
+  cards.forEach(card => {
+    const tags = card.dataset.tags || '';
+    const name = card.querySelector('.card-name')?.textContent.toLowerCase() || '';
+    const desc = card.querySelector('.card-desc')?.textContent.toLowerCase() || '';
+    const matchesFilter = activeFilters.includes('all') || activeFilters.every(f => tags.includes(f));
+    const matchesSearch = !search || name.includes(search) || desc.includes(search) || tags.includes(search);
+    const show = matchesFilter && matchesSearch;
+    card.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('filter-count').textContent = `Showing ${visible} recipe${visible !== 1 ? 's' : ''}`;
+  document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+}
+
+function sidebarFilter(tag) {
+  event.preventDefault();
+  document.querySelectorAll('.sidebar-list a').forEach(a => a.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.fchip').forEach(c => c.classList.remove('on'));
+  document.querySelector('.fchip[data-filter="all"]').classList.add('on');
+  activeFilters = [tag];
+  filterRecipes();
+}
+
+// ── Modal logic ──
+function openAddModal(type) {
+  if (type === 'link') switchTab('link-tab', document.querySelectorAll('.modal-tab')[1]);
+  else switchTab('recipe-tab', document.querySelectorAll('.modal-tab')[0]);
+  document.getElementById('add-modal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+  document.body.style.overflow = '';
+}
+function closeIfOutside(e, id) {
+  if (e.target === document.getElementById(id)) closeModal(id);
+}
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.modal-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+}
+function saveRecipe() {
+  const activeTab = document.querySelector('.tab-panel.active');
+  const successId = activeTab.id === 'recipe-tab' ? 'recipe-success' : 'link-success';
+  document.getElementById(successId).classList.add('show');
+  setTimeout(() => closeModal('add-modal'), 2500);
+}
+
+// ── Detail modal ──
+function openDetail(key) {
+  const r = recipes[key];
+  if (!r) return;
+  const tagHtml = r.tags.map(t => `<span class="card-tag terra">${t}</span>`).join('');
+  const ingHtml = r.ingredients.map(i => `<li>${i}</li>`).join('');
+  const stepHtml = r.steps.map((s,i) => `<li class="detail-step"><span class="step-num-badge">${i+1}</span><span class="step-text">${s}</span></li>`).join('');
+  document.getElementById('detail-content').innerHTML = `
+    <button class="modal-x" onclick="closeModal('detail-modal')">×</button>
+    <span class="detail-emoji">${r.emoji}</span>
+    <div class="detail-tags">${tagHtml}</div>
+    <h2 class="modal-h2">${r.name}</h2>
+    <div class="detail-meta-row">
+      <div class="detail-meta-item"><span class="detail-meta-val">⏱ ${r.time}</span><span class="detail-meta-key">Active Time</span></div>
+      <div class="detail-meta-item"><span class="detail-meta-val">👨‍👩‍👧‍👦 ${r.serves}</span><span class="detail-meta-key">Servings</span></div>
+      <div class="detail-meta-item"><span class="detail-meta-val">🌍 ${r.cuisine}</span><span class="detail-meta-key">Cuisine</span></div>
+    </div>
+    <div class="detail-section-title">Ingredients</div>
+    <ul class="detail-ingredients">${ingHtml}</ul>
+    <div class="detail-section-title">Instructions</div>
+    <ol class="detail-steps">${stepHtml}</ol>
+    <div class="detail-erins-note"><strong>Erin's Note:</strong> ${r.note}</div>
+    <button class="card-assign-btn" style="width:100%;margin-top:16px;" onclick="closeModal('detail-modal');openAssign('${r.name}')">Assign to a Client Family →</button>
+  `;
+  document.getElementById('detail-modal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+// ── Assign modal ──
+function openAssign(name) {
+  document.getElementById('assign-sub').textContent = `Assign "${name}" to client families.`;
+  document.getElementById('assign-modal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function confirmAssign() {
+  document.getElementById('assign-success').classList.add('show');
+  setTimeout(() => closeModal('assign-modal'), 2200);
+}
+
+// ── Scroll reveal ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }
+  });
+}, {threshold:0.08});
+document.querySelectorAll('.recipe-card').forEach(el => {
+  el.style.opacity='0'; el.style.transform='translateY(16px)';
+  el.style.transition='opacity 0.5s ease, transform 0.5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>
