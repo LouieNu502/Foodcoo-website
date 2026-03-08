@@ -505,7 +505,6 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
       <div class="preview-url" id="prev-url">louienu502.com/smithfamily</div>
       <div class="preview-tags" id="prev-tags">
         <span class="preview-tag active">Balanced Nutrition</span>
-        <span class="preview-tag">Instacart</span>
         <span class="preview-tag">Week 1</span>
       </div>
       <div class="preview-members">
@@ -532,10 +531,10 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 
 <div class="portal-footer">
   <div class="footer-left">Your Family's <span>"Food COO"</span></div>
-  <div class="footer-right">Erin Wiedmar, RDN, MEd, CDE<br>502-930-5845 · erin.louienu@gmail.com</div>
+  <div class="footer-right">Erin Wiedmar, RDN, MEd, CDE<br>502-930-5845 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5a3f2833347436352f333f342f1a3d373b333674393537">[email&#160;protected]</a></div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 let currentStep = 1;
 let members = []; // [{name, age, schedule, allergies, favBreakfast, favLunch, favDinner, favSnacks, dislikes, textures, proteins, fruitsVeg}]
 
@@ -687,7 +686,7 @@ function updatePreview() {
   document.getElementById('prev-url').textContent = `louienu502.com/${slug}`;
 
   const tagsEl = document.getElementById('prev-tags');
-  tagsEl.innerHTML = `<span class="preview-tag active">${goal}</span><span class="preview-tag">${grocery}</span><span class="preview-tag">Week ${week}</span>`;
+  tagsEl.innerHTML = `<span class="preview-tag active">${goal}</span><span class="preview-tag">Week ${week}</span>`;
 
   const membersEl = document.getElementById('prev-members');
   if (members.length > 0) {
@@ -973,11 +972,10 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
   <div class="hero-banner-text">
     <div class="banner-greeting">Your personalized portal</div>
     <h1 class="banner-h1">Welcome, <em>${name}s</em> 👋</h1>
-    <p class="banner-sub">Your week is planned, your groceries are ready to order, and Erin has a note waiting for you.</p>
+    <p class="banner-sub">Your week is planned, Erin has your groceries covered, and there's a note waiting for you below.</p>
     <div class="banner-tags">
       <span class="banner-tag active">${goal}</span>
       <span class="banner-tag">${members.length} people</span>
-      <span class="banner-tag">${grocery}</span>
       ${painPoints.slice(0,2).map(p=>`<span class="banner-tag">Working on: ${p}</span>`).join('')}
     </div>
   </div>
@@ -1015,9 +1013,9 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
         <div class="note-date">— Erin W. · ${noteDate}</div>
       </div>
       <div class="grocery-panel">
-        <h3>Grocery Delivery</h3>
-        <div class="grocery-sub">One tap to send this week's list to your preferred service.</div>
-        ${groceryBtns}
+        <h3>🛒 Groceries, Handled</h3>
+        <div class="grocery-sub">Erin takes grocery shopping completely off your plate. Whether she orders delivery or shops in person, it's handled for you — just like everything else.</div>
+        <div style="background:var(--sage-soft);border:1px solid var(--sage);border-radius:4px;padding:12px 16px;font-size:0.8rem;color:var(--brown-mid);line-height:1.6;">✓ This is part of your engagement — no action needed from you.</div>
       </div>
       <div class="next-card">
         <h3>Upcoming With Erin</h3>
@@ -1101,7 +1099,6 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
       <div style="background:var(--warm-white);border:1px solid var(--sand);border-radius:6px;padding:22px;">
         <div style="font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--terra);margin-bottom:14px;">Household Logistics</div>
         ${budget ? `<div class="overview-row"><span class="overview-key">Weekly Budget</span><span class="overview-val">${budget}</span></div>` : ''}
-        <div class="overview-row"><span class="overview-key">Grocery Service</span><span class="overview-val">${grocery}</span></div>
         <div class="overview-row"><span class="overview-key">Leftovers</span><span class="overview-val">${leftovers}</span></div>
         ${appliancesHtml ? `<div style="margin-top:12px;"><div style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--taupe);margin-bottom:8px;">Kitchen Appliances</div><div>${appliancesHtml}</div></div>` : ''}
       </div>
@@ -1172,15 +1169,4 @@ function toggleCodeView(btn) {
 }
 
 // Auto-slug from family name
-document.getElementById('family-name').addEventListener('input', function() {
-  document.getElementById('url-slug').value = this.value.toLowerCase().replace(/\s+/g,'') + 'family';
-  updatePreview();
-});
-
-// Init
-renderMemberCards();
-renderMemberProfiles();
-updatePreview();
-</script>
-</body>
-</html>
+document.getElementById('family-name').addEventListener('input', fu
