@@ -387,16 +387,12 @@ function save() {
   localStorage.setItem(KEY_FAMILIES, JSON.stringify(allFamilies));
   localStorage.setItem(KEY_HISTORY,  JSON.stringify(allHistory));
 }
-const GITHUB_RECIPES_URL = 'https://raw.githubusercontent.com/louienu502/Foodcoo-website/main/recipes.json';
 let _adminLibraryCache = null;
 async function loadLibrary() {
   if (_adminLibraryCache) return _adminLibraryCache;
-  try {
-    const res = await fetch(GITHUB_RECIPES_URL + '?t=' + Date.now());
-    if (!res.ok) return [];
-    _adminLibraryCache = await res.json();
-    return _adminLibraryCache;
-  } catch(e) { return []; }
+  try { _adminLibraryCache = JSON.parse(localStorage.getItem('foodcoo_recipes')||'[]'); }
+  catch(e) { _adminLibraryCache = []; }
+  return _adminLibraryCache;
 }
 
 // ── PIN ──
