@@ -1230,8 +1230,9 @@ document.querySelectorAll('.meal-cell,.fb-card').forEach((el,i)=>{
   document.getElementById('code-filename').textContent = `${slug}.html — Ready to paste`;
   document.getElementById('filename-display').textContent = `${slug}.html`;
   document.getElementById('url-display').textContent = `louienu502.com/${slug}`;
-  document.getElementById('code-output').classList.add('show');
-  document.getElementById('code-output').scrollIntoView({behavior:'smooth',block:'start'});
+  const outputEl = document.getElementById('code-output');
+  outputEl.classList.add('show');
+  setTimeout(() => outputEl.scrollIntoView({behavior:'smooth', block:'start'}), 100);
   window._generatedCode = code;
 
   // Register this family in the admin dashboard
