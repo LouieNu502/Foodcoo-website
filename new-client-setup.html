@@ -453,11 +453,16 @@ let members = [];
 let mealLinks = {}; // { mon: recipeObj, tue: recipeObj, ... }
 let pickerTargetDay = null;
 
-// ── RECIPE LIBRARY (reads from localStorage same as recipes.html) ──
-function loadLibrary() {
+// ── RECIPE LIBRARY (from GitHub) ──
+const GITHUB_RECIPES_URL = 'https://raw.githubusercontent.com/louienu502/Foodcoo-website/main/recipes.json';
+let _libraryCache = null;
+async function loadLibrary() {
+  if (_libraryCache) return _libraryCache;
   try {
-    const raw = localStorage.getItem('foodcoo_recipes');
-    return raw ? JSON.parse(raw) : [];
+    const res = await fetch(GITHUB_RECIPES_URL + '?t=' + Date.now());
+    if (!res.ok) return [];
+    _libraryCache = await res.json();
+    return _libraryCache;
   } catch(e) { return []; }
 }
 
@@ -465,11 +470,12 @@ function loadLibrary() {
 function openPicker(day) {
   pickerTargetDay = day;
   document.getElementById('picker-search').value = '';
-  renderPickerList();
+  document.getElementById('picker-results').innerHTML = '<div class="picker-empty">Loading…</div>';
   const modal = document.getElementById('picker-modal');
   modal.style.display = 'flex';
   requestAnimationFrame(() => modal.classList.add('show'));
   document.getElementById('picker-search').focus();
+  renderPickerList();
 }
 function closePicker() {
   const modal = document.getElementById('picker-modal');
@@ -479,9 +485,9 @@ function closePicker() {
 function closePickerOutside(e) {
   if (e.target === document.getElementById('picker-modal')) closePicker();
 }
-function renderPickerList() {
+async function renderPickerList() {
   const q = document.getElementById('picker-search').value.toLowerCase();
-  const recipes = loadLibrary();
+  const recipes = await loadLibrary();
   const el = document.getElementById('picker-results');
   if (recipes.length === 0) {
     el.innerHTML = `<div class="picker-empty">No recipes in your library yet.<br><a href="recipes.html" target="_blank">Add recipes on the recipes page →</a></div>`;
@@ -1280,8 +1286,8 @@ renderMemberProfiles();
 updatePreview();
 
 // Check library on step 6
-document.querySelector('.pstep:nth-child(6)').addEventListener('click', ()=>{
-  const recipes = loadLibrary();
+document.querySelector('.pstep:nth-child(6)').addEventListener('click', async ()=>{
+  const recipes = await loadLibrary();
   document.getElementById('picker-notice').style.display = recipes.length===0 ? 'block' : 'none';
 });
 </script>
