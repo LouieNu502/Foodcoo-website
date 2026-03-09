@@ -509,7 +509,7 @@ async function renderRecipes() {
   });
 
   document.getElementById('filter-count').textContent = `Showing ${filtered.length} recipe${filtered.length!==1?'s':''}`;
-  const grid = document.getElementById('recipe-grid');
+
 
   if (all.length === 0) {
     grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🥄</div><div class="empty-title">Your library is empty</div><div class="empty-desc">Log in as admin using the footer link<br>to start adding your recipes and links.</div></div>`;
