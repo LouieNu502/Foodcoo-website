@@ -209,6 +209,8 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
     <div class="admin-btns" id="admin-btns">
       <button class="add-recipe-btn" onclick="openAddModal('recipe')">+ Add My Recipe</button>
       <button class="add-link-btn" onclick="openAddModal('link')">+ Add External Link</button>
+      <button class="add-link-btn" onclick="exportBackup()" style="margin-top:4px;">⬇ Export Backup</button>
+      <button class="add-link-btn" onclick="importBackup()" style="margin-top:2px;">⬆ Import Backup</button>
     </div>
     <div class="sidebar-divider"></div>
     <div class="sidebar-section">
@@ -448,47 +450,56 @@ function logout() {
   document.querySelectorAll('.card-delete-btn').forEach(b => b.classList.remove('show'));
 }
 
-// ── GITHUB CONFIG ──
-const GITHUB_TOKEN = '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';
-const GITHUB_REPO  = 'louienu502/Foodcoo-website';
-const RECIPES_PATH = 'recipes.json';
-let recipesCache  = null;
-let recipesSha    = null;
-
-async function loadRecipes() {
-  if (recipesCache) return recipesCache;
-  try {
-    const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${RECIPES_PATH}`, {
-      headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
-    });
-    if (res.status === 404) { recipesCache = []; recipesSha = null; return []; }
-    const data = await res.json();
-    recipesSha = data.sha;
-    recipesCache = JSON.parse(atob(data.content.replace(/\n/g,'')));
-    return recipesCache;
-  } catch(e) { console.warn('Could not load recipes:', e); return recipesCache || []; }
+// ── STORAGE ──
+function loadRecipes() {
+  try { return JSON.parse(localStorage.getItem('foodcoo_recipes') || '[]'); }
+  catch(e) { return []; }
+}
+function saveRecipes(r) {
+  localStorage.setItem('foodcoo_recipes', JSON.stringify(r));
 }
 
-async function saveRecipesToGitHub(recipes) {
-  recipesCache = recipes;
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(recipes, null, 2))));
-  const body = { message: 'Update recipe library', content, branch: 'main' };
-  if (recipesSha) body.sha = recipesSha;
-  const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${RECIPES_PATH}`, {
-    method: 'PUT',
-    headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  if (!res.ok) throw new Error('GitHub save failed: ' + res.status);
-  const data = await res.json();
-  recipesSha = data.content.sha;
+// ── BACKUP EXPORT ──
+function exportBackup() {
+  const recipes = loadRecipes();
+  const blob = new Blob([JSON.stringify(recipes, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'foodcoo-recipes-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── BACKUP IMPORT ──
+function importBackup() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const recipes = JSON.parse(ev.target.result);
+        if (!Array.isArray(recipes)) throw new Error('Invalid format');
+        saveRecipes(recipes);
+        renderRecipes();
+        alert('✅ ' + recipes.length + ' recipes imported successfully!');
+      } catch(err) {
+        alert('Error importing backup: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 
 // ── RENDER ──
-async function renderRecipes() {
+function renderRecipes() {
   const grid = document.getElementById('recipe-grid');
-  grid.innerHTML = `<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">Loading recipes…</div></div>`;
-  const all = await loadRecipes();
+  const all = loadRecipes();
   const search = document.getElementById('search-input').value.toLowerCase();
   const own = all.filter(r=>r.type==='own');
   const ext = all.filter(r=>r.type==='external');
@@ -557,8 +568,8 @@ async function renderRecipes() {
 }
 
 // ── DETAIL ──
-async function openDetail(id) {
-  const recipes = await loadRecipes();
+function openDetail(id) {
+  const recipes = loadRecipes();
   const r = recipes.find(x=>x.id===id);
   if (!r) return;
   const tagHtml = (r.tags||[]).map(t=>`<span class="card-tag terra">${t}</span>`).join('');
@@ -598,11 +609,9 @@ function switchTab(type) {
 function getTagsFrom(chipGroupId) {
   return Array.from(document.querySelectorAll(`#${chipGroupId} .mchip.on`)).map(c=>c.dataset.tag);
 }
-async function saveRecipe() {
+function saveRecipe() {
   const name = document.getElementById('r-name').value.trim();
   if (!name) { alert('Please enter a recipe name.'); return; }
-  const btn = document.querySelector('#tab-recipe .mbtn');
-  btn.textContent = 'Saving…'; btn.disabled = true;
   const recipe = {
     id:'r_'+Date.now(), type:'own', name,
     emoji: document.getElementById('r-emoji').value||'🍽️',
@@ -617,30 +626,21 @@ async function saveRecipe() {
     steps: document.getElementById('r-steps').value.split('\n').map(s=>s.trim()).filter(Boolean),
     note: document.getElementById('r-note').value,
   };
-  try {
-    const all = await loadRecipes(); all.push(recipe);
-    await saveRecipesToGitHub(all);
-    document.getElementById('recipe-success').classList.add('show');
-    setTimeout(() => {
-      closeModal('add-modal');
-      document.getElementById('recipe-success').classList.remove('show');
-      ['r-name','r-emoji','r-time','r-serves','r-desc','r-ingredients','r-steps','r-note'].forEach(id=>document.getElementById(id).value='');
-      document.querySelectorAll('#recipe-chips .mchip').forEach(c=>c.classList.remove('on'));
-      renderRecipes();
-    }, 1500);
-  } catch(e) {
-    alert('Error saving recipe: ' + e.message);
-  } finally {
-    btn.textContent = 'Save Recipe to Library →'; btn.disabled = false;
-  }
+  const all = loadRecipes(); all.push(recipe); saveRecipes(all);
+  document.getElementById('recipe-success').classList.add('show');
+  setTimeout(() => {
+    closeModal('add-modal');
+    document.getElementById('recipe-success').classList.remove('show');
+    ['r-name','r-emoji','r-time','r-serves','r-desc','r-ingredients','r-steps','r-note'].forEach(id=>document.getElementById(id).value='');
+    document.querySelectorAll('#recipe-chips .mchip').forEach(c=>c.classList.remove('on'));
+    renderRecipes();
+  }, 1500);
 }
-async function saveLink() {
+function saveLink() {
   const name = document.getElementById('l-name').value.trim();
   const url = document.getElementById('l-url').value.trim();
   if (!name) { alert('Please enter a recipe name.'); return; }
   if (!url) { alert('Please enter a URL.'); return; }
-  const btn = document.querySelector('#tab-link .mbtn');
-  btn.textContent = 'Saving…'; btn.disabled = true;
   const recipe = {
     id:'l_'+Date.now(), type:'external', name,
     emoji: document.getElementById('l-emoji').value||'🔗',
@@ -651,22 +651,15 @@ async function saveLink() {
     desc: document.getElementById('l-desc').value,
     note: document.getElementById('l-note').value,
   };
-  try {
-    const all = await loadRecipes(); all.push(recipe);
-    await saveRecipesToGitHub(all);
-    document.getElementById('link-success').classList.add('show');
-    setTimeout(() => {
-      closeModal('add-modal');
-      document.getElementById('link-success').classList.remove('show');
-      ['l-name','l-emoji','l-url','l-source','l-time','l-desc','l-note'].forEach(id=>document.getElementById(id).value='');
-      document.querySelectorAll('#link-chips .mchip').forEach(c=>c.classList.remove('on'));
-      renderRecipes();
-    }, 1500);
-  } catch(e) {
-    alert('Error saving link: ' + e.message);
-  } finally {
-    btn.textContent = 'Save Link to Library →'; btn.disabled = false;
-  }
+  const all = loadRecipes(); all.push(recipe); saveRecipes(all);
+  document.getElementById('link-success').classList.add('show');
+  setTimeout(() => {
+    closeModal('add-modal');
+    document.getElementById('link-success').classList.remove('show');
+    ['l-name','l-emoji','l-url','l-source','l-time','l-desc','l-note'].forEach(id=>document.getElementById(id).value='');
+    document.querySelectorAll('#link-chips .mchip').forEach(c=>c.classList.remove('on'));
+    renderRecipes();
+  }, 1500);
 }
 
 // ── DELETE ──
@@ -676,18 +669,10 @@ function askDelete(id, name) {
   document.getElementById('delete-modal').classList.add('show');
   document.body.style.overflow = 'hidden';
 }
-async function confirmDelete() {
-  const btn = document.querySelector('#delete-modal button:last-child');
-  btn.textContent = 'Deleting…'; btn.disabled = true;
-  try {
-    const all = (await loadRecipes()).filter(r=>r.id!==pendingDeleteId);
-    await saveRecipesToGitHub(all);
-    pendingDeleteId = null;
-    closeModal('delete-modal'); renderRecipes();
-  } catch(e) {
-    alert('Error deleting recipe: ' + e.message);
-    btn.textContent = 'Delete'; btn.disabled = false;
-  }
+function confirmDelete() {
+  const all = loadRecipes().filter(r=>r.id!==pendingDeleteId);
+  saveRecipes(all); pendingDeleteId = null;
+  closeModal('delete-modal'); renderRecipes();
 }
 
 // ── FILTERS ──
@@ -724,9 +709,7 @@ function closeIfOutside(e, id) {
   if (e.target === document.getElementById(id)) closeModal(id);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  try { renderRecipes(); } catch(e) { console.error('renderRecipes error:', e); }
-});
+renderRecipes();
 </script>
 </body>
 </html>
