@@ -171,11 +171,10 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 <body>
 
 <div class="topbar">
-  <a href="index.html" class="topbar-brand">Food <span>COO</span></a>
+  <a href="index.html" class="topbar-brand">LouieNu<span>502</span></a>
   <div class="topbar-tag">Erin Only</div>
   <nav class="topbar-nav">
     <a href="index.html">Home</a>
-    <a href="recipes.html">Recipes</a>
   </nav>
 </div>
 
@@ -946,9 +945,9 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 <body>
 
 <div class="topbar">
-  <a href="index.html" class="topbar-brand">Food <span>COO</span></a>
+  <a href="index.html" class="topbar-brand">LouieNu<span>502</span></a>
   <div class="topbar-right">
-    <nav class="topbar-nav"><a href="index.html">Home</a><a href="recipes.html">Recipes</a></nav>
+    <nav class="topbar-nav"><a href="index.html">Home</a></nav>
     <div class="topbar-week">Week ${week} of Pilot</div>
   </div>
 </div>
@@ -959,9 +958,7 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
     <h1 class="banner-h1">Welcome, <em>${name}s</em> 👋</h1>
     <p class="banner-sub">Your week is planned, Erin has your groceries covered, and there's a note waiting for you below.</p>
     <div class="banner-tags">
-      <span class="banner-tag active">${goal}</span>
-      <span class="banner-tag">${members.length} people</span>
-      ${painPoints.slice(0,2).map(p=>`<span class="banner-tag">Working on: ${p}</span>`).join('')}
+      <span class="banner-tag active">${members.length} ${members.length===1?'person':'people'}</span>
     </div>
   </div>
 </div>
