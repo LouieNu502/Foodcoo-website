@@ -387,8 +387,16 @@ function save() {
   localStorage.setItem(KEY_FAMILIES, JSON.stringify(allFamilies));
   localStorage.setItem(KEY_HISTORY,  JSON.stringify(allHistory));
 }
-function loadLibrary() {
-  try { return JSON.parse(localStorage.getItem('foodcoo_recipes')||'[]'); } catch(e){ return []; }
+const GITHUB_RECIPES_URL = 'https://raw.githubusercontent.com/louienu502/Foodcoo-website/main/recipes.json';
+let _adminLibraryCache = null;
+async function loadLibrary() {
+  if (_adminLibraryCache) return _adminLibraryCache;
+  try {
+    const res = await fetch(GITHUB_RECIPES_URL + '?t=' + Date.now());
+    if (!res.ok) return [];
+    _adminLibraryCache = await res.json();
+    return _adminLibraryCache;
+  } catch(e) { return []; }
 }
 
 // ── PIN ──
@@ -411,10 +419,10 @@ function init() {
 }
 
 // ── STATS ──
-function updateStats() {
+async function updateStats() {
   const families = Object.keys(allFamilies).length;
   const weeks = Object.values(allHistory).reduce((sum,h)=>sum+(h.length||0),0);
-  const recipes = loadLibrary().length;
+  const recipes = (await loadLibrary()).length;
   document.getElementById('stat-families').textContent = families;
   document.getElementById('stat-weeks').textContent = weeks;
   document.getElementById('stat-recipes').textContent = recipes;
@@ -626,11 +634,12 @@ function switchFvTab(name, el) {
 function openPicker(day) {
   pickerTargetDay = day;
   document.getElementById('picker-search').value = '';
-  renderPickerList();
+  document.getElementById('picker-results').innerHTML = '<div class="picker-empty">Loading…</div>';
   const modal = document.getElementById('picker-modal');
   modal.style.display = 'flex';
   requestAnimationFrame(()=>modal.classList.add('show'));
   document.getElementById('picker-search').focus();
+  renderPickerList();
 }
 function closePicker() {
   const modal = document.getElementById('picker-modal');
@@ -638,9 +647,9 @@ function closePicker() {
   setTimeout(()=>modal.style.display='none', 280);
 }
 function closePickerOutside(e) { if(e.target===document.getElementById('picker-modal'))closePicker(); }
-function renderPickerList() {
+async function renderPickerList() {
   const q = document.getElementById('picker-search').value.toLowerCase();
-  const recipes = loadLibrary();
+  const recipes = await loadLibrary();
   const el = document.getElementById('picker-results');
   if (recipes.length===0) { el.innerHTML=`<div class="picker-empty">No recipes yet.<br><a href="recipes.html" target="_blank">Add recipes →</a></div>`; return; }
   const filtered = q ? recipes.filter(r=>r.name.toLowerCase().includes(q)||(r.tags||[]).join(' ').toLowerCase().includes(q)) : recipes;
