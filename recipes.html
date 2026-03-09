@@ -248,7 +248,7 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
     <button class="footer-admin-link" id="admin-link" onclick="openPinModal()">admin</button>
     <button class="admin-logout" id="admin-logout" onclick="logout()">log out admin</button>
   </div>
-  <div class="footer-right">Erin Wiedmar, RDN, MEd, CDE<br>502-930-5845 · erin.louienu@gmail.com</div>
+  <div class="footer-right">Erin Wiedmar, RDN, MEd, CDE<br>502-930-5845 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="583d2a31367634372d313d362d183f35393134763b3735">[email&#160;protected]</a></div>
 </div>
 
 <!-- PIN MODAL -->
@@ -398,7 +398,7 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const CORRECT_PIN = '0466';
 let pinEntry = '';
 let isAdmin = false;
@@ -446,16 +446,47 @@ function logout() {
   document.querySelectorAll('.card-delete-btn').forEach(b => b.classList.remove('show'));
 }
 
-// ── STORAGE ──
-function loadRecipes() {
-  try { return JSON.parse(localStorage.getItem('foodcoo_recipes') || '[]'); }
-  catch(e) { return []; }
+// ── GITHUB CONFIG ──
+const GITHUB_TOKEN = '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';
+const GITHUB_REPO  = 'louienu502/Foodcoo-website';
+const RECIPES_PATH = 'recipes.json';
+let recipesCache  = null;
+let recipesSha    = null;
+
+async function loadRecipes() {
+  if (recipesCache) return recipesCache;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${RECIPES_PATH}`, {
+      headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (res.status === 404) { recipesCache = []; recipesSha = null; return []; }
+    const data = await res.json();
+    recipesSha = data.sha;
+    recipesCache = JSON.parse(atob(data.content.replace(/\n/g,'')));
+    return recipesCache;
+  } catch(e) { console.warn('Could not load recipes:', e); return recipesCache || []; }
 }
-function saveRecipes(r) { localStorage.setItem('foodcoo_recipes', JSON.stringify(r)); }
+
+async function saveRecipesToGitHub(recipes) {
+  recipesCache = recipes;
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(recipes, null, 2))));
+  const body = { message: 'Update recipe library', content, branch: 'main' };
+  if (recipesSha) body.sha = recipesSha;
+  const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${RECIPES_PATH}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error('GitHub save failed: ' + res.status);
+  const data = await res.json();
+  recipesSha = data.content.sha;
+}
 
 // ── RENDER ──
-function renderRecipes() {
-  const all = loadRecipes();
+async function renderRecipes() {
+  const grid = document.getElementById('recipe-grid');
+  grid.innerHTML = `<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">Loading recipes…</div></div>`;
+  const all = await loadRecipes();
   const search = document.getElementById('search-input').value.toLowerCase();
   const own = all.filter(r=>r.type==='own');
   const ext = all.filter(r=>r.type==='external');
@@ -524,8 +555,9 @@ function renderRecipes() {
 }
 
 // ── DETAIL ──
-function openDetail(id) {
-  const r = loadRecipes().find(x=>x.id===id);
+async function openDetail(id) {
+  const recipes = await loadRecipes();
+  const r = recipes.find(x=>x.id===id);
   if (!r) return;
   const tagHtml = (r.tags||[]).map(t=>`<span class="card-tag terra">${t}</span>`).join('');
   const ingHtml = (r.ingredients||[]).map(i=>`<li>${i}</li>`).join('');
@@ -564,9 +596,11 @@ function switchTab(type) {
 function getTagsFrom(chipGroupId) {
   return Array.from(document.querySelectorAll(`#${chipGroupId} .mchip.on`)).map(c=>c.dataset.tag);
 }
-function saveRecipe() {
+async function saveRecipe() {
   const name = document.getElementById('r-name').value.trim();
   if (!name) { alert('Please enter a recipe name.'); return; }
+  const btn = document.querySelector('#tab-recipe .mbtn');
+  btn.textContent = 'Saving…'; btn.disabled = true;
   const recipe = {
     id:'r_'+Date.now(), type:'own', name,
     emoji: document.getElementById('r-emoji').value||'🍽️',
@@ -581,21 +615,30 @@ function saveRecipe() {
     steps: document.getElementById('r-steps').value.split('\n').map(s=>s.trim()).filter(Boolean),
     note: document.getElementById('r-note').value,
   };
-  const all = loadRecipes(); all.push(recipe); saveRecipes(all);
-  document.getElementById('recipe-success').classList.add('show');
-  setTimeout(() => {
-    closeModal('add-modal');
-    document.getElementById('recipe-success').classList.remove('show');
-    ['r-name','r-emoji','r-time','r-serves','r-desc','r-ingredients','r-steps','r-note'].forEach(id=>document.getElementById(id).value='');
-    document.querySelectorAll('#recipe-chips .mchip').forEach(c=>c.classList.remove('on'));
-    renderRecipes();
-  }, 1500);
+  try {
+    const all = await loadRecipes(); all.push(recipe);
+    await saveRecipesToGitHub(all);
+    document.getElementById('recipe-success').classList.add('show');
+    setTimeout(() => {
+      closeModal('add-modal');
+      document.getElementById('recipe-success').classList.remove('show');
+      ['r-name','r-emoji','r-time','r-serves','r-desc','r-ingredients','r-steps','r-note'].forEach(id=>document.getElementById(id).value='');
+      document.querySelectorAll('#recipe-chips .mchip').forEach(c=>c.classList.remove('on'));
+      renderRecipes();
+    }, 1500);
+  } catch(e) {
+    alert('Error saving recipe: ' + e.message);
+  } finally {
+    btn.textContent = 'Save Recipe to Library →'; btn.disabled = false;
+  }
 }
-function saveLink() {
+async function saveLink() {
   const name = document.getElementById('l-name').value.trim();
   const url = document.getElementById('l-url').value.trim();
   if (!name) { alert('Please enter a recipe name.'); return; }
   if (!url) { alert('Please enter a URL.'); return; }
+  const btn = document.querySelector('#tab-link .mbtn');
+  btn.textContent = 'Saving…'; btn.disabled = true;
   const recipe = {
     id:'l_'+Date.now(), type:'external', name,
     emoji: document.getElementById('l-emoji').value||'🔗',
@@ -606,15 +649,22 @@ function saveLink() {
     desc: document.getElementById('l-desc').value,
     note: document.getElementById('l-note').value,
   };
-  const all = loadRecipes(); all.push(recipe); saveRecipes(all);
-  document.getElementById('link-success').classList.add('show');
-  setTimeout(() => {
-    closeModal('add-modal');
-    document.getElementById('link-success').classList.remove('show');
-    ['l-name','l-emoji','l-url','l-source','l-time','l-desc','l-note'].forEach(id=>document.getElementById(id).value='');
-    document.querySelectorAll('#link-chips .mchip').forEach(c=>c.classList.remove('on'));
-    renderRecipes();
-  }, 1500);
+  try {
+    const all = await loadRecipes(); all.push(recipe);
+    await saveRecipesToGitHub(all);
+    document.getElementById('link-success').classList.add('show');
+    setTimeout(() => {
+      closeModal('add-modal');
+      document.getElementById('link-success').classList.remove('show');
+      ['l-name','l-emoji','l-url','l-source','l-time','l-desc','l-note'].forEach(id=>document.getElementById(id).value='');
+      document.querySelectorAll('#link-chips .mchip').forEach(c=>c.classList.remove('on'));
+      renderRecipes();
+    }, 1500);
+  } catch(e) {
+    alert('Error saving link: ' + e.message);
+  } finally {
+    btn.textContent = 'Save Link to Library →'; btn.disabled = false;
+  }
 }
 
 // ── DELETE ──
@@ -624,10 +674,18 @@ function askDelete(id, name) {
   document.getElementById('delete-modal').classList.add('show');
   document.body.style.overflow = 'hidden';
 }
-function confirmDelete() {
-  const all = loadRecipes().filter(r=>r.id!==pendingDeleteId);
-  saveRecipes(all); pendingDeleteId = null;
-  closeModal('delete-modal'); renderRecipes();
+async function confirmDelete() {
+  const btn = document.querySelector('#delete-modal button:last-child');
+  btn.textContent = 'Deleting…'; btn.disabled = true;
+  try {
+    const all = (await loadRecipes()).filter(r=>r.id!==pendingDeleteId);
+    await saveRecipesToGitHub(all);
+    pendingDeleteId = null;
+    closeModal('delete-modal'); renderRecipes();
+  } catch(e) {
+    alert('Error deleting recipe: ' + e.message);
+    btn.textContent = 'Delete'; btn.disabled = false;
+  }
 }
 
 // ── FILTERS ──
@@ -656,10 +714,4 @@ function sidebarFilter(tag, el) {
 }
 
 // ── MODALS ──
-function closeModal(id) { document.getElementById(id).classList.remove('show'); document.body.style.overflow=''; }
-function closeIfOutside(e,id) { if(e.target===document.getElementById(id)) closeModal(id); }
-
-renderRecipes();
-</script>
-</body>
-</html>
+function closeModal
