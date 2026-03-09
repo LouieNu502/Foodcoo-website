@@ -390,6 +390,7 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
           </select>
         </div>
       </div>
+      <div class="frow"><label class="flabel">Google Form URL (Schedule)</label><input class="finput" id="schedule-form-url" type="url" placeholder="https://docs.google.com/forms/d/e/..."></div>
       <div class="btn-row"><button class="btn-back" onclick="goToStep(6)">← Back</button><button class="btn-next" onclick="goToStep(8)">Review &amp; Generate →</button></div>
     </div>
 
@@ -719,6 +720,7 @@ function generateCode() {
   const note  = document.getElementById('erins-note').value||'I am so excited to start this journey with your family!';
   const noteDate = document.getElementById('note-date').value||'March 2026';
   const scheduleDay = document.getElementById('schedule-day').value;
+  const scheduleFormUrl = document.getElementById('schedule-form-url').value.trim();
   const upcomingRaw = document.getElementById('upcoming-visits').value||'';
   const upcomingLines = upcomingRaw.split('\n').filter(l=>l.trim());
   const nextVisit = document.getElementById('next-visit').value||'Coming soon';
@@ -1021,24 +1023,18 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 
 <!-- TAB: SCHEDULE -->
 <div class="tab-content" id="tab-schedule">
-  <div style="padding:36px 44px;max-width:800px;">
+  <div style="padding:36px 44px;max-width:860px;">
     <div class="slabel">Submit Your Week</div>
-    <div class="schedule-form">
-      <h3>📅 Next Week's Family Schedule</h3>
-      <p>Please submit this by <strong>${scheduleDay}</strong> each week so Erin can plan meals that fit your real schedule — who's home, who has activities, and how much time you'll have to cook.</p>
-      ${dayFull.map(d=>`
-      <div class="schedule-day-row">
-        <div class="schedule-day-label">${d}</div>
-        <div class="schedule-slots">
-          <div class="schedule-slot"><label>Morning</label><input type="text" placeholder="e.g. School 7:30am"></div>
-          <div class="schedule-slot"><label>Afternoon</label><input type="text" placeholder="e.g. Soccer 4–6pm"></div>
-          <div class="schedule-slot"><label>Evening / Dinner</label><select><option value="">Select dinner situation</option><option>Everyone home — full dinner</option><option>Quick dinner needed (30 min or less)</option><option>Staggered — people eating at diff times</option><option>Some people gone</option><option>Eating out or leftovers</option></select></div>
-        </div>
-      </div>`).join('')}
-      <div style="margin-top:16px;"><label style="display:block;font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--brown-mid);margin-bottom:7px;">Any notes for Erin this week?</label><textarea style="width:100%;padding:11px 14px;background:var(--warm-white);border:1.5px solid var(--sand);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--brown-deep);outline:none;resize:vertical;min-height:80px;" placeholder="Big week, someone's sick, celebrating a birthday..."></textarea></div>
-      <button class="schedule-submit" onclick="submitSchedule(this)">Send Schedule to Erin →</button>
-      <div class="schedule-success">✅ Schedule sent! Erin will have your meal plan ready before ${scheduleDay==='Sunday'?'Monday':'the week starts'}.</div>
-    </div>
+    <p style="font-size:0.85rem;color:var(--taupe);margin-bottom:24px;line-height:1.6;">Please submit your family's schedule by <strong style="color:var(--brown-deep);">${scheduleDay}</strong> each week so Erin can plan meals that fit your real routine.</p>
+    ${scheduleFormUrl ? `
+    <div style="background:var(--warm-white);border:1px solid var(--sand);border-radius:8px;overflow:hidden;">
+      <iframe src="${scheduleFormUrl}" width="100%" height="900" frameborder="0" marginheight="0" marginwidth="0" style="display:block;">Loading form...</iframe>
+    </div>` : `
+    <div style="background:var(--warm-white);border:1.5px solid var(--sand);border-radius:8px;padding:40px;text-align:center;color:var(--taupe);">
+      <div style="font-size:2rem;margin-bottom:12px;">📅</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--brown-deep);margin-bottom:8px;">Schedule form coming soon</div>
+      <div style="font-size:0.82rem;line-height:1.6;">Erin will add your family's schedule form here shortly.</div>
+    </div>`}
   </div>
 </div>
 
