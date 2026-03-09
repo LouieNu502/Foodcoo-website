@@ -72,13 +72,13 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
 .add-member-btn:hover{border-color:var(--terra);color:var(--terra);}
 
 /* MEAL ROWS */
-.meal-rows{display:flex;flex-direction:column;gap:8px;}
-.meal-row{display:grid;grid-template-columns:90px 1fr 1fr 1fr 90px;gap:8px;align-items:center;background:var(--warm-white);border:1.5px solid var(--sand);border-radius:4px;padding:10px 14px;transition:border-color 0.2s;}
+.meal-rows{display:flex;flex-direction:column;gap:10px;}
+.meal-row{display:grid;grid-template-columns:90px 1fr 1fr 1fr 90px;gap:8px;align-items:start;background:var(--warm-white);border:1.5px solid var(--sand);border-radius:4px;padding:12px 14px;transition:border-color 0.2s;}
 .meal-row.linked{border-color:var(--sage);background:rgba(200,216,194,0.1);}
-.meal-row-day{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);font-weight:500;}
-.meal-row input,.meal-row select{padding:8px 10px;background:var(--cream);border:1px solid var(--sand);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--brown-deep);outline:none;transition:border-color 0.2s;width:100%;}
-.meal-row input:focus,.meal-row select:focus{border-color:var(--terra);}
-.meal-row input::placeholder{color:var(--taupe);font-size:0.75rem;}
+.meal-row-day{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);font-weight:500;padding-top:8px;}
+.meal-row textarea,.meal-row select{padding:8px 10px;background:var(--cream);border:1px solid var(--sand);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--brown-deep);outline:none;transition:border-color 0.2s;width:100%;resize:vertical;min-height:64px;line-height:1.5;}
+.meal-row textarea:focus{border-color:var(--terra);}
+.meal-row textarea::placeholder{color:var(--taupe);font-size:0.75rem;}
 .pick-btn{padding:8px 10px;background:var(--warm-white);border:1.5px solid var(--sand);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.7rem;cursor:pointer;color:var(--brown-mid);transition:all 0.2s;white-space:nowrap;width:100%;}
 .pick-btn:hover{border-color:var(--terra);color:var(--terra);}
 .pick-btn.active{border-color:var(--sage);color:var(--sage);background:var(--sage-soft);}
@@ -262,6 +262,7 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
       <div class="frow"><label class="flabel">Where they grocery shop most often</label><input class="finput" id="grocery-store" type="text" placeholder="e.g. Kroger on Bardstown Rd"></div>
       <div class="section-divider">Kitchen Appliances</div>
       <div class="frow"><div class="chip-group" id="appliances">
+        <span class="chip" onclick="toggleChip(this)" data-val="Oven">Oven</span>
         <span class="chip" onclick="toggleChip(this)" data-val="Slow Cooker">Slow Cooker</span>
         <span class="chip" onclick="toggleChip(this)" data-val="Instant Pot">Instant Pot</span>
         <span class="chip" onclick="toggleChip(this)" data-val="Air Fryer">Air Fryer</span>
@@ -317,38 +318,9 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
     <div class="step-panel" id="step-5">
       <div class="step-title">Goals &amp; <em>Vision</em></div>
       <div class="step-desc">What does success look like for this family?</div>
-      <div class="frow"><label class="flabel">Primary Nutrition Goal</label>
-        <select class="fselect" id="goal" onchange="updatePreview()">
-          <option>Balanced Nutrition</option><option>Heart Health</option><option>Weight Management</option>
-          <option>Blood Sugar Control</option><option>Reduce Processed Foods</option>
-          <option>Sports Performance</option><option>Reduce Takeout</option><option>Expand Kids' Food Variety</option>
-          <option>Less Stress at Mealtimes</option><option>Energy Improvement</option>
-        </select>
-      </div>
       <div class="frow"><label class="flabel">What would food success look like in 3 months?</label><textarea class="ftextarea" id="success-3mo" placeholder="In their own words if possible..."></textarea></div>
       <div class="frow"><label class="flabel">What would feel different in the home?</label><textarea class="ftextarea" id="feel-different" placeholder="e.g. Less arguing at dinner, no stress on Sunday nights..."></textarea></div>
-      <div class="frow"><label class="flabel">Most interested in</label>
-        <div class="chip-group" id="interests">
-          <span class="chip sage" onclick="toggleChip(this)" data-val="Better systems">Better systems</span>
-          <span class="chip sage" onclick="toggleChip(this)" data-val="More balanced meals">More balanced meals</span>
-          <span class="chip sage" onclick="toggleChip(this)" data-val="Expanding kids' food variety">Expanding kids' variety</span>
-          <span class="chip sage" onclick="toggleChip(this)" data-val="Less stress">Less stress</span>
-          <span class="chip sage" onclick="toggleChip(this)" data-val="Weight goals">Weight goals</span>
-          <span class="chip sage" onclick="toggleChip(this)" data-val="Blood sugar stability">Blood sugar stability</span>
-          <span class="chip sage" onclick="toggleChip(this)" data-val="Energy improvement">Energy improvement</span>
-        </div>
-      </div>
-      <div class="frow"><label class="flabel">What matters most to them about food</label>
-        <div class="chip-group" id="values">
-          <span class="chip gold" onclick="toggleChip(this)" data-val="Health">Health</span>
-          <span class="chip gold" onclick="toggleChip(this)" data-val="Simplicity">Simplicity</span>
-          <span class="chip gold" onclick="toggleChip(this)" data-val="Budget">Budget</span>
-          <span class="chip gold" onclick="toggleChip(this)" data-val="Family connection">Family connection</span>
-          <span class="chip gold" onclick="toggleChip(this)" data-val="Cultural traditions">Cultural traditions</span>
-          <span class="chip gold" onclick="toggleChip(this)" data-val="Sports/academic performance">Sports/academic performance</span>
-          <span class="chip gold" onclick="toggleChip(this)" data-val="Teaching kids independence">Teaching kids independence</span>
-        </div>
-      </div>
+      <div class="frow"><label class="flabel">Most interested in</label><textarea class="ftextarea" id="interests" placeholder="e.g. Better systems, less stress at mealtimes, expanding kids' variety, blood sugar stability..."></textarea></div>
       <div class="frow"><label class="flabel">Magic wand answer</label><textarea class="ftextarea" id="magic-wand" style="min-height:70px;" placeholder="If they could fix one thing instantly..."></textarea></div>
       <div class="btn-row"><button class="btn-back" onclick="goToStep(4)">← Back</button><button class="btn-next" onclick="goToStep(6)">Next: Meal Plan →</button></div>
     </div>
@@ -363,13 +335,13 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
       </div>
 
       <div class="meal-rows">
-        <div class="meal-row" id="mrow-mon"><div class="meal-row-day">Monday</div><input type="text" id="meal-mon-b" placeholder="Breakfast" oninput="onMealType('mon-b')"><input type="text" id="meal-mon-l" placeholder="Lunch" oninput="onMealType('mon-l')"><input type="text" id="meal-mon-d" placeholder="Dinner" oninput="onMealType('mon-d')"><button class="pick-btn" id="pick-mon" onclick="openPicker('mon-d')">📖 Pick Dinner</button></div>
-        <div class="meal-row" id="mrow-tue"><div class="meal-row-day">Tuesday</div><input type="text" id="meal-tue-b" placeholder="Breakfast" oninput="onMealType('tue-b')"><input type="text" id="meal-tue-l" placeholder="Lunch" oninput="onMealType('tue-l')"><input type="text" id="meal-tue-d" placeholder="Dinner" oninput="onMealType('tue-d')"><button class="pick-btn" id="pick-tue" onclick="openPicker('tue-d')">📖 Pick Dinner</button></div>
-        <div class="meal-row" id="mrow-wed"><div class="meal-row-day">Wednesday</div><input type="text" id="meal-wed-b" placeholder="Breakfast" oninput="onMealType('wed-b')"><input type="text" id="meal-wed-l" placeholder="Lunch" oninput="onMealType('wed-l')"><input type="text" id="meal-wed-d" placeholder="Dinner" oninput="onMealType('wed-d')"><button class="pick-btn" id="pick-wed" onclick="openPicker('wed-d')">📖 Pick Dinner</button></div>
-        <div class="meal-row" id="mrow-thu"><div class="meal-row-day">Thursday</div><input type="text" id="meal-thu-b" placeholder="Breakfast" oninput="onMealType('thu-b')"><input type="text" id="meal-thu-l" placeholder="Lunch" oninput="onMealType('thu-l')"><input type="text" id="meal-thu-d" placeholder="Dinner" oninput="onMealType('thu-d')"><button class="pick-btn" id="pick-thu" onclick="openPicker('thu-d')">📖 Pick Dinner</button></div>
-        <div class="meal-row" id="mrow-fri"><div class="meal-row-day">Friday</div><input type="text" id="meal-fri-b" placeholder="Breakfast" oninput="onMealType('fri-b')"><input type="text" id="meal-fri-l" placeholder="Lunch" oninput="onMealType('fri-l')"><input type="text" id="meal-fri-d" placeholder="Dinner" oninput="onMealType('fri-d')"><button class="pick-btn" id="pick-fri" onclick="openPicker('fri-d')">📖 Pick Dinner</button></div>
-        <div class="meal-row" id="mrow-sat"><div class="meal-row-day">Saturday</div><input type="text" id="meal-sat-b" placeholder="Breakfast" oninput="onMealType('sat-b')"><input type="text" id="meal-sat-l" placeholder="Lunch" oninput="onMealType('sat-l')"><input type="text" id="meal-sat-d" placeholder="Dinner" oninput="onMealType('sat-d')"><button class="pick-btn" id="pick-sat" onclick="openPicker('sat-d')">📖 Pick Dinner</button></div>
-        <div class="meal-row" id="mrow-sun"><div class="meal-row-day">Sunday</div><input type="text" id="meal-sun-b" placeholder="Breakfast" oninput="onMealType('sun-b')"><input type="text" id="meal-sun-l" placeholder="Lunch" oninput="onMealType('sun-l')"><input type="text" id="meal-sun-d" placeholder="Dinner" oninput="onMealType('sun-d')"><button class="pick-btn" id="pick-sun" onclick="openPicker('sun-d')">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-mon"><div class="meal-row-day">Monday</div><textarea id="meal-mon-b" placeholder="Breakfast&#10;e.g. Overnight oats" oninput="onMealType('mon-b')"></textarea><textarea id="meal-mon-l" placeholder="Lunch&#10;e.g. Turkey wrap" oninput="onMealType('mon-l')"></textarea><textarea id="meal-mon-d" placeholder="Dinner&#10;e.g. Chicken tacos" oninput="onMealType('mon-d')"></textarea><button class="pick-btn" id="pick-mon" onclick="openPicker('mon-d')" style="margin-top:4px;">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-tue"><div class="meal-row-day">Tuesday</div><textarea id="meal-tue-b" placeholder="Breakfast" oninput="onMealType('tue-b')"></textarea><textarea id="meal-tue-l" placeholder="Lunch" oninput="onMealType('tue-l')"></textarea><textarea id="meal-tue-d" placeholder="Dinner" oninput="onMealType('tue-d')"></textarea><button class="pick-btn" id="pick-tue" onclick="openPicker('tue-d')" style="margin-top:4px;">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-wed"><div class="meal-row-day">Wednesday</div><textarea id="meal-wed-b" placeholder="Breakfast" oninput="onMealType('wed-b')"></textarea><textarea id="meal-wed-l" placeholder="Lunch" oninput="onMealType('wed-l')"></textarea><textarea id="meal-wed-d" placeholder="Dinner" oninput="onMealType('wed-d')"></textarea><button class="pick-btn" id="pick-wed" onclick="openPicker('wed-d')" style="margin-top:4px;">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-thu"><div class="meal-row-day">Thursday</div><textarea id="meal-thu-b" placeholder="Breakfast" oninput="onMealType('thu-b')"></textarea><textarea id="meal-thu-l" placeholder="Lunch" oninput="onMealType('thu-l')"></textarea><textarea id="meal-thu-d" placeholder="Dinner" oninput="onMealType('thu-d')"></textarea><button class="pick-btn" id="pick-thu" onclick="openPicker('thu-d')" style="margin-top:4px;">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-fri"><div class="meal-row-day">Friday</div><textarea id="meal-fri-b" placeholder="Breakfast" oninput="onMealType('fri-b')"></textarea><textarea id="meal-fri-l" placeholder="Lunch" oninput="onMealType('fri-l')"></textarea><textarea id="meal-fri-d" placeholder="Dinner" oninput="onMealType('fri-d')"></textarea><button class="pick-btn" id="pick-fri" onclick="openPicker('fri-d')" style="margin-top:4px;">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-sat"><div class="meal-row-day">Saturday</div><textarea id="meal-sat-b" placeholder="Breakfast" oninput="onMealType('sat-b')"></textarea><textarea id="meal-sat-l" placeholder="Lunch" oninput="onMealType('sat-l')"></textarea><textarea id="meal-sat-d" placeholder="Dinner" oninput="onMealType('sat-d')"></textarea><button class="pick-btn" id="pick-sat" onclick="openPicker('sat-d')" style="margin-top:4px;">📖 Pick Dinner</button></div>
+        <div class="meal-row" id="mrow-sun"><div class="meal-row-day">Sunday</div><textarea id="meal-sun-b" placeholder="Breakfast" oninput="onMealType('sun-b')"></textarea><textarea id="meal-sun-l" placeholder="Lunch" oninput="onMealType('sun-l')"></textarea><textarea id="meal-sun-d" placeholder="Dinner" oninput="onMealType('sun-d')"></textarea><button class="pick-btn" id="pick-sun" onclick="openPicker('sun-d')" style="margin-top:4px;">📖 Pick Dinner</button></div>
       </div>
 
       <div class="btn-row"><button class="btn-back" onclick="goToStep(5)">← Back</button><button class="btn-next" onclick="goToStep(7)">Next: Erin's Note →</button></div>
@@ -662,10 +634,10 @@ function updatePreview() {
   const name = document.getElementById('family-name').value || 'Smith';
   const slug = document.getElementById('url-slug').value || name.toLowerCase()+'family';
   const week = document.getElementById('week-num').value;
-  const goal = document.getElementById('goal') ? document.getElementById('goal').value : 'Balanced Nutrition';
+  const goal = '';
   document.getElementById('prev-name').innerHTML = `The <em>${name}</em> Family`;
   document.getElementById('prev-url').textContent = `louienu502.com/${slug}`;
-  document.getElementById('prev-tags').innerHTML = `<span class="preview-tag active">${goal}</span><span class="preview-tag">Week ${week}</span>`;
+  document.getElementById('prev-tags').innerHTML = `<span class="preview-tag">Week ${week}</span>`;
   if (members.length > 0) {
     document.getElementById('prev-members').innerHTML = members.map(m=>`<div class="preview-member"><div class="preview-member-avatar">${(m.name||'?')[0].toUpperCase()}</div><div class="preview-member-name">${m.name||'Unnamed'}</div><div class="preview-member-age">${m.age?'Age '+m.age:''}</div></div>`).join('');
   }
@@ -684,7 +656,7 @@ function buildReview() {
   const name = document.getElementById('family-name').value||'—';
   const slug = document.getElementById('url-slug').value||'—';
   const week = document.getElementById('week-num').value;
-  const goal = document.getElementById('goal').value;
+  const goal = '';
   const note = document.getElementById('erins-note').value;
   const days = ['mon','tue','wed','thu','fri','sat','sun'];
   const dayL = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
@@ -693,7 +665,7 @@ function buildReview() {
     <div class="review-section">
       <div class="review-label">Family</div>
       <div style="font-family:'Playfair Display',serif;font-size:1.2rem;">The ${name} Family</div>
-      <div style="font-size:0.78rem;color:var(--taupe);margin-top:3px;">louienu502.com/${slug} · Week ${week} · ${goal}</div>
+      <div style="font-size:0.78rem;color:var(--taupe);margin-top:3px;">louienu502.com/${slug} · Week ${week}</div>
     </div>
     <div class="review-section">
       <div class="review-label">Household Members (${members.length})</div>
@@ -717,7 +689,7 @@ function generateCode() {
   const name  = document.getElementById('family-name').value||'Smith';
   const slug  = (document.getElementById('url-slug').value||name.toLowerCase()+'family').toLowerCase();
   const week  = document.getElementById('week-num').value;
-  const goal  = document.getElementById('goal').value;
+  const goal  = '';
   const budget= document.getElementById('grocery-budget').value;
   const note  = document.getElementById('erins-note').value||'I am so excited to start this journey with your family!';
   const noteDate = document.getElementById('note-date').value||'March 2026';
@@ -729,8 +701,8 @@ function generateCode() {
   const painPoints = getChips('pain-chips');
   const fallsApart = document.getElementById('fallsapart').value;
   const magicWand  = document.getElementById('magic-wand').value;
-  const interests  = getChips('interests');
-  const values     = getChips('values');
+  const interests  = document.getElementById('interests').value;
+  const values     = [];
   const success3mo = document.getElementById('success-3mo').value;
   const appliances = getChips('appliances');
   const leftovers  = document.getElementById('leftovers').value;
@@ -763,8 +735,8 @@ function generateCode() {
   const membersJSON = JSON.stringify(membersData).replace(/`/g,"'");
 
   const painTagsHtml  = painPoints.map(p=>`<span class="ptag red">${p}</span>`).join('');
-  const interestsHtml = interests.map(p=>`<span class="ptag green">${p}</span>`).join('');
-  const valuesHtml    = values.map(p=>`<span class="ptag gold">${p}</span>`).join('');
+  const interestsHtml = '';
+  const valuesHtml    = '';
   const appliancesHtml= appliances.map(a=>`<span class="ptag">${a}</span>`).join('');
 
   const upcomingItems = upcomingLines.length>0
@@ -1059,8 +1031,7 @@ body{background:var(--cream);color:var(--brown-deep);font-family:'DM Sans',sans-
         ${goal?`<div class="overview-row"><span class="overview-key">Primary Goal</span><span class="overview-val">${goal}</span></div>`:''}
         ${success3mo?`<div style="margin:12px 0;"><div style="font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);margin-bottom:6px;">Success in 3 months</div><div style="font-size:0.82rem;color:var(--brown-mid);line-height:1.6;font-style:italic;">"${success3mo}"</div></div>`:''}
         ${magicWand?`<div style="margin:12px 0;"><div style="font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);margin-bottom:6px;">Their magic wand answer</div><div style="font-size:0.82rem;color:var(--brown-mid);line-height:1.6;font-style:italic;">"${magicWand}"</div></div>`:''}
-        ${interestsHtml?`<div style="margin-top:14px;"><div style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--taupe);margin-bottom:8px;">Most interested in</div><div>${interestsHtml}</div></div>`:''}
-        ${valuesHtml?`<div style="margin-top:12px;"><div style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--taupe);margin-bottom:8px;">What matters most</div><div>${valuesHtml}</div></div>`:''}
+        ${interests?`<div style="margin-top:14px;"><div style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--taupe);margin-bottom:8px;">Most interested in</div><div style="font-size:0.82rem;color:var(--brown-mid);line-height:1.6;">${interests}</div></div>`:''}
       </div>
       <div style="background:var(--warm-white);border:1px solid var(--sand);border-radius:6px;padding:22px;">
         <div style="font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--terra);margin-bottom:14px;">Challenges We're Addressing</div>
@@ -1247,8 +1218,8 @@ document.querySelectorAll('.meal-cell,.fb-card').forEach((el,i)=>{
     magicWand: document.getElementById('magic-wand').value,
     success3mo: document.getElementById('success-3mo').value,
     painPoints: getChips('pain-chips'),
-    interests: getChips('interests'),
-    values: getChips('values'),
+    interests: document.getElementById('interests').value,
+    values: [],
     appliances: getChips('appliances'),
     leftovers: document.getElementById('leftovers').value,
     scheduleDay: document.getElementById('schedule-day').value,
