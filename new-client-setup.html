@@ -534,13 +534,15 @@ function renderPickerList() {
   }).join('');
 }
 function selectRecipe(r) {
-  const d = pickerTargetDay;
-  mealLinks[d] = r;
-  document.getElementById('meal-' + d).value = r.name;
-  document.getElementById('emoji-' + d).value = r.emoji || '🍽️';
-  document.getElementById('mrow-' + d).classList.add('linked');
-  document.getElementById('pick-' + d).textContent = '✓ Linked';
-  document.getElementById('pick-' + d).classList.add('active');
+  const key = pickerTargetDay; // e.g. 'mon-d'
+  mealLinks[key] = r;
+  const day = key.replace(/-[bld]$/,'');
+  const dinnerInput = document.getElementById('meal-' + key);
+  if (dinnerInput) dinnerInput.value = r.name;
+  const row = document.getElementById('mrow-' + day);
+  if (row) row.classList.add('linked');
+  const pickBtn = document.getElementById('pick-' + day);
+  if (pickBtn) { pickBtn.textContent = '✓ Linked'; pickBtn.classList.add('active'); }
   updatePreview();
   closePicker();
 }
@@ -668,13 +670,12 @@ function updatePreview() {
     document.getElementById('prev-members').innerHTML = members.map(m=>`<div class="preview-member"><div class="preview-member-avatar">${(m.name||'?')[0].toUpperCase()}</div><div class="preview-member-name">${m.name||'Unnamed'}</div><div class="preview-member-age">${m.age?'Age '+m.age:''}</div></div>`).join('');
   }
   ['mon','tue','wed','thu','fri','sat','sun'].forEach(d => {
-    const v = document.getElementById('meal-'+d).value;
-    const e = document.getElementById('emoji-'+d).value;
+    const dinner = document.getElementById('meal-'+d+'-d');
+    const v = dinner ? dinner.value : '';
     const el = document.getElementById('prev-'+d);
     const lk = document.getElementById('prev-'+d+'-link');
-    el.textContent = v ? (e?e+' ':'')+v : '—';
-    el.style.color = v ? 'var(--cream)' : 'var(--taupe)';
-    if (lk) lk.textContent = mealLinks[d] ? '🔗 linked' : '';
+    if (el) { el.textContent = v || '—'; el.style.color = v ? 'var(--cream)' : 'var(--taupe)'; }
+    if (lk) lk.textContent = mealLinks[d+'-d'] ? '🔗 linked' : '';
   });
 }
 
@@ -687,7 +688,7 @@ function buildReview() {
   const note = document.getElementById('erins-note').value;
   const days = ['mon','tue','wed','thu','fri','sat','sun'];
   const dayL = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const meals = days.map(d=>document.getElementById('meal-'+d).value||'—');
+  const meals = days.map(d=>document.getElementById('meal-'+d+'-d') ? document.getElementById('meal-'+d+'-d').value||'—' : '—');
   document.getElementById('review-summary').innerHTML = `
     <div class="review-section">
       <div class="review-label">Family</div>
@@ -742,7 +743,7 @@ function generateCode() {
     day: d,
     breakfast: { name: document.getElementById('meal-'+d+'-b').value||'', emoji:'🌅', type:'Breakfast' },
     lunch:     { name: document.getElementById('meal-'+d+'-l').value||'', emoji:'☀️', type:'Lunch' },
-    dinner:    { name: document.getElementById('meal-'+d+'-d').value||'—', emoji: document.getElementById('emoji-'+d) ? (document.getElementById('emoji-'+d).value||'🍽️') : '🍽️', type:'Dinner', recipe: mealLinks[d+'-d']||null }
+    dinner:    { name: document.getElementById('meal-'+d+'-d').value||'—', emoji:'🍽️', type:'Dinner', recipe: mealLinks[d+'-d']||null }
   }));
 
   // Embed only the dinner recipes actually used (deduplicated)
