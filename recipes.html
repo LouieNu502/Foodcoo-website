@@ -407,11 +407,13 @@ let activeFilter = 'all';
 
 // ── PIN ──
 function openPinModal() {
-  pinEntry = '';
-  updatePinDots();
-  document.getElementById('pin-error').textContent = '';
-  document.getElementById('pin-modal').classList.add('show');
-  document.body.style.overflow = 'hidden';
+  try {
+    pinEntry = '';
+    updatePinDots();
+    document.getElementById('pin-error').textContent = '';
+    document.getElementById('pin-modal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  } catch(e) { console.error('openPinModal error:', e); }
 }
 function pinPress(k) {
   if (pinEntry.length < 4) { pinEntry += k; updatePinDots(); }
@@ -722,7 +724,9 @@ function closeIfOutside(e, id) {
   if (e.target === document.getElementById(id)) closeModal(id);
 }
 
-renderRecipes();
+document.addEventListener('DOMContentLoaded', () => {
+  try { renderRecipes(); } catch(e) { console.error('renderRecipes error:', e); }
+});
 </script>
 </body>
 </html>
