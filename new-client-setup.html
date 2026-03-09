@@ -713,6 +713,7 @@ function buildReview() {
 
 // ── GENERATE ──
 function generateCode() {
+  try {
   const name  = document.getElementById('family-name').value||'Smith';
   const slug  = (document.getElementById('url-slug').value||name.toLowerCase()+'family').toLowerCase();
   const week  = document.getElementById('week-num').value;
@@ -1273,6 +1274,10 @@ document.querySelectorAll('.meal-cell,.fb-card').forEach((el,i)=>{
     }
     localStorage.setItem('foodcoo_history', JSON.stringify(existingHistory));
   } catch(e) { console.warn('Could not register family in admin:', e); }
+  } catch(err) {
+    alert('Something went wrong generating the portal. Error: ' + err.message);
+    console.error('generateCode error:', err);
+  }
 }
 
 function copyCode() {
