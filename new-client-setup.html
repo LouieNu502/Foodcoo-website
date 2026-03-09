@@ -452,17 +452,13 @@ let members = [];
 let mealLinks = {}; // { mon: recipeObj, tue: recipeObj, ... }
 let pickerTargetDay = null;
 
-// ── RECIPE LIBRARY (from GitHub) ──
-const GITHUB_RECIPES_URL = 'https://raw.githubusercontent.com/louienu502/Foodcoo-website/main/recipes.json';
+// ── RECIPE LIBRARY (localStorage) ──
 let _libraryCache = null;
 async function loadLibrary() {
   if (_libraryCache) return _libraryCache;
-  try {
-    const res = await fetch(GITHUB_RECIPES_URL + '?t=' + Date.now());
-    if (!res.ok) return [];
-    _libraryCache = await res.json();
-    return _libraryCache;
-  } catch(e) { return []; }
+  try { _libraryCache = JSON.parse(localStorage.getItem('foodcoo_recipes')||'[]'); }
+  catch(e) { _libraryCache = []; }
+  return _libraryCache;
 }
 
 // ── PICKER ──
