@@ -714,4 +714,15 @@ function sidebarFilter(tag, el) {
 }
 
 // ── MODALS ──
-function closeModal
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+  document.body.style.overflow = '';
+}
+function closeIfOutside(e, id) {
+  if (e.target === document.getElementById(id)) closeModal(id);
+}
+
+renderRecipes();
+</script>
+</body>
+</html>
